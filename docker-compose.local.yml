@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   authserver:
-    image: rfiready.co:5000/authserver:${DEP_ENV}
+    image: rfiready.co:5000/authserver:local
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -62,26 +62,14 @@ services:
         delay: 10s
         order: stop-first
         failure_action: rollback
-    volumes:
-      - type: volume
-        source: authdata
-        target: /data/db
-        volume:
-          nocopy: true
-    healthcheck:
-      test: ["CMD-SHELL", "curl localhost:27018/test || exit 1"]
-      interval: 60s
-      retries: 5
-      timeout: 10s
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl localhost:27018/test || exit 1"]
+    #   interval: 60s
+    #   retries: 5
+    #   timeout: 10s
     networks:
       - api-service
 
 networks:
   api-service:
     external: true
-volumes:
-  authdata:
-    driver_opts:
-      type: nfs4
-      o: "addr=172.31.84.217,nolock,rw"
-      device: ":/root/nfs/auth/data"

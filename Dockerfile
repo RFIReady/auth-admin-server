@@ -30,4 +30,4 @@ COPY --from=node-builder /authorizer/dashboard/favicon_io dashboard/favicon_io
 COPY --from=go-builder /authorizer/build build
 COPY templates templates
 EXPOSE 8080
-CMD [ "./build/server" ]
+CMD [ "./build/server","--log_level=debug" ]
