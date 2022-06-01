@@ -1,0 +1,447 @@
+Info 0    [19:45:51.962] Starting TS Server
+Info 1    [19:45:51.964] Version: 4.6.3
+Info 2    [19:45:51.964] Arguments: /Users/peterchoi/.nvm/versions/node/v16.9.1/bin/node /Users/peterchoi/Documents/Projects/RFIReady/backend/node_modules/typescript/lib/tsserver.js --logFile /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/.log/tsserver.log --logVerbosity info --cancellationPipeName /private/var/folders/ss/hb78kxmd587388mxvn21krkc0000gn/T/0efd12e8e78379b5d77b96b9cb68c222/tscancellation*
+Info 3    [19:45:51.964] Platform: darwin NodeVersion: 16 CaseSensitive: false
+Info 4    [19:45:51.964] ServerMode: undefined syntaxOnly: false hasUnknownServerMode: undefined
+Info 5    [19:45:51.979] Format host information updated
+Info 6    [19:45:51.985] Search path: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src
+Info 7    [19:45:51.986] For info: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/App.tsx :: Config file name: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/tsconfig.json
+Info 8    [19:45:51.986] Creating configuration project /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/tsconfig.json
+Info 9    [19:45:52.007] Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/tsconfig.json : {
+ "rootNames": [
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/App.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/Root.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/index.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/theme.ts",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/pages/dashboard.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/pages/login.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/pages/rest-password.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/pages/setup-password.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/pages/signup.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/utils/common.ts"
+ ],
+ "options": {
+  "target": 2,
+  "module": 1,
+  "jsx": 2,
+  "rootDir": "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src",
+  "strict": true,
+  "esModuleInterop": true,
+  "skipLibCheck": true,
+  "forceConsistentCasingInFileNames": true,
+  "configFilePath": "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/tsconfig.json"
+ }
+}
+Info 10   [19:45:52.032] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/tsconfig.json
+Info 11   [19:45:53.525] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed: 1493.0853447914124ms
+Info 12   [19:45:53.525] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/tsconfig.json' (Configured)
+Info 13   [19:45:53.525] 	Files (321)
+
+Info 14   [19:45:53.525] -----------------------------------------------
+Info 15   [19:45:53.538] AutoImportProviderProject: found 1 root files in 1 dependencies in 10.317348003387451 ms
+Info 16   [19:45:53.539] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info 17   [19:45:53.662] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed: 123.46704578399658ms
+Info 18   [19:45:53.662] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info 19   [19:45:53.662] 	Files (1)
+
+Info 20   [19:45:53.662] -----------------------------------------------
+Info 21   [19:46:10.161] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/app/src/flycheck_index.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/app 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/tsconfig.json WatchType: Wild card directory
+Info 22   [19:46:10.162] Elapsed:: 0.939910888671875ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/app/src/flycheck_index.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/app 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/tsconfig.json WatchType: Wild card directory
+Info 23   [19:46:10.162] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/flycheck_index.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/tsconfig.json WatchType: Failed Lookup Locations
+Info 24   [19:46:10.162] Elapsed:: 0.331906795501709ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/flycheck_index.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/tsconfig.json WatchType: Failed Lookup Locations
+Info 25   [19:46:10.425] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/tsconfig.json
+Info 26   [19:46:10.427] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed: 2.0021591186523438ms
+Info 27   [19:46:12.663] Before ensureProjectForOpenFiles:
+Info 28   [19:46:12.663] After ensureProjectForOpenFiles:
+Info 29   [19:46:12.664] got projects updated in background, updating diagnostics for /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/App.tsx
+Info 30   [19:53:48.966] Search path: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src
+Info 31   [19:53:48.966] For info: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/App.tsx :: Config file name: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 32   [19:53:48.966] Creating configuration project /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 33   [19:53:48.983] Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json : {
+ "rootNames": [
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/App.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/constants.ts",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/index.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/DeleteUserModal.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/EditUserModal.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/GenerateKeysModal.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/InputField.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/InviteMembersModal.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/Menu.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/EnvComponents/AccessToken.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/EnvComponents/DatabaseCredentials.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/EnvComponents/DomainWhitelisting.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/EnvComponents/EmailConfiguration.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/EnvComponents/JWTConfiguration.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/EnvComponents/OAuthConfig.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/EnvComponents/OrganizationInfo.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/EnvComponents/Roles.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/EnvComponents/SecurityAdminSecret.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/EnvComponents/SessionStorage.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/EnvComponents/UICustomization.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/contexts/AuthContext.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/graphql/mutation/index.ts",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/graphql/queries/index.ts",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/AuthLayout.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/DashboardLayout.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/pages/Auth.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/pages/Environment.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/pages/Home.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/pages/Users.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/routes/index.tsx",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/utils/index.ts",
+  "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/utils/parseCSV.ts"
+ ],
+ "options": {
+  "target": 2,
+  "module": 1,
+  "jsx": 2,
+  "rootDir": "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src",
+  "strict": true,
+  "esModuleInterop": true,
+  "skipLibCheck": true,
+  "forceConsistentCasingInFileNames": true,
+  "lib": [
+   "lib.esnext.d.ts",
+   "lib.dom.d.ts"
+  ],
+  "configFilePath": "/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json"
+ }
+}
+Info 34   [19:53:49.001] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 35   [19:53:49.316] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed: 314.8804407119751ms
+Info 36   [19:53:49.317] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json' (Configured)
+Info 37   [19:53:49.317] 	Files (350)
+
+Info 38   [19:53:49.317] -----------------------------------------------
+Info 39   [19:53:49.329] AutoImportProviderProject: found 1 root files in 1 dependencies in 9.683669090270996 ms
+Info 40   [19:53:49.329] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject2*
+Info 41   [19:53:49.329] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed: 0.5435361862182617ms
+Info 42   [19:53:49.329] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 43   [19:53:49.329] 	Files (1)
+
+Info 44   [19:53:49.329] -----------------------------------------------
+Info 45   [19:54:53.075] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/utils/flycheck_index.ts :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 46   [19:54:53.075] Elapsed:: 0.23980474472045898ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/utils/flycheck_index.ts :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 47   [19:54:53.075] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/utils/flycheck_index.ts :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 48   [19:54:53.075] Elapsed:: 0.09342575073242188ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/utils/flycheck_index.ts :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 49   [19:54:53.339] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 50   [19:54:53.341] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed: 2.1371021270751953ms
+Info 51   [19:54:55.576] Before ensureProjectForOpenFiles:
+Info 52   [19:54:55.576] After ensureProjectForOpenFiles:
+Info 53   [19:54:55.576] got projects updated in background, updating diagnostics for /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/App.tsx,/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/App.tsx
+Info 54   [19:55:22.939] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 55   [19:55:22.939] Elapsed:: 0.22919893264770508ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 56   [19:55:22.939] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 57   [19:55:22.939] Elapsed:: 0.13057994842529297ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 58   [19:55:23.199] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 59   [19:55:23.200] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Not Elapsed: 1.5778093338012695ms
+Info 60   [19:55:25.439] Before ensureProjectForOpenFiles:
+Info 61   [19:55:25.439] After ensureProjectForOpenFiles:
+Info 62   [19:55:25.439] got projects updated in background, updating diagnostics for /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/App.tsx,/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/App.tsx
+Info 63   [19:55:30.406] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 64   [19:55:30.406] Elapsed:: 0.2779731750488281ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 65   [19:55:30.406] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 66   [19:55:30.406] Elapsed:: 0.166748046875ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 67   [19:55:30.666] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 68   [19:55:30.766] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 4 structureChanged: true structureIsReused:: Not Elapsed: 99.72301435470581ms
+Info 69   [19:55:30.766] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json' (Configured)
+Info 70   [19:55:30.766] 	Files (351)
+
+Info 71   [19:55:30.766] -----------------------------------------------
+Info 72   [19:55:30.766] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 73   [19:55:30.766] 	Files (1)
+
+Info 74   [19:55:30.766] -----------------------------------------------
+Info 75   [19:55:30.767] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 76   [19:55:30.767] Elapsed:: 0.20350408554077148ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 77   [19:55:30.767] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 78   [19:55:30.767] Elapsed:: 0.08893871307373047ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 79   [19:55:30.767] FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 2:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 500 undefined WatchType: Closed Script info
+Info 80   [19:55:30.772] Elapsed:: 4.220447063446045ms FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 2:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 500 undefined WatchType: Closed Script info
+Info 81   [19:55:31.033] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 82   [19:55:31.104] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 5 structureChanged: true structureIsReused:: Not Elapsed: 70.18981599807739ms
+Info 83   [19:55:31.104] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json' (Configured)
+Info 84   [19:55:31.104] 	Files (350)
+
+Info 85   [19:55:31.104] -----------------------------------------------
+Info 86   [19:55:31.104] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 87   [19:55:31.104] 	Files (1)
+
+Info 88   [19:55:31.104] -----------------------------------------------
+Info 89   [19:55:33.277] Before ensureProjectForOpenFiles:
+Info 90   [19:55:33.277] After ensureProjectForOpenFiles:
+Info 91   [19:55:33.277] got projects updated in background, updating diagnostics for /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/App.tsx,/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/App.tsx
+Info 92   [19:55:34.052] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 93   [19:55:34.053] Elapsed:: 0.28310298919677734ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 94   [19:55:34.053] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 95   [19:55:34.053] Elapsed:: 0.15180635452270508ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 96   [19:55:34.311] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 97   [19:55:34.385] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 6 structureChanged: true structureIsReused:: Not Elapsed: 73.80259990692139ms
+Info 98   [19:55:34.385] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json' (Configured)
+Info 99   [19:55:34.385] 	Files (351)
+
+Info 100  [19:55:34.385] -----------------------------------------------
+Info 101  [19:55:34.385] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 102  [19:55:34.385] 	Files (1)
+
+Info 103  [19:55:34.385] -----------------------------------------------
+Info 104  [19:55:34.387] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 105  [19:55:34.387] Elapsed:: 0.20756769180297852ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 106  [19:55:34.387] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 107  [19:55:34.387] Elapsed:: 0.09506416320800781ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 108  [19:55:34.659] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 109  [19:55:34.719] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 7 structureChanged: true structureIsReused:: Not Elapsed: 59.62139320373535ms
+Info 110  [19:55:34.719] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json' (Configured)
+Info 111  [19:55:34.719] 	Files (350)
+
+Info 112  [19:55:34.719] -----------------------------------------------
+Info 113  [19:55:34.719] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 114  [19:55:34.719] 	Files (1)
+
+Info 115  [19:55:34.719] -----------------------------------------------
+Info 116  [19:55:34.777] FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 2:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 500 undefined WatchType: Closed Script info
+Info 117  [19:55:34.777] Elapsed:: 0.0383601188659668ms FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 2:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 500 undefined WatchType: Closed Script info
+Info 118  [19:55:36.891] Before ensureProjectForOpenFiles:
+Info 119  [19:55:36.891] After ensureProjectForOpenFiles:
+Info 120  [19:55:36.891] got projects updated in background, updating diagnostics for /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/App.tsx,/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/App.tsx
+Info 121  [19:55:38.612] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 122  [19:55:38.612] Elapsed:: 0.4576859474182129ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 123  [19:55:38.613] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 124  [19:55:38.613] Elapsed:: 0.2196793556213379ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 125  [19:55:38.878] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 126  [19:55:38.946] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 8 structureChanged: true structureIsReused:: Not Elapsed: 67.86125802993774ms
+Info 127  [19:55:38.946] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json' (Configured)
+Info 128  [19:55:38.946] 	Files (351)
+
+Info 129  [19:55:38.946] -----------------------------------------------
+Info 130  [19:55:38.946] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 131  [19:55:38.946] 	Files (1)
+
+Info 132  [19:55:38.946] -----------------------------------------------
+Info 133  [19:55:38.947] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 134  [19:55:38.947] Elapsed:: 0.18880128860473633ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 135  [19:55:38.947] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 136  [19:55:38.947] Elapsed:: 0.08747005462646484ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 137  [19:55:39.216] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 138  [19:55:39.282] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 9 structureChanged: true structureIsReused:: Not Elapsed: 65.3799901008606ms
+Info 139  [19:55:39.282] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json' (Configured)
+Info 140  [19:55:39.282] 	Files (350)
+
+Info 141  [19:55:39.282] -----------------------------------------------
+Info 142  [19:55:39.282] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 143  [19:55:39.282] 	Files (1)
+
+Info 144  [19:55:39.282] -----------------------------------------------
+Info 145  [19:55:41.452] Before ensureProjectForOpenFiles:
+Info 146  [19:55:41.453] After ensureProjectForOpenFiles:
+Info 147  [19:55:41.453] got projects updated in background, updating diagnostics for /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/App.tsx,/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/App.tsx
+Info 148  [19:55:42.651] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 149  [19:55:42.651] Elapsed:: 0.3195986747741699ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 150  [19:55:42.651] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 151  [19:55:42.651] Elapsed:: 0.17165279388427734ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 152  [19:55:42.790] FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 1:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 500 undefined WatchType: Closed Script info
+Info 153  [19:55:42.790] Elapsed:: 0.15424585342407227ms FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 1:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 500 undefined WatchType: Closed Script info
+Info 154  [19:55:42.912] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 155  [19:55:42.971] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 10 structureChanged: true structureIsReused:: Not Elapsed: 59.124167919158936ms
+Info 156  [19:55:42.971] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json' (Configured)
+Info 157  [19:55:42.971] 	Files (351)
+
+Info 158  [19:55:42.971] -----------------------------------------------
+Info 159  [19:55:42.971] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 160  [19:55:42.971] 	Files (1)
+
+Info 161  [19:55:42.971] -----------------------------------------------
+Info 162  [19:55:42.972] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 163  [19:55:42.972] Elapsed:: 0.15915393829345703ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 164  [19:55:42.972] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 165  [19:55:42.972] Elapsed:: 0.07987308502197266ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 166  [19:55:43.083] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 167  [19:55:43.083] Elapsed:: 0.27230405807495117ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 168  [19:55:43.083] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 169  [19:55:43.083] Elapsed:: 0.14142131805419922ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 170  [19:55:43.341] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 171  [19:55:43.342] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 11 structureChanged: false structureIsReused:: Not Elapsed: 1.218484878540039ms
+Info 172  [19:55:43.372] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 173  [19:55:43.373] Elapsed:: 0.23197078704833984ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 174  [19:55:43.373] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 175  [19:55:43.373] Elapsed:: 0.09939861297607422ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 176  [19:55:43.638] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 177  [19:55:43.690] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 12 structureChanged: true structureIsReused:: Not Elapsed: 51.96865129470825ms
+Info 178  [19:55:43.690] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json' (Configured)
+Info 179  [19:55:43.690] 	Files (350)
+
+Info 180  [19:55:43.690] -----------------------------------------------
+Info 181  [19:55:43.690] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 182  [19:55:43.690] 	Files (1)
+
+Info 183  [19:55:43.690] -----------------------------------------------
+Info 184  [19:55:44.793] FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 2:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 500 undefined WatchType: Closed Script info
+Info 185  [19:55:44.794] Elapsed:: 0.04495859146118164ms FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 2:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 500 undefined WatchType: Closed Script info
+Info 186  [19:55:45.877] Before ensureProjectForOpenFiles:
+Info 187  [19:55:45.877] After ensureProjectForOpenFiles:
+Info 188  [19:55:45.877] got projects updated in background, updating diagnostics for /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/App.tsx,/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/App.tsx
+Info 189  [19:55:57.538] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 190  [19:55:57.539] Elapsed:: 0.46715688705444336ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 191  [19:55:57.539] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 192  [19:55:57.539] Elapsed:: 0.18009090423583984ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 193  [19:55:57.803] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 194  [19:55:57.875] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 13 structureChanged: true structureIsReused:: Not Elapsed: 71.6048789024353ms
+Info 195  [19:55:57.875] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json' (Configured)
+Info 196  [19:55:57.875] 	Files (351)
+
+Info 197  [19:55:57.875] -----------------------------------------------
+Info 198  [19:55:57.875] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 199  [19:55:57.875] 	Files (1)
+
+Info 200  [19:55:57.875] -----------------------------------------------
+Info 201  [19:55:58.142] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 202  [19:55:58.143] Elapsed:: 0.22944307327270508ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 203  [19:55:58.143] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 204  [19:55:58.143] Elapsed:: 0.12576723098754883ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 205  [19:55:58.404] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 206  [19:55:58.464] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 14 structureChanged: true structureIsReused:: Not Elapsed: 60.15227794647217ms
+Info 207  [19:55:58.464] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json' (Configured)
+Info 208  [19:55:58.464] 	Files (350)
+
+Info 209  [19:55:58.464] -----------------------------------------------
+Info 210  [19:55:58.464] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 211  [19:55:58.464] 	Files (1)
+
+Info 212  [19:55:58.464] -----------------------------------------------
+Info 213  [19:55:58.820] FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/AuthLayout.tsx 1:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/AuthLayout.tsx 500 undefined WatchType: Closed Script info
+Info 214  [19:55:58.821] Elapsed:: 0.1411881446838379ms FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/AuthLayout.tsx 1:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/AuthLayout.tsx 500 undefined WatchType: Closed Script info
+Info 215  [19:55:58.821] FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 2:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 500 undefined WatchType: Closed Script info
+Info 216  [19:55:58.821] Elapsed:: 0.035386085510253906ms FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 2:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_AuthLayout.tsx 500 undefined WatchType: Closed Script info
+Info 217  [19:55:59.071] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 218  [19:55:59.080] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 15 structureChanged: false structureIsReused:: Completely Elapsed: 9.022355079650879ms
+Info 219  [19:55:59.080] Different program with same set of files
+Info 220  [19:56:00.876] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_DashboardLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 221  [19:56:00.876] Elapsed:: 0.24243402481079102ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_DashboardLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 222  [19:56:00.876] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_DashboardLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 223  [19:56:00.876] Elapsed:: 0.13010597229003906ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_DashboardLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 224  [19:56:01.133] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 225  [19:56:01.194] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 16 structureChanged: true structureIsReused:: Not Elapsed: 61.06047201156616ms
+Info 226  [19:56:01.194] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json' (Configured)
+Info 227  [19:56:01.194] 	Files (351)
+
+Info 228  [19:56:01.194] -----------------------------------------------
+Info 229  [19:56:01.194] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 230  [19:56:01.194] 	Files (1)
+
+Info 231  [19:56:01.194] -----------------------------------------------
+Info 232  [19:56:01.194] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_DashboardLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 233  [19:56:01.195] Elapsed:: 0.180908203125ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_DashboardLayout.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 234  [19:56:01.195] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_DashboardLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 235  [19:56:01.195] Elapsed:: 0.08420324325561523ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_DashboardLayout.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 236  [19:56:01.458] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 237  [19:56:01.512] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 17 structureChanged: true structureIsReused:: Not Elapsed: 53.17486333847046ms
+Info 238  [19:56:01.512] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json' (Configured)
+Info 239  [19:56:01.512] 	Files (350)
+
+Info 240  [19:56:01.512] -----------------------------------------------
+Info 241  [19:56:01.512] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 242  [19:56:01.512] 	Files (1)
+
+Info 243  [19:56:01.512] -----------------------------------------------
+Info 244  [19:56:02.822] FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_DashboardLayout.tsx 2:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_DashboardLayout.tsx 500 undefined WatchType: Closed Script info
+Info 245  [19:56:02.822] Elapsed:: 0.09064674377441406ms FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_DashboardLayout.tsx 2:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/flycheck_DashboardLayout.tsx 500 undefined WatchType: Closed Script info
+Info 246  [19:56:03.696] Before ensureProjectForOpenFiles:
+Info 247  [19:56:03.696] After ensureProjectForOpenFiles:
+Info 248  [19:56:03.696] got projects updated in background, updating diagnostics for /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/App.tsx,/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/App.tsx
+Info 249  [19:56:12.208] Search path: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts
+Info 250  [19:56:12.208] For info: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/DashboardLayout.tsx :: Config file name: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 251  [19:57:45.004] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 252  [19:57:45.004] Elapsed:: 0.20655488967895508ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 253  [19:57:45.004] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 254  [19:57:45.005] Elapsed:: 0.1594090461730957ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 255  [19:57:45.207] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 256  [19:57:45.208] Elapsed:: 0.2582283020019531ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 257  [19:57:45.208] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 258  [19:57:45.208] Elapsed:: 0.12780380249023438ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 259  [19:57:45.470] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 260  [19:57:45.481] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 18 structureChanged: false structureIsReused:: Completely Elapsed: 10.296869277954102ms
+Info 261  [19:57:45.481] Different program with same set of files
+Info 262  [19:57:47.713] Before ensureProjectForOpenFiles:
+Info 263  [19:57:47.714] After ensureProjectForOpenFiles:
+Info 264  [19:57:47.714] got projects updated in background, updating diagnostics for /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/App.tsx,/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/App.tsx,/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/DashboardLayout.tsx
+Info 265  [19:58:05.081] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 266  [19:58:05.081] Elapsed:: 0.22037076950073242ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 267  [19:58:05.081] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 268  [19:58:05.081] Elapsed:: 0.13433027267456055ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 269  [19:58:05.346] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 270  [19:58:05.348] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 19 structureChanged: false structureIsReused:: Completely Elapsed: 1.8086953163146973ms
+Info 271  [19:58:07.585] Before ensureProjectForOpenFiles:
+Info 272  [19:58:07.585] After ensureProjectForOpenFiles:
+Info 273  [19:58:07.585] got projects updated in background, updating diagnostics for /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/App.tsx,/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/App.tsx,/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/DashboardLayout.tsx
+Info 274  [19:58:08.033] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 275  [19:58:08.034] Elapsed:: 0.26509904861450195ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 276  [19:58:08.034] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 277  [19:58:08.034] Elapsed:: 0.14783525466918945ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 278  [19:58:08.294] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 279  [19:58:08.389] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 20 structureChanged: true structureIsReused:: Not Elapsed: 94.98998498916626ms
+Info 280  [19:58:08.389] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json' (Configured)
+Info 281  [19:58:08.389] 	Files (351)
+
+Info 282  [19:58:08.389] -----------------------------------------------
+Info 283  [19:58:08.389] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 284  [19:58:08.389] 	Files (1)
+
+Info 285  [19:58:08.389] -----------------------------------------------
+Info 286  [19:58:09.003] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 287  [19:58:09.003] Elapsed:: 0.27555370330810547ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 288  [19:58:09.003] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 289  [19:58:09.003] Elapsed:: 0.12012815475463867ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 290  [19:58:09.009] FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx 2:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx 500 undefined WatchType: Closed Script info
+Info 291  [19:58:09.027] Elapsed:: 18.641114234924316ms FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx 2:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx 500 undefined WatchType: Closed Script info
+Info 292  [19:58:09.291] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 293  [19:58:09.344] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 21 structureChanged: true structureIsReused:: Not Elapsed: 53.55728816986084ms
+Info 294  [19:58:09.345] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json' (Configured)
+Info 295  [19:58:09.345] 	Files (350)
+
+Info 296  [19:58:09.345] -----------------------------------------------
+Info 297  [19:58:09.345] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 298  [19:58:09.345] 	Files (1)
+
+Info 299  [19:58:09.345] -----------------------------------------------
+Info 300  [19:58:11.529] Before ensureProjectForOpenFiles:
+Info 301  [19:58:11.529] After ensureProjectForOpenFiles:
+Info 302  [19:58:11.529] got projects updated in background, updating diagnostics for /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/App.tsx,/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/App.tsx,/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/DashboardLayout.tsx
+Info 303  [19:58:33.193] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 304  [19:58:33.194] Elapsed:: 0.23243379592895508ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 305  [19:58:33.194] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 306  [19:58:33.194] Elapsed:: 0.12544965744018555ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 307  [19:58:33.453] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 308  [19:58:33.552] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 22 structureChanged: true structureIsReused:: Not Elapsed: 98.73850679397583ms
+Info 309  [19:58:33.552] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json' (Configured)
+Info 310  [19:58:33.552] 	Files (351)
+
+Info 311  [19:58:33.552] -----------------------------------------------
+Info 312  [19:58:33.552] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 313  [19:58:33.552] 	Files (1)
+
+Info 314  [19:58:33.552] -----------------------------------------------
+Info 315  [19:58:33.845] DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 316  [19:58:33.846] Elapsed:: 0.21660375595092773ms DirectoryWatcher:: Triggered with /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /users/peterchoi/documents/projects/rfiready/backend/service/auth-admin-server/dashboard 1 undefined Config: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Wild card directory
+Info 317  [19:58:33.846] DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 318  [19:58:33.846] Elapsed:: 0.1047511100769043ms DirectoryWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx :: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src 1 undefined Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json WatchType: Failed Lookup Locations
+Info 319  [19:58:34.123] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 320  [19:58:34.175] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 23 structureChanged: true structureIsReused:: Not Elapsed: 51.95977020263672ms
+Info 321  [19:58:34.175] Project '/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json' (Configured)
+Info 322  [19:58:34.175] 	Files (350)
+
+Info 323  [19:58:34.175] -----------------------------------------------
+Info 324  [19:58:34.175] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 325  [19:58:34.175] 	Files (1)
+
+Info 326  [19:58:34.175] -----------------------------------------------
+Info 327  [19:58:35.068] FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx 2:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx 500 undefined WatchType: Closed Script info
+Info 328  [19:58:35.068] Elapsed:: 0.036606788635253906ms FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx 2:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/flycheck_Menu.tsx 500 undefined WatchType: Closed Script info
+Info 329  [19:58:35.068] FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/Menu.tsx 1:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/Menu.tsx 500 undefined WatchType: Closed Script info
+Info 330  [19:58:35.068] Elapsed:: 0.04553365707397461ms FileWatcher:: Triggered with /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/Menu.tsx 1:: WatchInfo: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/components/Menu.tsx 500 undefined WatchType: Closed Script info
+Info 331  [19:58:35.319] Starting updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json
+Info 332  [19:58:35.330] Finishing updateGraphWorker: Project: /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/tsconfig.json Version: 24 structureChanged: false structureIsReused:: Completely Elapsed: 10.752765655517578ms
+Info 333  [19:58:35.330] Different program with same set of files
+Info 334  [19:58:37.571] Before ensureProjectForOpenFiles:
+Info 335  [19:58:37.571] After ensureProjectForOpenFiles:
+Info 336  [19:58:37.571] got projects updated in background, updating diagnostics for /Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/app/src/App.tsx,/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/App.tsx,/Users/peterchoi/Documents/Projects/RFIReady/backend/service/auth-admin-server/dashboard/src/layouts/DashboardLayout.tsx
