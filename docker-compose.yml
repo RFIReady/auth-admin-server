@@ -15,10 +15,11 @@ services:
       - SMTP_HOST=smtp.sendgrid.net
       - SMTP_PORT=465
       - SMTP_USERNAME=apikey
-      - SMTP_PASSWORD=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
+      - SMTP_PASSWORD=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
       - SENDER_EMAIL=verify@rfiready.co
       - RESET_PASSWORD_URL=https://www.rfiready.co/resetpassword
       - DISABLE_MAGIC_LINK_LOGIN=true
+      - DISABLE_EMAIL_VERIFICATION=true
       - ORGANIZATION_NAME=RFIReady
       - ORGANIZATION_LOGO=https://rfireadyasset.s3.amazonaws.com/logo.png
     deploy:
