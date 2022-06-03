@@ -12,11 +12,11 @@ services:
       - DATABASE_TYPE=mongodb
       - AUTHORIZER_URL=https://www.admin.rfiready.co
       - ENV=production
-      - SMTP_HOST=smtp.sendgrid.net
+      - SMTP_HOST=smtp.gmail.com
       - SMTP_PORT=465
-      - SMTP_USERNAME=apikey
-      - SMTP_PASSWORD=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
-      - SENDER_EMAIL=verify@rfiready.co
+      - SMTP_USERNAME=admin@rfiready.co
+      - SMTP_PASSWORD=Admin123!!
+      - SENDER_EMAIL=admin@rfiready.co
       - RESET_PASSWORD_URL=https://www.rfiready.co/resetpassword
       - DISABLE_MAGIC_LINK_LOGIN=true
       - DISABLE_EMAIL_VERIFICATION=true
@@ -37,11 +37,11 @@ services:
       - 8081:8080
     depends_on:
       - authdb
-    healthcheck:
-      test: ["CMD-SHELL", "curl --fail localhost:8080 || exit 1"]
-      interval: 60s
-      retries: 5
-      timeout: 10s
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl --fail localhost:8080 || exit 1"]
+    #   interval: 60s
+    #   retries: 5
+    #   timeout: 10s
     networks:
       - api-service
 
@@ -63,17 +63,17 @@ services:
         delay: 10s
         order: stop-first
         failure_action: rollback
-    volumes:
-      - type: volume
-        source: authdata
-        target: /data/db
-        volume:
-          nocopy: true
-    healthcheck:
-      test: ["CMD-SHELL", "curl localhost:27018/test || exit 1"]
-      interval: 60s
-      retries: 5
-      timeout: 10s
+    # volumes:
+    #   - type: volume
+    #     source: authdata
+    #     target: /data/db
+    #     volume:
+    #       nocopy: true
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl localhost:27018/test || exit 1"]
+    #   interval: 60s
+    #   retries: 5
+    #   timeout: 10s
     networks:
       - api-service
 
