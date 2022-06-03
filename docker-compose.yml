@@ -63,12 +63,12 @@ services:
         delay: 10s
         order: stop-first
         failure_action: rollback
-    # volumes:
-    #   - type: volume
-    #     source: authdata
-    #     target: /data/db
-    #     volume:
-    #       nocopy: true
+    volumes:
+      - type: volume
+        source: authdata
+        target: /data/db
+        volume:
+          nocopy: true
     # healthcheck:
     #   test: ["CMD-SHELL", "curl localhost:27018/test || exit 1"]
     #   interval: 60s
