@@ -25,7 +25,7 @@ import EmailConfigurations from '../components/EnvComponents/EmailConfiguration'
 import DomainWhiteListing from '../components/EnvComponents/DomainWhitelisting';
 import OrganizationInfo from '../components/EnvComponents/OrganizationInfo';
 import AccessToken from '../components/EnvComponents/AccessToken';
-import UICustomization from '../components/EnvComponents/UICustomization';
+import Features from '../components/EnvComponents/Features';
 import SecurityAdminSecret from '../components/EnvComponents/SecurityAdminSecret';
 import DatabaseCredentials from '../components/EnvComponents/DatabaseCredentials';
 
@@ -46,6 +46,8 @@ const Environment = () => {
 		GITHUB_CLIENT_SECRET: '',
 		FACEBOOK_CLIENT_ID: '',
 		FACEBOOK_CLIENT_SECRET: '',
+		LINKEDIN_CLIENT_ID: '',
+		LINKEDIN_CLIENT_SECRET: '',
 		ROLES: [],
 		DEFAULT_ROLES: [],
 		PROTECTED_ROLES: [],
@@ -83,6 +85,7 @@ const Environment = () => {
 		GOOGLE_CLIENT_SECRET: false,
 		GITHUB_CLIENT_SECRET: false,
 		FACEBOOK_CLIENT_SECRET: false,
+		LINKEDIN_CLIENT_SECRET: false,
 		JWT_SECRET: false,
 		SMTP_PASSWORD: false,
 		ADMIN_SECRET: false,
@@ -259,12 +262,9 @@ const Environment = () => {
 						setVariables={setEnvVariables}
 					/>
 				);
-			case envSubViews.UI_CUSTOMIZATION:
+			case envSubViews.FEATURES:
 				return (
-					<UICustomization
-						variables={envVariables}
-						setVariables={setEnvVariables}
-					/>
+					<Features variables={envVariables} setVariables={setEnvVariables} />
 				);
 			case envSubViews.ADMIN_SECRET:
 				return (

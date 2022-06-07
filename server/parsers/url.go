@@ -1,12 +1,13 @@
-package utils
+package parsers
 
 import (
 	"net/url"
 	"strings"
 
-	"github.com/authorizerdev/authorizer/server/constants"
-	"github.com/authorizerdev/authorizer/server/envstore"
 	"github.com/gin-gonic/gin"
+
+	"github.com/authorizerdev/authorizer/server/constants"
+	"github.com/authorizerdev/authorizer/server/memorystore"
 )
 
 // GetHost returns hostname from request context
@@ -14,12 +15,15 @@ import (
 // if EnvKeyAuthorizerURL is set it is given second highest priority.
 // if above 2 are not set the requesting host name is used
 func GetHost(c *gin.Context) string {
-	authorizerURL := c.Request.Header.Get("X-Authorizer-URL")
+	authorizerURL, err := memorystore.Provider.GetStringStoreEnvVariable(constants.EnvKeyAuthorizerURL)
+	if err != nil {
+		authorizerURL = ""
+	}
 	if authorizerURL != "" {
 		return authorizerURL
 	}
 
-	authorizerURL = envstore.EnvStoreObj.GetStringStoreEnvVariable(constants.EnvKeyAuthorizerURL)
+	authorizerURL = c.Request.Header.Get("X-Authorizer-URL")
 	if authorizerURL != "" {
 		return authorizerURL
 	}
@@ -89,8 +93,8 @@ func GetDomainName(uri string) string {
 
 // GetAppURL to get /app/ url if not configured by user
 func GetAppURL(gc *gin.Context) string {
-	envAppURL := envstore.EnvStoreObj.GetStringStoreEnvVariable(constants.EnvKeyAppURL)
-	if envAppURL == "" {
+	envAppURL, err := memorystore.Provider.GetStringStoreEnvVariable(constants.EnvKeyAppURL)
+	if envAppURL == "" || err != nil {
 		envAppURL = GetHost(gc) + "/app"
 	}
 	return envAppURL

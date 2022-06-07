@@ -59,7 +59,6 @@ type ComplexityRoot struct {
 		AppURL                     func(childComplexity int) int
 		ClientID                   func(childComplexity int) int
 		ClientSecret               func(childComplexity int) int
-		CookieName                 func(childComplexity int) int
 		CustomAccessTokenScript    func(childComplexity int) int
 		DatabaseHost               func(childComplexity int) int
 		DatabaseName               func(childComplexity int) int
@@ -73,6 +72,7 @@ type ComplexityRoot struct {
 		DisableEmailVerification   func(childComplexity int) int
 		DisableLoginPage           func(childComplexity int) int
 		DisableMagicLinkLogin      func(childComplexity int) int
+		DisableRedisForEnv         func(childComplexity int) int
 		DisableSignUp              func(childComplexity int) int
 		FacebookClientID           func(childComplexity int) int
 		FacebookClientSecret       func(childComplexity int) int
@@ -85,6 +85,8 @@ type ComplexityRoot struct {
 		JwtRoleClaim               func(childComplexity int) int
 		JwtSecret                  func(childComplexity int) int
 		JwtType                    func(childComplexity int) int
+		LinkedinClientID           func(childComplexity int) int
+		LinkedinClientSecret       func(childComplexity int) int
 		OrganizationLogo           func(childComplexity int) int
 		OrganizationName           func(childComplexity int) int
 		ProtectedRoles             func(childComplexity int) int
@@ -116,6 +118,7 @@ type ComplexityRoot struct {
 		IsFacebookLoginEnabled       func(childComplexity int) int
 		IsGithubLoginEnabled         func(childComplexity int) int
 		IsGoogleLoginEnabled         func(childComplexity int) int
+		IsLinkedinLoginEnabled       func(childComplexity int) int
 		IsMagicLinkLoginEnabled      func(childComplexity int) int
 		IsSignUpEnabled              func(childComplexity int) int
 		Version                      func(childComplexity int) int
@@ -346,13 +349,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Env.ClientSecret(childComplexity), true
 
-	case "Env.COOKIE_NAME":
-		if e.complexity.Env.CookieName == nil {
-			break
-		}
-
-		return e.complexity.Env.CookieName(childComplexity), true
-
 	case "Env.CUSTOM_ACCESS_TOKEN_SCRIPT":
 		if e.complexity.Env.CustomAccessTokenScript == nil {
 			break
@@ -444,6 +440,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Env.DisableMagicLinkLogin(childComplexity), true
 
+	case "Env.DISABLE_REDIS_FOR_ENV":
+		if e.complexity.Env.DisableRedisForEnv == nil {
+			break
+		}
+
+		return e.complexity.Env.DisableRedisForEnv(childComplexity), true
+
 	case "Env.DISABLE_SIGN_UP":
 		if e.complexity.Env.DisableSignUp == nil {
 			break
@@ -527,6 +530,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Env.JwtType(childComplexity), true
+
+	case "Env.LINKEDIN_CLIENT_ID":
+		if e.complexity.Env.LinkedinClientID == nil {
+			break
+		}
+
+		return e.complexity.Env.LinkedinClientID(childComplexity), true
+
+	case "Env.LINKEDIN_CLIENT_SECRET":
+		if e.complexity.Env.LinkedinClientSecret == nil {
+			break
+		}
+
+		return e.complexity.Env.LinkedinClientSecret(childComplexity), true
 
 	case "Env.ORGANIZATION_LOGO":
 		if e.complexity.Env.OrganizationLogo == nil {
@@ -681,6 +698,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Meta.IsGoogleLoginEnabled(childComplexity), true
+
+	case "Meta.is_linkedin_login_enabled":
+		if e.complexity.Meta.IsLinkedinLoginEnabled == nil {
+			break
+		}
+
+		return e.complexity.Meta.IsLinkedinLoginEnabled(childComplexity), true
 
 	case "Meta.is_magic_link_login_enabled":
 		if e.complexity.Meta.IsMagicLinkLoginEnabled == nil {
@@ -1352,6 +1376,7 @@ type Meta {
 	is_google_login_enabled: Boolean!
 	is_facebook_login_enabled: Boolean!
 	is_github_login_enabled: Boolean!
+	is_linkedin_login_enabled: Boolean!
 	is_email_verification_enabled: Boolean!
 	is_basic_authentication_enabled: Boolean!
 	is_magic_link_login_enabled: Boolean!
@@ -1423,13 +1448,13 @@ type Response {
 type Env {
 	ACCESS_TOKEN_EXPIRY_TIME: String
 	ADMIN_SECRET: String
-	DATABASE_NAME: String!
-	DATABASE_URL: String!
-	DATABASE_TYPE: String!
-	DATABASE_USERNAME: String!
-	DATABASE_PASSWORD: String!
-	DATABASE_HOST: String!
-	DATABASE_PORT: String!
+	DATABASE_NAME: String
+	DATABASE_URL: String
+	DATABASE_TYPE: String
+	DATABASE_USERNAME: String
+	DATABASE_PASSWORD: String
+	DATABASE_HOST: String
+	DATABASE_PORT: String
 	CLIENT_ID: String!
 	CLIENT_SECRET: String!
 	CUSTOM_ACCESS_TOKEN_SCRIPT: String
@@ -1445,13 +1470,13 @@ type Env {
 	ALLOWED_ORIGINS: [String!]
 	APP_URL: String
 	REDIS_URL: String
-	COOKIE_NAME: String
 	RESET_PASSWORD_URL: String
-	DISABLE_EMAIL_VERIFICATION: Boolean
-	DISABLE_BASIC_AUTHENTICATION: Boolean
-	DISABLE_MAGIC_LINK_LOGIN: Boolean
-	DISABLE_LOGIN_PAGE: Boolean
-	DISABLE_SIGN_UP: Boolean
+	DISABLE_EMAIL_VERIFICATION: Boolean!
+	DISABLE_BASIC_AUTHENTICATION: Boolean!
+	DISABLE_MAGIC_LINK_LOGIN: Boolean!
+	DISABLE_LOGIN_PAGE: Boolean!
+	DISABLE_SIGN_UP: Boolean!
+	DISABLE_REDIS_FOR_ENV: Boolean!
 	ROLES: [String!]
 	PROTECTED_ROLES: [String!]
 	DEFAULT_ROLES: [String!]
@@ -1462,6 +1487,8 @@ type Env {
 	GITHUB_CLIENT_SECRET: String
 	FACEBOOK_CLIENT_ID: String
 	FACEBOOK_CLIENT_SECRET: String
+	LINKEDIN_CLIENT_ID: String
+	LINKEDIN_CLIENT_SECRET: String
 	ORGANIZATION_NAME: String
 	ORGANIZATION_LOGO: String
 }
@@ -1492,14 +1519,13 @@ input UpdateEnvInput {
 	JWT_PUBLIC_KEY: String
 	ALLOWED_ORIGINS: [String!]
 	APP_URL: String
-	REDIS_URL: String
-	COOKIE_NAME: String
 	RESET_PASSWORD_URL: String
 	DISABLE_EMAIL_VERIFICATION: Boolean
 	DISABLE_BASIC_AUTHENTICATION: Boolean
 	DISABLE_MAGIC_LINK_LOGIN: Boolean
 	DISABLE_LOGIN_PAGE: Boolean
 	DISABLE_SIGN_UP: Boolean
+	DISABLE_REDIS_FOR_ENV: Boolean
 	ROLES: [String!]
 	PROTECTED_ROLES: [String!]
 	DEFAULT_ROLES: [String!]
@@ -1510,6 +1536,8 @@ input UpdateEnvInput {
 	GITHUB_CLIENT_SECRET: String
 	FACEBOOK_CLIENT_ID: String
 	FACEBOOK_CLIENT_SECRET: String
+	LINKEDIN_CLIENT_ID: String
+	LINKEDIN_CLIENT_SECRET: String
 	ORGANIZATION_NAME: String
 	ORGANIZATION_LOGO: String
 }
@@ -2356,14 +2384,11 @@ func (ec *executionContext) _Env_DATABASE_NAME(ctx context.Context, field graphq
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Env_DATABASE_URL(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
@@ -2391,14 +2416,11 @@ func (ec *executionContext) _Env_DATABASE_URL(ctx context.Context, field graphql
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Env_DATABASE_TYPE(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
@@ -2426,14 +2448,11 @@ func (ec *executionContext) _Env_DATABASE_TYPE(ctx context.Context, field graphq
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Env_DATABASE_USERNAME(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
@@ -2461,14 +2480,11 @@ func (ec *executionContext) _Env_DATABASE_USERNAME(ctx context.Context, field gr
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Env_DATABASE_PASSWORD(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
@@ -2496,14 +2512,11 @@ func (ec *executionContext) _Env_DATABASE_PASSWORD(ctx context.Context, field gr
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Env_DATABASE_HOST(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
@@ -2531,14 +2544,11 @@ func (ec *executionContext) _Env_DATABASE_HOST(ctx context.Context, field graphq
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Env_DATABASE_PORT(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
@@ -2566,14 +2576,11 @@ func (ec *executionContext) _Env_DATABASE_PORT(ctx context.Context, field graphq
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Env_CLIENT_ID(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
@@ -3062,38 +3069,6 @@ func (ec *executionContext) _Env_REDIS_URL(ctx context.Context, field graphql.Co
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Env_COOKIE_NAME(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Env",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CookieName, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Env_RESET_PASSWORD_URL(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -3151,11 +3126,14 @@ func (ec *executionContext) _Env_DISABLE_EMAIL_VERIFICATION(ctx context.Context,
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*bool)
+	res := resTmp.(bool)
 	fc.Result = res
-	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Env_DISABLE_BASIC_AUTHENTICATION(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
@@ -3183,11 +3161,14 @@ func (ec *executionContext) _Env_DISABLE_BASIC_AUTHENTICATION(ctx context.Contex
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*bool)
+	res := resTmp.(bool)
 	fc.Result = res
-	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Env_DISABLE_MAGIC_LINK_LOGIN(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
@@ -3215,11 +3196,14 @@ func (ec *executionContext) _Env_DISABLE_MAGIC_LINK_LOGIN(ctx context.Context, f
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*bool)
+	res := resTmp.(bool)
 	fc.Result = res
-	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Env_DISABLE_LOGIN_PAGE(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
@@ -3247,11 +3231,14 @@ func (ec *executionContext) _Env_DISABLE_LOGIN_PAGE(ctx context.Context, field g
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*bool)
+	res := resTmp.(bool)
 	fc.Result = res
-	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Env_DISABLE_SIGN_UP(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
@@ -3279,11 +3266,49 @@ func (ec *executionContext) _Env_DISABLE_SIGN_UP(ctx context.Context, field grap
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*bool)
+	res := resTmp.(bool)
 	fc.Result = res
-	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Env_DISABLE_REDIS_FOR_ENV(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Env",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DisableRedisForEnv, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Env_ROLES(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
@@ -3593,6 +3618,70 @@ func (ec *executionContext) _Env_FACEBOOK_CLIENT_SECRET(ctx context.Context, fie
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.FacebookClientSecret, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Env_LINKEDIN_CLIENT_ID(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Env",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.LinkedinClientID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Env_LINKEDIN_CLIENT_SECRET(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Env",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.LinkedinClientSecret, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3995,6 +4084,41 @@ func (ec *executionContext) _Meta_is_github_login_enabled(ctx context.Context, f
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.IsGithubLoginEnabled, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Meta_is_linkedin_login_enabled(ctx context.Context, field graphql.CollectedField, obj *model.Meta) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Meta",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IsLinkedinLoginEnabled, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -8431,22 +8555,6 @@ func (ec *executionContext) unmarshalInputUpdateEnvInput(ctx context.Context, ob
 			if err != nil {
 				return it, err
 			}
-		case "REDIS_URL":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("REDIS_URL"))
-			it.RedisURL, err = ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "COOKIE_NAME":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("COOKIE_NAME"))
-			it.CookieName, err = ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
 		case "RESET_PASSWORD_URL":
 			var err error
 
@@ -8492,6 +8600,14 @@ func (ec *executionContext) unmarshalInputUpdateEnvInput(ctx context.Context, ob
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("DISABLE_SIGN_UP"))
 			it.DisableSignUp, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "DISABLE_REDIS_FOR_ENV":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("DISABLE_REDIS_FOR_ENV"))
+			it.DisableRedisForEnv, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8572,6 +8688,22 @@ func (ec *executionContext) unmarshalInputUpdateEnvInput(ctx context.Context, ob
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("FACEBOOK_CLIENT_SECRET"))
 			it.FacebookClientSecret, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "LINKEDIN_CLIENT_ID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("LINKEDIN_CLIENT_ID"))
+			it.LinkedinClientID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "LINKEDIN_CLIENT_SECRET":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("LINKEDIN_CLIENT_SECRET"))
+			it.LinkedinClientSecret, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8943,39 +9075,18 @@ func (ec *executionContext) _Env(ctx context.Context, sel ast.SelectionSet, obj 
 			out.Values[i] = ec._Env_ADMIN_SECRET(ctx, field, obj)
 		case "DATABASE_NAME":
 			out.Values[i] = ec._Env_DATABASE_NAME(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "DATABASE_URL":
 			out.Values[i] = ec._Env_DATABASE_URL(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "DATABASE_TYPE":
 			out.Values[i] = ec._Env_DATABASE_TYPE(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "DATABASE_USERNAME":
 			out.Values[i] = ec._Env_DATABASE_USERNAME(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "DATABASE_PASSWORD":
 			out.Values[i] = ec._Env_DATABASE_PASSWORD(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "DATABASE_HOST":
 			out.Values[i] = ec._Env_DATABASE_HOST(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "DATABASE_PORT":
 			out.Values[i] = ec._Env_DATABASE_PORT(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "CLIENT_ID":
 			out.Values[i] = ec._Env_CLIENT_ID(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -9012,20 +9123,38 @@ func (ec *executionContext) _Env(ctx context.Context, sel ast.SelectionSet, obj 
 			out.Values[i] = ec._Env_APP_URL(ctx, field, obj)
 		case "REDIS_URL":
 			out.Values[i] = ec._Env_REDIS_URL(ctx, field, obj)
-		case "COOKIE_NAME":
-			out.Values[i] = ec._Env_COOKIE_NAME(ctx, field, obj)
 		case "RESET_PASSWORD_URL":
 			out.Values[i] = ec._Env_RESET_PASSWORD_URL(ctx, field, obj)
 		case "DISABLE_EMAIL_VERIFICATION":
 			out.Values[i] = ec._Env_DISABLE_EMAIL_VERIFICATION(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "DISABLE_BASIC_AUTHENTICATION":
 			out.Values[i] = ec._Env_DISABLE_BASIC_AUTHENTICATION(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "DISABLE_MAGIC_LINK_LOGIN":
 			out.Values[i] = ec._Env_DISABLE_MAGIC_LINK_LOGIN(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "DISABLE_LOGIN_PAGE":
 			out.Values[i] = ec._Env_DISABLE_LOGIN_PAGE(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "DISABLE_SIGN_UP":
 			out.Values[i] = ec._Env_DISABLE_SIGN_UP(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "DISABLE_REDIS_FOR_ENV":
+			out.Values[i] = ec._Env_DISABLE_REDIS_FOR_ENV(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "ROLES":
 			out.Values[i] = ec._Env_ROLES(ctx, field, obj)
 		case "PROTECTED_ROLES":
@@ -9046,6 +9175,10 @@ func (ec *executionContext) _Env(ctx context.Context, sel ast.SelectionSet, obj 
 			out.Values[i] = ec._Env_FACEBOOK_CLIENT_ID(ctx, field, obj)
 		case "FACEBOOK_CLIENT_SECRET":
 			out.Values[i] = ec._Env_FACEBOOK_CLIENT_SECRET(ctx, field, obj)
+		case "LINKEDIN_CLIENT_ID":
+			out.Values[i] = ec._Env_LINKEDIN_CLIENT_ID(ctx, field, obj)
+		case "LINKEDIN_CLIENT_SECRET":
+			out.Values[i] = ec._Env_LINKEDIN_CLIENT_SECRET(ctx, field, obj)
 		case "ORGANIZATION_NAME":
 			out.Values[i] = ec._Env_ORGANIZATION_NAME(ctx, field, obj)
 		case "ORGANIZATION_LOGO":
@@ -9154,6 +9287,11 @@ func (ec *executionContext) _Meta(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "is_github_login_enabled":
 			out.Values[i] = ec._Meta_is_github_login_enabled(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "is_linkedin_login_enabled":
+			out.Values[i] = ec._Meta_is_linkedin_login_enabled(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

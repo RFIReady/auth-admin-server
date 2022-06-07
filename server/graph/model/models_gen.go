@@ -26,13 +26,13 @@ type DeleteUserInput struct {
 type Env struct {
 	AccessTokenExpiryTime      *string  `json:"ACCESS_TOKEN_EXPIRY_TIME"`
 	AdminSecret                *string  `json:"ADMIN_SECRET"`
-	DatabaseName               string   `json:"DATABASE_NAME"`
-	DatabaseURL                string   `json:"DATABASE_URL"`
-	DatabaseType               string   `json:"DATABASE_TYPE"`
-	DatabaseUsername           string   `json:"DATABASE_USERNAME"`
-	DatabasePassword           string   `json:"DATABASE_PASSWORD"`
-	DatabaseHost               string   `json:"DATABASE_HOST"`
-	DatabasePort               string   `json:"DATABASE_PORT"`
+	DatabaseName               *string  `json:"DATABASE_NAME"`
+	DatabaseURL                *string  `json:"DATABASE_URL"`
+	DatabaseType               *string  `json:"DATABASE_TYPE"`
+	DatabaseUsername           *string  `json:"DATABASE_USERNAME"`
+	DatabasePassword           *string  `json:"DATABASE_PASSWORD"`
+	DatabaseHost               *string  `json:"DATABASE_HOST"`
+	DatabasePort               *string  `json:"DATABASE_PORT"`
 	ClientID                   string   `json:"CLIENT_ID"`
 	ClientSecret               string   `json:"CLIENT_SECRET"`
 	CustomAccessTokenScript    *string  `json:"CUSTOM_ACCESS_TOKEN_SCRIPT"`
@@ -48,13 +48,13 @@ type Env struct {
 	AllowedOrigins             []string `json:"ALLOWED_ORIGINS"`
 	AppURL                     *string  `json:"APP_URL"`
 	RedisURL                   *string  `json:"REDIS_URL"`
-	CookieName                 *string  `json:"COOKIE_NAME"`
 	ResetPasswordURL           *string  `json:"RESET_PASSWORD_URL"`
-	DisableEmailVerification   *bool    `json:"DISABLE_EMAIL_VERIFICATION"`
-	DisableBasicAuthentication *bool    `json:"DISABLE_BASIC_AUTHENTICATION"`
-	DisableMagicLinkLogin      *bool    `json:"DISABLE_MAGIC_LINK_LOGIN"`
-	DisableLoginPage           *bool    `json:"DISABLE_LOGIN_PAGE"`
-	DisableSignUp              *bool    `json:"DISABLE_SIGN_UP"`
+	DisableEmailVerification   bool     `json:"DISABLE_EMAIL_VERIFICATION"`
+	DisableBasicAuthentication bool     `json:"DISABLE_BASIC_AUTHENTICATION"`
+	DisableMagicLinkLogin      bool     `json:"DISABLE_MAGIC_LINK_LOGIN"`
+	DisableLoginPage           bool     `json:"DISABLE_LOGIN_PAGE"`
+	DisableSignUp              bool     `json:"DISABLE_SIGN_UP"`
+	DisableRedisForEnv         bool     `json:"DISABLE_REDIS_FOR_ENV"`
 	Roles                      []string `json:"ROLES"`
 	ProtectedRoles             []string `json:"PROTECTED_ROLES"`
 	DefaultRoles               []string `json:"DEFAULT_ROLES"`
@@ -65,6 +65,8 @@ type Env struct {
 	GithubClientSecret         *string  `json:"GITHUB_CLIENT_SECRET"`
 	FacebookClientID           *string  `json:"FACEBOOK_CLIENT_ID"`
 	FacebookClientSecret       *string  `json:"FACEBOOK_CLIENT_SECRET"`
+	LinkedinClientID           *string  `json:"LINKEDIN_CLIENT_ID"`
+	LinkedinClientSecret       *string  `json:"LINKEDIN_CLIENT_SECRET"`
 	OrganizationName           *string  `json:"ORGANIZATION_NAME"`
 	OrganizationLogo           *string  `json:"ORGANIZATION_LOGO"`
 }
@@ -116,6 +118,7 @@ type Meta struct {
 	IsGoogleLoginEnabled         bool   `json:"is_google_login_enabled"`
 	IsFacebookLoginEnabled       bool   `json:"is_facebook_login_enabled"`
 	IsGithubLoginEnabled         bool   `json:"is_github_login_enabled"`
+	IsLinkedinLoginEnabled       bool   `json:"is_linkedin_login_enabled"`
 	IsEmailVerificationEnabled   bool   `json:"is_email_verification_enabled"`
 	IsBasicAuthenticationEnabled bool   `json:"is_basic_authentication_enabled"`
 	IsMagicLinkLoginEnabled      bool   `json:"is_magic_link_login_enabled"`
@@ -199,14 +202,13 @@ type UpdateEnvInput struct {
 	JwtPublicKey               *string  `json:"JWT_PUBLIC_KEY"`
 	AllowedOrigins             []string `json:"ALLOWED_ORIGINS"`
 	AppURL                     *string  `json:"APP_URL"`
-	RedisURL                   *string  `json:"REDIS_URL"`
-	CookieName                 *string  `json:"COOKIE_NAME"`
 	ResetPasswordURL           *string  `json:"RESET_PASSWORD_URL"`
 	DisableEmailVerification   *bool    `json:"DISABLE_EMAIL_VERIFICATION"`
 	DisableBasicAuthentication *bool    `json:"DISABLE_BASIC_AUTHENTICATION"`
 	DisableMagicLinkLogin      *bool    `json:"DISABLE_MAGIC_LINK_LOGIN"`
 	DisableLoginPage           *bool    `json:"DISABLE_LOGIN_PAGE"`
 	DisableSignUp              *bool    `json:"DISABLE_SIGN_UP"`
+	DisableRedisForEnv         *bool    `json:"DISABLE_REDIS_FOR_ENV"`
 	Roles                      []string `json:"ROLES"`
 	ProtectedRoles             []string `json:"PROTECTED_ROLES"`
 	DefaultRoles               []string `json:"DEFAULT_ROLES"`
@@ -217,6 +219,8 @@ type UpdateEnvInput struct {
 	GithubClientSecret         *string  `json:"GITHUB_CLIENT_SECRET"`
 	FacebookClientID           *string  `json:"FACEBOOK_CLIENT_ID"`
 	FacebookClientSecret       *string  `json:"FACEBOOK_CLIENT_SECRET"`
+	LinkedinClientID           *string  `json:"LINKEDIN_CLIENT_ID"`
+	LinkedinClientSecret       *string  `json:"LINKEDIN_CLIENT_SECRET"`
 	OrganizationName           *string  `json:"ORGANIZATION_NAME"`
 	OrganizationLogo           *string  `json:"ORGANIZATION_LOGO"`
 }
