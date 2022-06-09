@@ -1,0 +1,78 @@
+[19:45:52.152] Global cache location '/Users/peterchoi/Library/Caches/typescript/4.6', safe file path '/users/peterchoi/documents/projects/rfiready/backend/node_modules/typescript/lib/typingsafelist.json', types map path /users/peterchoi/documents/projects/rfiready/backend/node_modules/typescript/lib/typesmap.json
+[19:45:52.154] Processing cache location '/Users/peterchoi/Library/Caches/typescript/4.6'
+[19:45:52.154] Trying to find '/Users/peterchoi/Library/Caches/typescript/4.6/package.json'...
+[19:45:52.158] Loaded content of '/Users/peterchoi/Library/Caches/typescript/4.6/package.json': {"private":true,"dependencies":{"types-registry":"^0.1.593"},"devDependencies":{"@types/aria-query":"^5.0.0","@types/babel__core":"^7.1.19","@types/babel__preset-env":"^7.9.2","@types/big.js":"^6.1.3","@types/body-parser":"^1.19.2","@types/common-tags":"^1.8.1","@types/convert-source-map":"^1.5.2","@types/cors":"^2.8.12","@types/craco__craco":"^6.4.0","@types/cron":"^2.0.0","@types/cross-spawn":"^6.0.2","@types/dlv":"^1.1.2","@types/enzyme":"^3.10.12","@types/enzyme-adapter-react-16":"^1.0.6","@types/enzyme-to-json":"^1.5.4","@types/eslint":"^8.4.2","@types/eslint-config-prettier":"^6.11.0","@types/eslint-plugin-markdown":"^2.0.0","@types/eslint-plugin-prettier":"^3.1.0","@types/eventsource":"^1.1.8","@types/express":"^4.17.13","@types/graceful-fs":"^4.1.5","@types/graphql-list-fields":"^2.0.3","@types/ignore-styles":"^5.0.0","@types/inquirer":"^8.2.1","@types/jest":"^27.4.1","@types/loader-utils":"^2.0.3","@types/lodash":"^4.14.182","@types/lodash.merge":"^4.6.6","@types/multer":"^1.4.7","@types/node":"^17.0.25","@types/nodemon":"^1.19.1","@types/noisejs":"^0.0.28","@types/page":"^1.11.5","@types/prettier":"^2.6.2","@types/prop-types":"^15.7.5","@types/react":"^18.0.9","@types/react-dev-utils":"^9.0.10","@types/react-dom":"^18.0.3","@types/react-helmet":"^6.1.5","@types/react-router":"^5.1.18","@types/react-router-dom":"^5.3.3","@types/request":"^2.48.8","@types/require-relative":"^0.8.0","@types/resolve":"^1.20.2","@types/sass":"^1.43.1","@types/stack-utils":"^2.0.1","@types/standard-version":"^7.0.1","@types/store":"^2.0.2","@types/styled-components":"^5.1.25","@types/swagger-jsdoc":"^6.0.1","@types/swagger-ui-express":"^4.1.3","@types/tailwindcss":"^3.0.10","@types/testing-library__jest-dom":"^5.14.3","@types/vscode":"^1.66.0","@types/ws":"^8.5.3"}}
+[19:45:52.158] Loaded content of '/Users/peterchoi/Library/Caches/typescript/4.6/package-lock.json'
+[19:45:52.169] Adding entry into typings cache: 'aria-query' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/aria-query/index.d.ts'
+[19:45:52.175] Adding entry into typings cache: 'babel__core' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/babel__core/index.d.ts'
+[19:45:52.179] Adding entry into typings cache: 'babel__preset-env' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/babel__preset-env/index.d.ts'
+[19:45:52.182] Adding entry into typings cache: 'big.js' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/big.js/index.d.ts'
+[19:45:52.185] Adding entry into typings cache: 'body-parser' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/body-parser/index.d.ts'
+[19:45:52.189] Adding entry into typings cache: 'common-tags' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/common-tags/index.d.ts'
+[19:45:52.191] Adding entry into typings cache: 'convert-source-map' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/convert-source-map/index.d.ts'
+[19:45:52.195] Adding entry into typings cache: 'cors' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/cors/index.d.ts'
+[19:45:52.198] Adding entry into typings cache: 'craco__craco' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/craco__craco/index.d.ts'
+[19:45:52.202] Adding entry into typings cache: 'cron' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/cron/index.d.ts'
+[19:45:52.206] Adding entry into typings cache: 'cross-spawn' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/cross-spawn/index.d.ts'
+[19:45:52.208] Adding entry into typings cache: 'dlv' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/dlv/index.d.ts'
+[19:45:52.214] Adding entry into typings cache: 'enzyme' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/enzyme/index.d.ts'
+[19:45:52.216] Adding entry into typings cache: 'enzyme-adapter-react-16' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/enzyme-adapter-react-16/index.d.ts'
+[19:45:52.218] Adding entry into typings cache: 'enzyme-to-json' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/enzyme-to-json/index.d.ts'
+[19:45:52.222] Adding entry into typings cache: 'eslint' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/eslint/index.d.ts'
+[19:45:52.225] Adding entry into typings cache: 'eslint-config-prettier' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/eslint-config-prettier/index.d.ts'
+[19:45:52.227] Adding entry into typings cache: 'eslint-plugin-markdown' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/eslint-plugin-markdown/index.d.ts'
+[19:45:52.228] Adding entry into typings cache: 'eslint-plugin-prettier' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/eslint-plugin-prettier/index.d.ts'
+[19:45:52.232] Adding entry into typings cache: 'eventsource' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/eventsource/index.d.ts'
+[19:45:52.234] Adding entry into typings cache: 'express' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/express/index.d.ts'
+[19:45:52.236] Adding entry into typings cache: 'graceful-fs' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/graceful-fs/index.d.ts'
+[19:45:52.239] Adding entry into typings cache: 'graphql-list-fields' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/graphql-list-fields/index.d.ts'
+[19:45:52.242] Adding entry into typings cache: 'ignore-styles' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/ignore-styles/index.d.ts'
+[19:45:52.247] Adding entry into typings cache: 'inquirer' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/inquirer/index.d.ts'
+[19:45:52.252] Adding entry into typings cache: 'jest' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/jest/index.d.ts'
+[19:45:52.254] Adding entry into typings cache: 'loader-utils' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/loader-utils/index.d.ts'
+[19:45:52.259] Adding entry into typings cache: 'lodash' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/lodash/index.d.ts'
+[19:45:52.260] Adding entry into typings cache: 'lodash.merge' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/lodash.merge/index.d.ts'
+[19:45:52.263] Adding entry into typings cache: 'multer' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/multer/index.d.ts'
+[19:45:52.271] Adding entry into typings cache: 'node' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/node/index.d.ts'
+[19:45:52.272] Adding entry into typings cache: 'nodemon' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/nodemon/index.d.ts'
+[19:45:52.275] Adding entry into typings cache: 'noisejs' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/noisejs/index.d.ts'
+[19:45:52.277] Adding entry into typings cache: 'page' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/page/index.d.ts'
+[19:45:52.280] Adding entry into typings cache: 'prettier' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/prettier/index.d.ts'
+[19:45:52.282] Adding entry into typings cache: 'prop-types' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/prop-types/index.d.ts'
+[19:45:52.286] Adding entry into typings cache: 'react' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/react/index.d.ts'
+[19:45:52.290] Adding entry into typings cache: 'react-dev-utils' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/react-dev-utils/index.d.ts'
+[19:45:52.292] Adding entry into typings cache: 'react-dom' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/react-dom/index.d.ts'
+[19:45:52.295] Adding entry into typings cache: 'react-helmet' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/react-helmet/index.d.ts'
+[19:45:52.298] Adding entry into typings cache: 'react-router' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/react-router/index.d.ts'
+[19:45:52.300] Adding entry into typings cache: 'react-router-dom' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/react-router-dom/index.d.ts'
+[19:45:52.303] Adding entry into typings cache: 'request' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/request/index.d.ts'
+[19:45:52.304] Adding entry into typings cache: 'require-relative' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/require-relative/index.d.ts'
+[19:45:52.307] Adding entry into typings cache: 'resolve' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/resolve/index.d.ts'
+[19:45:52.308] Adding entry into typings cache: 'sass' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/sass/index.d.ts'
+[19:45:52.310] Adding entry into typings cache: 'stack-utils' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/stack-utils/index.d.ts'
+[19:45:52.312] Adding entry into typings cache: 'standard-version' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/standard-version/index.d.ts'
+[19:45:52.314] Adding entry into typings cache: 'store' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/store/index.d.ts'
+[19:45:52.317] Adding entry into typings cache: 'styled-components' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/styled-components/index.d.ts'
+[19:45:52.318] Adding entry into typings cache: 'swagger-jsdoc' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/swagger-jsdoc/index.d.ts'
+[19:45:52.320] Adding entry into typings cache: 'swagger-ui-express' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/swagger-ui-express/index.d.ts'
+[19:45:52.322] Adding entry into typings cache: 'tailwindcss' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/tailwindcss/index.d.ts'
+[19:45:52.325] Adding entry into typings cache: 'testing-library__jest-dom' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/testing-library__jest-dom/index.d.ts'
+[19:45:52.327] Adding entry into typings cache: 'vscode' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/vscode/index.d.ts'
+[19:45:52.329] Adding entry into typings cache: 'ws' => '/Users/peterchoi/Library/Caches/typescript/4.6/node_modules/@types/ws/index.d.ts'
+[19:45:52.330] Finished processing cache location '/Users/peterchoi/Library/Caches/typescript/4.6'
+[19:45:52.330] Process id: 34550
+[19:45:52.330] NPM location: /Users/peterchoi/.nvm/versions/node/v16.9.1/bin/npm (explicit '--npmLocation' not  provided)
+[19:45:52.330] validateDefaultNpmLocation: false
+[19:45:52.330] Npm config file: /Users/peterchoi/Library/Caches/typescript/4.6/package.json
+[19:45:52.330] Updating types-registry npm package...
+[19:45:52.330] Exec: /Users/peterchoi/.nvm/versions/node/v16.9.1/bin/npm install --ignore-scripts types-registry@latest
+[19:45:53.345]     Succeeded. stdout:
+    
+    changed 1 package, and audited 162 packages in 798ms
+
+9 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+[19:45:53.345] Updated types-registry npm package
