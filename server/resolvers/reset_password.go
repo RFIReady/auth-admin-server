@@ -39,7 +39,7 @@ func ResetPasswordResolver(ctx context.Context, params model.ResetPasswordInput)
 		return res, fmt.Errorf(`basic authentication is disabled for this instance`)
 	}
 
-	verificationRequest, err := db.Provider.GetVerificationRequestByToken(params.Token)
+	verificationRequest, err := db.Provider.GetVerificationRequestByToken(ctx, params.Token)
 	if err != nil {
 		log.Debug("Failed to get verification request: ", err)
 		return res, fmt.Errorf(`invalid token`)
@@ -50,16 +50,21 @@ func ResetPasswordResolver(ctx context.Context, params model.ResetPasswordInput)
 		return res, fmt.Errorf(`passwords don't match`)
 	}
 
-	if !validators.IsValidPassword(params.Password) {
+	if err := validators.IsValidPassword(params.Password); err != nil {
 		log.Debug("Invalid password")
-		return res, fmt.Errorf(`password is not valid. It needs to be at least 6 characters long and contain at least one number, one uppercase letter, one lowercase letter and one special character`)
+		return res, err
 	}
 
 	// verify if token exists in db
 	hostname := parsers.GetHost(gc)
-	claim, err := token.ParseJWTToken(params.Token, hostname, verificationRequest.Nonce, verificationRequest.Email)
+	claim, err := token.ParseJWTToken(params.Token)
 	if err != nil {
 		log.Debug("Failed to parse token: ", err)
+		return res, fmt.Errorf(`invalid token`)
+	}
+
+	if ok, err := token.ValidateJWTClaims(claim, hostname, verificationRequest.Nonce, verificationRequest.Email); !ok || err != nil {
+		log.Debug("Failed to validate jwt claims: ", err)
 		return res, fmt.Errorf(`invalid token`)
 	}
 
@@ -67,7 +72,7 @@ func ResetPasswordResolver(ctx context.Context, params model.ResetPasswordInput)
 	log := log.WithFields(log.Fields{
 		"email": email,
 	})
-	user, err := db.Provider.GetUserByEmail(email)
+	user, err := db.Provider.GetUserByEmail(ctx, email)
 	if err != nil {
 		log.Debug("Failed to get user: ", err)
 		return res, err
@@ -77,8 +82,8 @@ func ResetPasswordResolver(ctx context.Context, params model.ResetPasswordInput)
 	user.Password = &password
 
 	signupMethod := user.SignupMethods
-	if !strings.Contains(signupMethod, constants.SignupMethodBasicAuth) {
-		signupMethod = signupMethod + "," + constants.SignupMethodBasicAuth
+	if !strings.Contains(signupMethod, constants.AuthRecipeMethodBasicAuth) {
+		signupMethod = signupMethod + "," + constants.AuthRecipeMethodBasicAuth
 	}
 	user.SignupMethods = signupMethod
 
@@ -89,13 +94,13 @@ func ResetPasswordResolver(ctx context.Context, params model.ResetPasswordInput)
 	}
 
 	// delete from verification table
-	err = db.Provider.DeleteVerificationRequest(verificationRequest)
+	err = db.Provider.DeleteVerificationRequest(ctx, verificationRequest)
 	if err != nil {
 		log.Debug("Failed to delete verification request: ", err)
 		return res, err
 	}
 
-	_, err = db.Provider.UpdateUser(user)
+	_, err = db.Provider.UpdateUser(ctx, user)
 	if err != nil {
 		log.Debug("Failed to update user: ", err)
 		return res, err

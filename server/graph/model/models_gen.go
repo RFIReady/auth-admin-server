@@ -2,6 +2,18 @@
 
 package model
 
+type AddEmailTemplateRequest struct {
+	EventName string `json:"event_name"`
+	Template  string `json:"template"`
+}
+
+type AddWebhookRequest struct {
+	EventName string                 `json:"event_name"`
+	Endpoint  string                 `json:"endpoint"`
+	Enabled   bool                   `json:"enabled"`
+	Headers   map[string]interface{} `json:"headers"`
+}
+
 type AdminLoginInput struct {
 	AdminSecret string `json:"admin_secret"`
 }
@@ -19,8 +31,25 @@ type AuthResponse struct {
 	User         *User   `json:"user"`
 }
 
+type DeleteEmailTemplateRequest struct {
+	ID string `json:"id"`
+}
+
 type DeleteUserInput struct {
 	Email string `json:"email"`
+}
+
+type EmailTemplate struct {
+	ID        string `json:"id"`
+	EventName string `json:"event_name"`
+	Template  string `json:"template"`
+	CreatedAt *int64 `json:"created_at"`
+	UpdatedAt *int64 `json:"updated_at"`
+}
+
+type EmailTemplates struct {
+	Pagination     *Pagination      `json:"pagination"`
+	EmailTemplates []*EmailTemplate `json:"EmailTemplates"`
 }
 
 type Env struct {
@@ -55,6 +84,7 @@ type Env struct {
 	DisableLoginPage           bool     `json:"DISABLE_LOGIN_PAGE"`
 	DisableSignUp              bool     `json:"DISABLE_SIGN_UP"`
 	DisableRedisForEnv         bool     `json:"DISABLE_REDIS_FOR_ENV"`
+	DisableStrongPassword      bool     `json:"DISABLE_STRONG_PASSWORD"`
 	Roles                      []string `json:"ROLES"`
 	ProtectedRoles             []string `json:"PROTECTED_ROLES"`
 	DefaultRoles               []string `json:"DEFAULT_ROLES"`
@@ -67,6 +97,8 @@ type Env struct {
 	FacebookClientSecret       *string  `json:"FACEBOOK_CLIENT_SECRET"`
 	LinkedinClientID           *string  `json:"LINKEDIN_CLIENT_ID"`
 	LinkedinClientSecret       *string  `json:"LINKEDIN_CLIENT_SECRET"`
+	AppleClientID              *string  `json:"APPLE_CLIENT_ID"`
+	AppleClientSecret          *string  `json:"APPLE_CLIENT_SECRET"`
 	OrganizationName           *string  `json:"ORGANIZATION_NAME"`
 	OrganizationLogo           *string  `json:"ORGANIZATION_LOGO"`
 }
@@ -97,6 +129,11 @@ type InviteMemberInput struct {
 	RedirectURI *string  `json:"redirect_uri"`
 }
 
+type ListWebhookLogRequest struct {
+	Pagination *PaginationInput `json:"pagination"`
+	WebhookID  *string          `json:"webhook_id"`
+}
+
 type LoginInput struct {
 	Email    string   `json:"email"`
 	Password string   `json:"password"`
@@ -119,10 +156,12 @@ type Meta struct {
 	IsFacebookLoginEnabled       bool   `json:"is_facebook_login_enabled"`
 	IsGithubLoginEnabled         bool   `json:"is_github_login_enabled"`
 	IsLinkedinLoginEnabled       bool   `json:"is_linkedin_login_enabled"`
+	IsAppleLoginEnabled          bool   `json:"is_apple_login_enabled"`
 	IsEmailVerificationEnabled   bool   `json:"is_email_verification_enabled"`
 	IsBasicAuthenticationEnabled bool   `json:"is_basic_authentication_enabled"`
 	IsMagicLinkLoginEnabled      bool   `json:"is_magic_link_login_enabled"`
 	IsSignUpEnabled              bool   `json:"is_sign_up_enabled"`
+	IsStrongPasswordEnabled      bool   `json:"is_strong_password_enabled"`
 }
 
 type OAuthRevokeInput struct {
@@ -182,8 +221,25 @@ type SignUpInput struct {
 	RedirectURI     *string  `json:"redirect_uri"`
 }
 
+type TestEndpointRequest struct {
+	Endpoint  string                 `json:"endpoint"`
+	EventName string                 `json:"event_name"`
+	Headers   map[string]interface{} `json:"headers"`
+}
+
+type TestEndpointResponse struct {
+	HTTPStatus *int64  `json:"http_status"`
+	Response   *string `json:"response"`
+}
+
 type UpdateAccessInput struct {
 	UserID string `json:"user_id"`
+}
+
+type UpdateEmailTemplateRequest struct {
+	ID        string  `json:"id"`
+	EventName *string `json:"event_name"`
+	Template  *string `json:"template"`
 }
 
 type UpdateEnvInput struct {
@@ -209,6 +265,7 @@ type UpdateEnvInput struct {
 	DisableLoginPage           *bool    `json:"DISABLE_LOGIN_PAGE"`
 	DisableSignUp              *bool    `json:"DISABLE_SIGN_UP"`
 	DisableRedisForEnv         *bool    `json:"DISABLE_REDIS_FOR_ENV"`
+	DisableStrongPassword      *bool    `json:"DISABLE_STRONG_PASSWORD"`
 	Roles                      []string `json:"ROLES"`
 	ProtectedRoles             []string `json:"PROTECTED_ROLES"`
 	DefaultRoles               []string `json:"DEFAULT_ROLES"`
@@ -221,6 +278,8 @@ type UpdateEnvInput struct {
 	FacebookClientSecret       *string  `json:"FACEBOOK_CLIENT_SECRET"`
 	LinkedinClientID           *string  `json:"LINKEDIN_CLIENT_ID"`
 	LinkedinClientSecret       *string  `json:"LINKEDIN_CLIENT_SECRET"`
+	AppleClientID              *string  `json:"APPLE_CLIENT_ID"`
+	AppleClientSecret          *string  `json:"APPLE_CLIENT_SECRET"`
 	OrganizationName           *string  `json:"ORGANIZATION_NAME"`
 	OrganizationLogo           *string  `json:"ORGANIZATION_LOGO"`
 }
@@ -253,6 +312,14 @@ type UpdateUserInput struct {
 	PhoneNumber   *string   `json:"phone_number"`
 	Picture       *string   `json:"picture"`
 	Roles         []*string `json:"roles"`
+}
+
+type UpdateWebhookRequest struct {
+	ID        string                 `json:"id"`
+	EventName *string                `json:"event_name"`
+	Endpoint  *string                `json:"endpoint"`
+	Enabled   *bool                  `json:"enabled"`
+	Headers   map[string]interface{} `json:"headers"`
 }
 
 type User struct {
@@ -310,4 +377,38 @@ type VerificationRequests struct {
 
 type VerifyEmailInput struct {
 	Token string `json:"token"`
+}
+
+type Webhook struct {
+	ID        string                 `json:"id"`
+	EventName *string                `json:"event_name"`
+	Endpoint  *string                `json:"endpoint"`
+	Enabled   *bool                  `json:"enabled"`
+	Headers   map[string]interface{} `json:"headers"`
+	CreatedAt *int64                 `json:"created_at"`
+	UpdatedAt *int64                 `json:"updated_at"`
+}
+
+type WebhookLog struct {
+	ID         string  `json:"id"`
+	HTTPStatus *int64  `json:"http_status"`
+	Response   *string `json:"response"`
+	Request    *string `json:"request"`
+	WebhookID  *string `json:"webhook_id"`
+	CreatedAt  *int64  `json:"created_at"`
+	UpdatedAt  *int64  `json:"updated_at"`
+}
+
+type WebhookLogs struct {
+	Pagination  *Pagination   `json:"pagination"`
+	WebhookLogs []*WebhookLog `json:"webhook_logs"`
+}
+
+type WebhookRequest struct {
+	ID string `json:"id"`
+}
+
+type Webhooks struct {
+	Pagination *Pagination `json:"pagination"`
+	Webhooks   []*Webhook  `json:"webhooks"`
 }

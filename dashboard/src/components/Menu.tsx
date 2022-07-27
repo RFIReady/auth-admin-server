@@ -30,6 +30,7 @@ import {
   FiMenu,
   FiUsers,
   FiChevronDown,
+  FiLink,
 } from "react-icons/fi";
 import { BiCustomize } from "react-icons/bi";
 import { AiOutlineKey } from "react-icons/ai";
@@ -111,6 +112,7 @@ const LinkItems: Array<LinkItemProps> = [
     ],
   },
   { name: "Users", icon: FiUsers, route: "/users" },
+  { name: "Webhooks", icon: FiLink, route: "/webhooks" },
 ];
 
 interface SidebarProps extends BoxProps {

@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/authorizerdev/authorizer/server/constants"
 	"github.com/authorizerdev/authorizer/server/db/models"
 	"github.com/authorizerdev/authorizer/server/graph/model"
 	"github.com/authorizerdev/authorizer/server/memorystore"
@@ -22,12 +23,14 @@ func validateJwtTokenTest(t *testing.T, s TestSetup) {
 			TokenType: "access_token",
 			Token:     "",
 		})
-		assert.False(t, res.IsValid)
+		assert.Error(t, err)
+		assert.Nil(t, res)
 		res, err = resolvers.ValidateJwtTokenResolver(ctx, model.ValidateJWTTokenInput{
 			TokenType: "access_token",
 			Token:     "invalid",
 		})
-		assert.False(t, res.IsValid)
+		assert.Error(t, err)
+		assert.Nil(t, res)
 		_, err = resolvers.ValidateJwtTokenResolver(ctx, model.ValidateJWTTokenInput{
 			TokenType: "access_token_invalid",
 			Token:     "invalid@invalid",
@@ -47,9 +50,14 @@ func validateJwtTokenTest(t *testing.T, s TestSetup) {
 	roles := []string{"user"}
 	gc, err := utils.GinContextFromContext(ctx)
 	assert.NoError(t, err)
-	authToken, err := token.CreateAuthToken(gc, user, roles, scope)
-	memorystore.Provider.SetState(authToken.AccessToken.Token, authToken.FingerPrint+"@"+user.ID)
-	memorystore.Provider.SetState(authToken.RefreshToken.Token, authToken.FingerPrint+"@"+user.ID)
+	sessionKey := constants.AuthRecipeMethodBasicAuth + ":" + user.ID
+	authToken, err := token.CreateAuthToken(gc, user, roles, scope, constants.AuthRecipeMethodBasicAuth)
+	memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeSessionToken+"_"+authToken.FingerPrint, authToken.FingerPrintHash)
+	memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeAccessToken+"_"+authToken.FingerPrint, authToken.AccessToken.Token)
+
+	if authToken.RefreshToken != nil {
+		memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeRefreshToken+"_"+authToken.FingerPrint, authToken.RefreshToken.Token)
+	}
 
 	t.Run(`should validate the access token`, func(t *testing.T) {
 		res, err := resolvers.ValidateJwtTokenResolver(ctx, model.ValidateJWTTokenInput{
@@ -57,7 +65,6 @@ func validateJwtTokenTest(t *testing.T, s TestSetup) {
 			Token:     authToken.AccessToken.Token,
 			Roles:     []string{"user"},
 		})
-
 		assert.NoError(t, err)
 		assert.True(t, res.IsValid)
 

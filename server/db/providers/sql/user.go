@@ -1,6 +1,7 @@
 package sql
 
 import (
+	"context"
 	"time"
 
 	"github.com/authorizerdev/authorizer/server/constants"
@@ -12,7 +13,7 @@ import (
 )
 
 // AddUser to save user information in database
-func (p *provider) AddUser(user models.User) (models.User, error) {
+func (p *provider) AddUser(ctx context.Context, user models.User) (models.User, error) {
 	if user.ID == "" {
 		user.ID = uuid.New().String()
 	}
@@ -42,7 +43,7 @@ func (p *provider) AddUser(user models.User) (models.User, error) {
 }
 
 // UpdateUser to update user information in database
-func (p *provider) UpdateUser(user models.User) (models.User, error) {
+func (p *provider) UpdateUser(ctx context.Context, user models.User) (models.User, error) {
 	user.UpdatedAt = time.Now().Unix()
 
 	result := p.db.Save(&user)
@@ -55,9 +56,14 @@ func (p *provider) UpdateUser(user models.User) (models.User, error) {
 }
 
 // DeleteUser to delete user information from database
-func (p *provider) DeleteUser(user models.User) error {
+func (p *provider) DeleteUser(ctx context.Context, user models.User) error {
 	result := p.db.Delete(&user)
 
+	if result.Error != nil {
+		return result.Error
+	}
+
+	result = p.db.Where("user_id = ?", user.ID).Delete(&models.Session{})
 	if result.Error != nil {
 		return result.Error
 	}
@@ -66,7 +72,7 @@ func (p *provider) DeleteUser(user models.User) error {
 }
 
 // ListUsers to get list of users from database
-func (p *provider) ListUsers(pagination model.Pagination) (*model.Users, error) {
+func (p *provider) ListUsers(ctx context.Context, pagination model.Pagination) (*model.Users, error) {
 	var users []models.User
 	result := p.db.Limit(int(pagination.Limit)).Offset(int(pagination.Offset)).Order("created_at DESC").Find(&users)
 	if result.Error != nil {
@@ -94,10 +100,9 @@ func (p *provider) ListUsers(pagination model.Pagination) (*model.Users, error) 
 }
 
 // GetUserByEmail to get user information from database using email address
-func (p *provider) GetUserByEmail(email string) (models.User, error) {
+func (p *provider) GetUserByEmail(ctx context.Context, email string) (models.User, error) {
 	var user models.User
 	result := p.db.Where("email = ?", email).First(&user)
-
 	if result.Error != nil {
 		return user, result.Error
 	}
@@ -106,11 +111,10 @@ func (p *provider) GetUserByEmail(email string) (models.User, error) {
 }
 
 // GetUserByID to get user information from database using user ID
-func (p *provider) GetUserByID(id string) (models.User, error) {
+func (p *provider) GetUserByID(ctx context.Context, id string) (models.User, error) {
 	var user models.User
 
 	result := p.db.Where("id = ?", id).First(&user)
-
 	if result.Error != nil {
 		return user, result.Error
 	}

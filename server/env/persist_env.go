@@ -1,6 +1,7 @@
 package env
 
 import (
+	"context"
 	"encoding/json"
 	"os"
 	"reflect"
@@ -58,7 +59,8 @@ func fixBackwardCompatibility(data map[string]interface{}) (bool, map[string]int
 // GetEnvData returns the env data from database
 func GetEnvData() (map[string]interface{}, error) {
 	var result map[string]interface{}
-	env, err := db.Provider.GetEnv()
+	ctx := context.Background()
+	env, err := db.Provider.GetEnv(ctx)
 	// config not found in db
 	if err != nil {
 		log.Debug("Error while getting env data from db: ", err)
@@ -108,9 +110,10 @@ func GetEnvData() (map[string]interface{}, error) {
 
 // PersistEnv persists the environment variables to the database
 func PersistEnv() error {
-	env, err := db.Provider.GetEnv()
+	ctx := context.Background()
+	env, err := db.Provider.GetEnv(ctx)
 	// config not found in db
-	if err != nil {
+	if err != nil || env.EnvData == "" {
 		// AES encryption needs 32 bit key only, so we chop off last 4 characters from 36 bit uuid
 		hash := uuid.New().String()[:36-4]
 		err := memorystore.Provider.UpdateEnvVariable(constants.EnvKeyEncryptionKey, hash)
@@ -137,7 +140,7 @@ func PersistEnv() error {
 			EnvData: encryptedConfig,
 		}
 
-		env, err = db.Provider.AddEnv(env)
+		env, err = db.Provider.AddEnv(ctx, env)
 		if err != nil {
 			log.Debug("Error while persisting env data to db: ", err)
 			return err
@@ -171,7 +174,7 @@ func PersistEnv() error {
 
 		err = json.Unmarshal(decryptedConfigs, &storeData)
 		if err != nil {
-			log.Debug("Error while unmarshalling env data: ", err)
+			log.Debug("Error while un-marshalling env data: ", err)
 			return err
 		}
 
@@ -198,7 +201,7 @@ func PersistEnv() error {
 				envValue := strings.TrimSpace(os.Getenv(key))
 				if envValue != "" {
 					switch key {
-					case constants.EnvKeyIsProd, constants.EnvKeyDisableBasicAuthentication, constants.EnvKeyDisableEmailVerification, constants.EnvKeyDisableLoginPage, constants.EnvKeyDisableMagicLinkLogin, constants.EnvKeyDisableSignUp, constants.EnvKeyDisableRedisForEnv:
+					case constants.EnvKeyIsProd, constants.EnvKeyDisableBasicAuthentication, constants.EnvKeyDisableEmailVerification, constants.EnvKeyDisableLoginPage, constants.EnvKeyDisableMagicLinkLogin, constants.EnvKeyDisableSignUp, constants.EnvKeyDisableRedisForEnv, constants.EnvKeyDisableStrongPassword:
 						if envValueBool, err := strconv.ParseBool(envValue); err == nil {
 							if value.(bool) != envValueBool {
 								storeData[key] = envValueBool
@@ -251,7 +254,7 @@ func PersistEnv() error {
 			}
 
 			env.EnvData = encryptedConfig
-			_, err = db.Provider.UpdateEnv(env)
+			_, err = db.Provider.UpdateEnv(ctx, env)
 			if err != nil {
 				log.Debug("Failed to Update Config: ", err)
 				return err

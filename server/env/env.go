@@ -70,6 +70,8 @@ func InitAllEnv() error {
 	osFacebookClientSecret := os.Getenv(constants.EnvKeyFacebookClientSecret)
 	osLinkedInClientID := os.Getenv(constants.EnvKeyLinkedInClientID)
 	osLinkedInClientSecret := os.Getenv(constants.EnvKeyLinkedInClientSecret)
+	osAppleClientID := os.Getenv(constants.EnvKeyAppleClientID)
+	osAppleClientSecret := os.Getenv(constants.EnvKeyAppleClientSecret)
 	osResetPasswordURL := os.Getenv(constants.EnvKeyResetPasswordURL)
 	osOrganizationName := os.Getenv(constants.EnvKeyOrganizationName)
 	osOrganizationLogo := os.Getenv(constants.EnvKeyOrganizationLogo)
@@ -81,6 +83,7 @@ func InitAllEnv() error {
 	osDisableLoginPage := os.Getenv(constants.EnvKeyDisableLoginPage)
 	osDisableSignUp := os.Getenv(constants.EnvKeyDisableSignUp)
 	osDisableRedisForEnv := os.Getenv(constants.EnvKeyDisableRedisForEnv)
+	osDisableStrongPassword := os.Getenv(constants.EnvKeyDisableStrongPassword)
 
 	// os slice vars
 	osAllowedOrigins := os.Getenv(constants.EnvKeyAllowedOrigins)
@@ -361,6 +364,20 @@ func InitAllEnv() error {
 		envData[constants.EnvKeyLinkedInClientSecret] = osLinkedInClientSecret
 	}
 
+	if val, ok := envData[constants.EnvKeyAppleClientID]; !ok || val == "" {
+		envData[constants.EnvKeyAppleClientID] = osAppleClientID
+	}
+	if osFacebookClientID != "" && envData[constants.EnvKeyAppleClientID] != osFacebookClientID {
+		envData[constants.EnvKeyAppleClientID] = osAppleClientID
+	}
+
+	if val, ok := envData[constants.EnvKeyAppleClientSecret]; !ok || val == "" {
+		envData[constants.EnvKeyAppleClientSecret] = osAppleClientSecret
+	}
+	if osFacebookClientSecret != "" && envData[constants.EnvKeyAppleClientSecret] != osFacebookClientSecret {
+		envData[constants.EnvKeyAppleClientSecret] = osAppleClientSecret
+	}
+
 	if val, ok := envData[constants.EnvKeyResetPasswordURL]; !ok || val == "" {
 		envData[constants.EnvKeyResetPasswordURL] = strings.TrimPrefix(osResetPasswordURL, "/")
 	}
@@ -457,6 +474,19 @@ func InitAllEnv() error {
 		}
 		if boolValue != envData[constants.EnvKeyDisableRedisForEnv].(bool) {
 			envData[constants.EnvKeyDisableRedisForEnv] = boolValue
+		}
+	}
+
+	if _, ok := envData[constants.EnvKeyDisableStrongPassword]; !ok {
+		envData[constants.EnvKeyDisableStrongPassword] = osDisableStrongPassword == "true"
+	}
+	if osDisableStrongPassword != "" {
+		boolValue, err := strconv.ParseBool(osDisableStrongPassword)
+		if err != nil {
+			return err
+		}
+		if boolValue != envData[constants.EnvKeyDisableStrongPassword].(bool) {
+			envData[constants.EnvKeyDisableStrongPassword] = boolValue
 		}
 	}
 

@@ -3,6 +3,8 @@ package constants
 var VERSION = "0.0.1"
 
 const (
+	// TestEnv is used for testing
+	TestEnv = "test"
 	// EnvKeyEnv key for env variable ENV
 	EnvKeyEnv = "ENV"
 	// EnvKeyEnvPath key for cli arg variable ENV_PATH
@@ -77,6 +79,10 @@ const (
 	EnvKeyLinkedInClientID = "LINKEDIN_CLIENT_ID"
 	// EnvKeyLinkedinClientSecret key for env variable LINKEDIN_CLIENT_SECRET
 	EnvKeyLinkedInClientSecret = "LINKEDIN_CLIENT_SECRET"
+	// EnvKeyAppleClientID key for env variable APPLE_CLIENT_ID
+	EnvKeyAppleClientID = "APPLE_CLIENT_ID"
+	// EnvKeyAppleClientSecret key for env variable APPLE_CLIENT_SECRET
+	EnvKeyAppleClientSecret = "APPLE_CLIENT_SECRET"
 	// EnvKeyOrganizationName key for env variable ORGANIZATION_NAME
 	EnvKeyOrganizationName = "ORGANIZATION_NAME"
 	// EnvKeyOrganizationLogo key for env variable ORGANIZATION_LOGO
@@ -109,6 +115,8 @@ const (
 	EnvKeyDisableSignUp = "DISABLE_SIGN_UP"
 	// EnvKeyDisableRedisForEnv key for env variable DISABLE_REDIS_FOR_ENV
 	EnvKeyDisableRedisForEnv = "DISABLE_REDIS_FOR_ENV"
+	// EnvKeyDisableStrongPassword key for env variable DISABLE_STRONG_PASSWORD
+	EnvKeyDisableStrongPassword = "DISABLE_STRONG_PASSWORD"
 
 	// Slice variables
 	// EnvKeyRoles key for env variable ROLES

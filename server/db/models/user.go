@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/authorizerdev/authorizer/server/graph/model"
+	"github.com/authorizerdev/authorizer/server/refs"
 )
 
 // Note: any change here should be reflected in providers/casandra/provider.go as it does not have model support in collection creation
@@ -35,12 +36,13 @@ type User struct {
 func (user *User) AsAPIUser() *model.User {
 	isEmailVerified := user.EmailVerifiedAt != nil
 	isPhoneVerified := user.PhoneNumberVerifiedAt != nil
-	email := user.Email
-	createdAt := user.CreatedAt
-	updatedAt := user.UpdatedAt
-	revokedTimestamp := user.RevokedTimestamp
+
+	id := user.ID
+	if strings.Contains(id, Collections.WebhookLog+"/") {
+		id = strings.TrimPrefix(id, Collections.WebhookLog+"/")
+	}
 	return &model.User{
-		ID:                  user.ID,
+		ID:                  id,
 		Email:               user.Email,
 		EmailVerified:       isEmailVerified,
 		SignupMethods:       user.SignupMethods,
@@ -48,15 +50,15 @@ func (user *User) AsAPIUser() *model.User {
 		FamilyName:          user.FamilyName,
 		MiddleName:          user.MiddleName,
 		Nickname:            user.Nickname,
-		PreferredUsername:   &email,
+		PreferredUsername:   refs.NewStringRef(user.Email),
 		Gender:              user.Gender,
 		Birthdate:           user.Birthdate,
 		PhoneNumber:         user.PhoneNumber,
 		PhoneNumberVerified: &isPhoneVerified,
 		Picture:             user.Picture,
 		Roles:               strings.Split(user.Roles, ","),
-		RevokedTimestamp:    revokedTimestamp,
-		CreatedAt:           &createdAt,
-		UpdatedAt:           &updatedAt,
+		RevokedTimestamp:    user.RevokedTimestamp,
+		CreatedAt:           refs.NewInt64Ref(user.CreatedAt),
+		UpdatedAt:           refs.NewInt64Ref(user.UpdatedAt),
 	}
 }

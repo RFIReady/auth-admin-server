@@ -58,9 +58,9 @@ func SignupResolver(ctx context.Context, params model.SignUpInput) (*model.AuthR
 		return res, fmt.Errorf(`password and confirm password does not match`)
 	}
 
-	if !validators.IsValidPassword(params.Password) {
+	if err := validators.IsValidPassword(params.Password); err != nil {
 		log.Debug("Invalid password")
-		return res, fmt.Errorf(`password is not valid. It needs to be at least 6 characters long and contain at least one number, one uppercase letter, one lowercase letter and one special character`)
+		return res, err
 	}
 
 	params.Email = strings.ToLower(params.Email)
@@ -74,7 +74,7 @@ func SignupResolver(ctx context.Context, params model.SignUpInput) (*model.AuthR
 		"email": params.Email,
 	})
 	// find user with email
-	existingUser, err := db.Provider.GetUserByEmail(params.Email)
+	existingUser, err := db.Provider.GetUserByEmail(ctx, params.Email)
 	if err != nil {
 		log.Debug("Failed to get user by email: ", err)
 	}
@@ -157,7 +157,7 @@ func SignupResolver(ctx context.Context, params model.SignUpInput) (*model.AuthR
 		user.Picture = params.Picture
 	}
 
-	user.SignupMethods = constants.SignupMethodBasicAuth
+	user.SignupMethods = constants.AuthRecipeMethodBasicAuth
 	isEmailVerificationDisabled, err := memorystore.Provider.GetBoolStoreEnvVariable(constants.EnvKeyDisableEmailVerification)
 	if err != nil {
 		log.Debug("Error getting email verification disabled: ", err)
@@ -167,7 +167,7 @@ func SignupResolver(ctx context.Context, params model.SignUpInput) (*model.AuthR
 		now := time.Now().Unix()
 		user.EmailVerifiedAt = &now
 	}
-	user, err = db.Provider.AddUser(user)
+	user, err = db.Provider.AddUser(ctx, user)
 	if err != nil {
 		log.Debug("Failed to add user: ", err)
 		return res, err
@@ -193,7 +193,7 @@ func SignupResolver(ctx context.Context, params model.SignUpInput) (*model.AuthR
 			log.Debug("Failed to create verification token: ", err)
 			return res, err
 		}
-		_, err = db.Provider.AddVerificationRequest(models.VerificationRequest{
+		_, err = db.Provider.AddVerificationRequest(ctx, models.VerificationRequest{
 			Token:       verificationToken,
 			Identifier:  verificationType,
 			ExpiresAt:   time.Now().Add(time.Minute * 30).Unix(),
@@ -207,7 +207,10 @@ func SignupResolver(ctx context.Context, params model.SignUpInput) (*model.AuthR
 		}
 
 		// exec it as go routin so that we can reduce the api latency
-		go email.SendVerificationMail(params.Email, verificationToken, hostname)
+		go func() {
+			email.SendVerificationMail(params.Email, verificationToken, hostname)
+			utils.RegisterEvent(ctx, constants.UserCreatedWebhookEvent, constants.AuthRecipeMethodBasicAuth, user)
+		}()
 
 		res = &model.AuthResponse{
 			Message: `Verification email has been sent. Please check your inbox`,
@@ -219,19 +222,11 @@ func SignupResolver(ctx context.Context, params model.SignUpInput) (*model.AuthR
 			scope = params.Scope
 		}
 
-		authToken, err := token.CreateAuthToken(gc, user, roles, scope)
+		authToken, err := token.CreateAuthToken(gc, user, roles, scope, constants.AuthRecipeMethodBasicAuth)
 		if err != nil {
 			log.Debug("Failed to create auth token: ", err)
 			return res, err
 		}
-
-		memorystore.Provider.SetState(authToken.FingerPrintHash, authToken.FingerPrint+"@"+user.ID)
-		cookie.SetSession(gc, authToken.FingerPrintHash)
-		go db.Provider.AddSession(models.Session{
-			UserID:    user.ID,
-			UserAgent: utils.GetUserAgent(gc.Request),
-			IP:        utils.GetIP(gc.Request),
-		})
 
 		expiresIn := authToken.AccessToken.ExpiresAt - time.Now().Unix()
 		if expiresIn <= 0 {
@@ -244,6 +239,25 @@ func SignupResolver(ctx context.Context, params model.SignUpInput) (*model.AuthR
 			ExpiresIn:   &expiresIn,
 			User:        userToReturn,
 		}
+
+		sessionKey := constants.AuthRecipeMethodBasicAuth + ":" + user.ID
+		cookie.SetSession(gc, authToken.FingerPrintHash)
+		memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeSessionToken+"_"+authToken.FingerPrint, authToken.FingerPrintHash)
+		memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeAccessToken+"_"+authToken.FingerPrint, authToken.AccessToken.Token)
+
+		if authToken.RefreshToken != nil {
+			res.RefreshToken = &authToken.RefreshToken.Token
+			memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeRefreshToken+"_"+authToken.FingerPrint, authToken.RefreshToken.Token)
+		}
+
+		go func() {
+			utils.RegisterEvent(ctx, constants.UserSignUpWebhookEvent, constants.AuthRecipeMethodBasicAuth, user)
+			db.Provider.AddSession(ctx, models.Session{
+				UserID:    user.ID,
+				UserAgent: utils.GetUserAgent(gc.Request),
+				IP:        utils.GetIP(gc.Request),
+			})
+		}()
 	}
 
 	return res, nil

@@ -9,10 +9,11 @@ import (
 
 	"github.com/authorizerdev/authorizer/server/constants"
 	"github.com/authorizerdev/authorizer/server/memorystore"
+	"github.com/authorizerdev/authorizer/server/token"
 )
 
-// Revoke handler to revoke refresh token
-func RevokeHandler() gin.HandlerFunc {
+// RevokeRefreshTokenHandler handler to revoke refresh token
+func RevokeRefreshTokenHandler() gin.HandlerFunc {
 	return func(gc *gin.Context) {
 		var reqBody map[string]string
 		if err := gc.BindJSON(&reqBody); err != nil {
@@ -45,7 +46,24 @@ func RevokeHandler() gin.HandlerFunc {
 			return
 		}
 
-		memorystore.Provider.RemoveState(refreshToken)
+		claims, err := token.ParseJWTToken(refreshToken)
+		if err != nil {
+			log.Debug("Client ID is invalid: ", clientID)
+			gc.JSON(http.StatusBadRequest, gin.H{
+				"error":             err.Error(),
+				"error_description": "Failed to parse jwt",
+			})
+			return
+		}
+
+		userID := claims["sub"].(string)
+		loginMethod := claims["login_method"]
+		sessionToken := userID
+		if loginMethod != nil && loginMethod != "" {
+			sessionToken = loginMethod.(string) + ":" + userID
+		}
+
+		memorystore.Provider.DeleteUserSession(sessionToken, claims["nonce"].(string))
 
 		gc.JSON(http.StatusOK, gin.H{
 			"message": "Token revoked successfully",

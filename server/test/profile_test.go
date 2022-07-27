@@ -26,7 +26,7 @@ func profileTests(t *testing.T, s TestSetup) {
 		_, err := resolvers.ProfileResolver(ctx)
 		assert.NotNil(t, err, "unauthorized")
 
-		verificationRequest, err := db.Provider.GetVerificationRequestByEmail(email, constants.VerificationTypeBasicAuthSignup)
+		verificationRequest, err := db.Provider.GetVerificationRequestByEmail(ctx, email, constants.VerificationTypeBasicAuthSignup)
 		verifyRes, err := resolvers.VerifyEmailResolver(ctx, model.VerifyEmailInput{
 			Token: verificationRequest.Token,
 		})
@@ -37,9 +37,9 @@ func profileTests(t *testing.T, s TestSetup) {
 		ctx = context.WithValue(req.Context(), "GinContextKey", s.GinContext)
 		profileRes, err := resolvers.ProfileResolver(ctx)
 		assert.Nil(t, err)
+		assert.NotNil(t, profileRes)
 		s.GinContext.Request.Header.Set("Authorization", "")
-
-		newEmail := *&profileRes.Email
+		newEmail := profileRes.Email
 		assert.Equal(t, email, newEmail, "emails should be equal")
 
 		cleanData(email)

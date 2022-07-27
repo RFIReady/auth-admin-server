@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 
+	"github.com/authorizerdev/authorizer/server/constants"
 	"github.com/authorizerdev/authorizer/server/cookie"
 	"github.com/authorizerdev/authorizer/server/db"
 	"github.com/authorizerdev/authorizer/server/db/models"
@@ -32,7 +33,7 @@ func VerifyEmailHandler() gin.HandlerFunc {
 			return
 		}
 
-		verificationRequest, err := db.Provider.GetVerificationRequestByToken(tokenInQuery)
+		verificationRequest, err := db.Provider.GetVerificationRequestByToken(c, tokenInQuery)
 		if err != nil {
 			log.Debug("Error getting verification request: ", err)
 			errorRes["error_description"] = err.Error()
@@ -42,7 +43,7 @@ func VerifyEmailHandler() gin.HandlerFunc {
 
 		// verify if token exists in db
 		hostname := parsers.GetHost(c)
-		claim, err := token.ParseJWTToken(tokenInQuery, hostname, verificationRequest.Nonce, verificationRequest.Email)
+		claim, err := token.ParseJWTToken(tokenInQuery)
 		if err != nil {
 			log.Debug("Error parsing token: ", err)
 			errorRes["error_description"] = err.Error()
@@ -50,7 +51,14 @@ func VerifyEmailHandler() gin.HandlerFunc {
 			return
 		}
 
-		user, err := db.Provider.GetUserByEmail(claim["sub"].(string))
+		if ok, err := token.ValidateJWTClaims(claim, hostname, verificationRequest.Nonce, verificationRequest.Email); !ok || err != nil {
+			log.Debug("Error validating jwt claims: ", err)
+			errorRes["error_description"] = err.Error()
+			c.JSON(400, errorRes)
+			return
+		}
+
+		user, err := db.Provider.GetUserByEmail(c, verificationRequest.Email)
 		if err != nil {
 			log.Debug("Error getting user: ", err)
 			errorRes["error_description"] = err.Error()
@@ -58,14 +66,16 @@ func VerifyEmailHandler() gin.HandlerFunc {
 			return
 		}
 
+		isSignUp := false
 		// update email_verified_at in users table
 		if user.EmailVerifiedAt == nil {
 			now := time.Now().Unix()
 			user.EmailVerifiedAt = &now
-			db.Provider.UpdateUser(user)
+			isSignUp = true
+			db.Provider.UpdateUser(c, user)
 		}
 		// delete from verification table
-		db.Provider.DeleteVerificationRequest(verificationRequest)
+		db.Provider.DeleteVerificationRequest(c, verificationRequest)
 
 		state := strings.TrimSpace(c.Query("state"))
 		redirectURL := strings.TrimSpace(c.Query("redirect_uri"))
@@ -84,7 +94,11 @@ func VerifyEmailHandler() gin.HandlerFunc {
 		} else {
 			scope = strings.Split(scopeString, " ")
 		}
-		authToken, err := token.CreateAuthToken(c, user, roles, scope)
+		loginMethod := constants.AuthRecipeMethodBasicAuth
+		if verificationRequest.Identifier == constants.VerificationTypeMagicLinkLogin {
+			loginMethod = constants.AuthRecipeMethodMagicLinkLogin
+		}
+		authToken, err := token.CreateAuthToken(c, user, roles, scope, loginMethod)
 		if err != nil {
 			log.Debug("Error creating auth token: ", err)
 			errorRes["error_description"] = err.Error()
@@ -99,13 +113,14 @@ func VerifyEmailHandler() gin.HandlerFunc {
 
 		params := "access_token=" + authToken.AccessToken.Token + "&token_type=bearer&expires_in=" + strconv.FormatInt(expiresIn, 10) + "&state=" + state + "&id_token=" + authToken.IDToken.Token
 
+		sessionKey := loginMethod + ":" + user.ID
 		cookie.SetSession(c, authToken.FingerPrintHash)
-		memorystore.Provider.SetState(authToken.FingerPrintHash, authToken.FingerPrint+"@"+user.ID)
-		memorystore.Provider.SetState(authToken.AccessToken.Token, authToken.FingerPrint+"@"+user.ID)
+		memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeSessionToken+"_"+authToken.FingerPrint, authToken.FingerPrintHash)
+		memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeAccessToken+"_"+authToken.FingerPrint, authToken.AccessToken.Token)
 
 		if authToken.RefreshToken != nil {
-			params = params + `&refresh_token=${refresh_token}`
-			memorystore.Provider.SetState(authToken.RefreshToken.Token, authToken.FingerPrint+"@"+user.ID)
+			params = params + `&refresh_token=` + authToken.RefreshToken.Token
+			memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeRefreshToken+"_"+authToken.FingerPrint, authToken.RefreshToken.Token)
 		}
 
 		if redirectURL == "" {
@@ -118,11 +133,19 @@ func VerifyEmailHandler() gin.HandlerFunc {
 			redirectURL = redirectURL + "?" + strings.TrimPrefix(params, "&")
 		}
 
-		go db.Provider.AddSession(models.Session{
-			UserID:    user.ID,
-			UserAgent: utils.GetUserAgent(c.Request),
-			IP:        utils.GetIP(c.Request),
-		})
+		go func() {
+			if isSignUp {
+				utils.RegisterEvent(c, constants.UserSignUpWebhookEvent, loginMethod, user)
+			} else {
+				utils.RegisterEvent(c, constants.UserLoginWebhookEvent, loginMethod, user)
+			}
+
+			db.Provider.AddSession(c, models.Session{
+				UserID:    user.ID,
+				UserAgent: utils.GetUserAgent(c.Request),
+				IP:        utils.GetIP(c.Request),
+			})
+		}()
 
 		c.Redirect(http.StatusTemporaryRedirect, redirectURL)
 	}

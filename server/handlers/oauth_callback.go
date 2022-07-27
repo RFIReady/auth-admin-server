@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -27,24 +28,26 @@ import (
 
 // OAuthCallbackHandler handles the OAuth callback for various oauth providers
 func OAuthCallbackHandler() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		provider := c.Param("oauth_provider")
-		state := c.Request.FormValue("state")
+	return func(ctx *gin.Context) {
+		provider := ctx.Param("oauth_provider")
+		state := ctx.Request.FormValue("state")
 
 		sessionState, err := memorystore.Provider.GetState(state)
 		if sessionState == "" || err != nil {
 			log.Debug("Invalid oauth state: ", state)
-			c.JSON(400, gin.H{"error": "invalid oauth state"})
+			ctx.JSON(400, gin.H{"error": "invalid oauth state"})
 		}
-		memorystore.Provider.GetState(state)
 		// contains random token, redirect url, role
 		sessionSplit := strings.Split(state, "___")
 
 		if len(sessionSplit) < 3 {
 			log.Debug("Unable to get redirect url from state: ", state)
-			c.JSON(400, gin.H{"error": "invalid redirect url"})
+			ctx.JSON(400, gin.H{"error": "invalid redirect url"})
 			return
 		}
+
+		// remove state from store
+		go memorystore.Provider.RemoveState(state)
 
 		stateValue := sessionSplit[0]
 		redirectURL := sessionSplit[1]
@@ -52,16 +55,18 @@ func OAuthCallbackHandler() gin.HandlerFunc {
 		scopes := strings.Split(sessionSplit[3], ",")
 
 		user := models.User{}
-		code := c.Request.FormValue("code")
+		code := ctx.Request.FormValue("code")
 		switch provider {
-		case constants.SignupMethodGoogle:
+		case constants.AuthRecipeMethodGoogle:
 			user, err = processGoogleUserInfo(code)
-		case constants.SignupMethodGithub:
+		case constants.AuthRecipeMethodGithub:
 			user, err = processGithubUserInfo(code)
-		case constants.SignupMethodFacebook:
+		case constants.AuthRecipeMethodFacebook:
 			user, err = processFacebookUserInfo(code)
-		case constants.SignupMethodLinkedIn:
+		case constants.AuthRecipeMethodLinkedIn:
 			user, err = processLinkedInUserInfo(code)
+		case constants.AuthRecipeMethodApple:
+			user, err = processAppleUserInfo(code)
 		default:
 			log.Info("Invalid oauth provider")
 			err = fmt.Errorf(`invalid oauth provider`)
@@ -69,23 +74,24 @@ func OAuthCallbackHandler() gin.HandlerFunc {
 
 		if err != nil {
 			log.Debug("Failed to process user info: ", err)
-			c.JSON(400, gin.H{"error": err.Error()})
+			ctx.JSON(400, gin.H{"error": err.Error()})
 			return
 		}
 
-		existingUser, err := db.Provider.GetUserByEmail(user.Email)
+		existingUser, err := db.Provider.GetUserByEmail(ctx, user.Email)
 		log := log.WithField("user", user.Email)
+		isSignUp := false
 
 		if err != nil {
 			isSignupDisabled, err := memorystore.Provider.GetBoolStoreEnvVariable(constants.EnvKeyDisableSignUp)
 			if err != nil {
 				log.Debug("Failed to get signup disabled env variable: ", err)
-				c.JSON(400, gin.H{"error": err.Error()})
+				ctx.JSON(400, gin.H{"error": err.Error()})
 				return
 			}
 			if isSignupDisabled {
 				log.Debug("Failed to signup as disabled")
-				c.JSON(400, gin.H{"error": "signup is disabled for this instance"})
+				ctx.JSON(400, gin.H{"error": "signup is disabled for this instance"})
 				return
 			}
 			// user not registered, register user and generate session token
@@ -108,18 +114,21 @@ func OAuthCallbackHandler() gin.HandlerFunc {
 
 			if hasProtectedRole {
 				log.Debug("Signup is not allowed with protected roles:", inputRoles)
-				c.JSON(400, gin.H{"error": "invalid role"})
+				ctx.JSON(400, gin.H{"error": "invalid role"})
 				return
 			}
 
 			user.Roles = strings.Join(inputRoles, ",")
 			now := time.Now().Unix()
 			user.EmailVerifiedAt = &now
-			user, _ = db.Provider.AddUser(user)
+			user, _ = db.Provider.AddUser(ctx, user)
+			isSignUp = true
 		} else {
+			user = existingUser
 			if user.RevokedTimestamp != nil {
 				log.Debug("User access revoked at: ", user.RevokedTimestamp)
-				c.JSON(400, gin.H{"error": "user access has been revoked"})
+				ctx.JSON(400, gin.H{"error": "user access has been revoked"})
+				return
 			}
 
 			// user exists in db, check if method was google
@@ -128,7 +137,6 @@ func OAuthCallbackHandler() gin.HandlerFunc {
 			if !strings.Contains(signupMethod, provider) {
 				signupMethod = signupMethod + "," + provider
 			}
-			user = existingUser
 			user.SignupMethods = signupMethod
 
 			if user.EmailVerifiedAt == nil {
@@ -169,7 +177,7 @@ func OAuthCallbackHandler() gin.HandlerFunc {
 
 				if hasProtectedRole {
 					log.Debug("Invalid role. User is using protected unassigned role")
-					c.JSON(400, gin.H{"error": "invalid role"})
+					ctx.JSON(400, gin.H{"error": "invalid role"})
 					return
 				} else {
 					user.Roles = existingUser.Roles + "," + strings.Join(unasignedRoles, ",")
@@ -178,18 +186,18 @@ func OAuthCallbackHandler() gin.HandlerFunc {
 				user.Roles = existingUser.Roles
 			}
 
-			user, err = db.Provider.UpdateUser(user)
+			user, err = db.Provider.UpdateUser(ctx, user)
 			if err != nil {
 				log.Debug("Failed to update user: ", err)
-				c.JSON(500, gin.H{"error": err.Error()})
+				ctx.JSON(500, gin.H{"error": err.Error()})
 				return
 			}
 		}
 
-		authToken, err := token.CreateAuthToken(c, user, inputRoles, scopes)
+		authToken, err := token.CreateAuthToken(ctx, user, inputRoles, scopes, provider)
 		if err != nil {
 			log.Debug("Failed to create auth token: ", err)
-			c.JSON(500, gin.H{"error": err.Error()})
+			ctx.JSON(500, gin.H{"error": err.Error()})
 		}
 
 		expiresIn := authToken.AccessToken.ExpiresAt - time.Now().Unix()
@@ -199,27 +207,35 @@ func OAuthCallbackHandler() gin.HandlerFunc {
 
 		params := "access_token=" + authToken.AccessToken.Token + "&token_type=bearer&expires_in=" + strconv.FormatInt(expiresIn, 10) + "&state=" + stateValue + "&id_token=" + authToken.IDToken.Token
 
-		cookie.SetSession(c, authToken.FingerPrintHash)
-		memorystore.Provider.SetState(authToken.FingerPrintHash, authToken.FingerPrint+"@"+user.ID)
-		memorystore.Provider.SetState(authToken.AccessToken.Token, authToken.FingerPrint+"@"+user.ID)
+		sessionKey := provider + ":" + user.ID
+		cookie.SetSession(ctx, authToken.FingerPrintHash)
+		memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeSessionToken+"_"+authToken.FingerPrint, authToken.FingerPrintHash)
+		memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeAccessToken+"_"+authToken.FingerPrint, authToken.AccessToken.Token)
 
 		if authToken.RefreshToken != nil {
 			params = params + `&refresh_token=` + authToken.RefreshToken.Token
-			memorystore.Provider.SetState(authToken.RefreshToken.Token, authToken.FingerPrint+"@"+user.ID)
+			memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeRefreshToken+"_"+authToken.FingerPrint, authToken.RefreshToken.Token)
 		}
 
-		go db.Provider.AddSession(models.Session{
-			UserID:    user.ID,
-			UserAgent: utils.GetUserAgent(c.Request),
-			IP:        utils.GetIP(c.Request),
-		})
+		go func() {
+			if isSignUp {
+				utils.RegisterEvent(ctx, constants.UserSignUpWebhookEvent, provider, user)
+			} else {
+				utils.RegisterEvent(ctx, constants.UserLoginWebhookEvent, provider, user)
+			}
+			db.Provider.AddSession(ctx, models.Session{
+				UserID:    user.ID,
+				UserAgent: utils.GetUserAgent(ctx.Request),
+				IP:        utils.GetIP(ctx.Request),
+			})
+		}()
 		if strings.Contains(redirectURL, "?") {
 			redirectURL = redirectURL + "&" + params
 		} else {
 			redirectURL = redirectURL + "?" + strings.TrimPrefix(params, "&")
 		}
 
-		c.Redirect(http.StatusTemporaryRedirect, redirectURL)
+		ctx.Redirect(http.StatusFound, redirectURL)
 	}
 }
 
@@ -258,7 +274,7 @@ func processGoogleUserInfo(code string) (models.User, error) {
 
 func processGithubUserInfo(code string) (models.User, error) {
 	user := models.User{}
-	token, err := oauth.OAuthProviders.GithubConfig.Exchange(oauth2.NoContext, code)
+	oauth2Token, err := oauth.OAuthProviders.GithubConfig.Exchange(oauth2.NoContext, code)
 	if err != nil {
 		log.Debug("Failed to exchange code for token: ", err)
 		return user, fmt.Errorf("invalid github exchange code: %s", err.Error())
@@ -270,7 +286,7 @@ func processGithubUserInfo(code string) (models.User, error) {
 		return user, fmt.Errorf("error creating github user info request: %s", err.Error())
 	}
 	req.Header = http.Header{
-		"Authorization": []string{fmt.Sprintf("token %s", token.AccessToken)},
+		"Authorization": []string{fmt.Sprintf("token %s", oauth2Token.AccessToken)},
 	}
 
 	response, err := client.Do(req)
@@ -286,8 +302,8 @@ func processGithubUserInfo(code string) (models.User, error) {
 		return user, fmt.Errorf("failed to read github response body: %s", err.Error())
 	}
 	if response.StatusCode >= 400 {
-		log.Debug("Failed to request linkedin user info: ", string(body))
-		return user, fmt.Errorf("failed to request linkedin user info: %s", string(body))
+		log.Debug("Failed to request github user info: ", string(body))
+		return user, fmt.Errorf("failed to request github user info: %s", string(body))
 	}
 
 	userRawData := make(map[string]string)
@@ -304,12 +320,60 @@ func processGithubUserInfo(code string) (models.User, error) {
 	}
 
 	picture := userRawData["avatar_url"]
+	email := userRawData["email"]
+
+	if email == "" {
+		type GithubUserEmails struct {
+			Email   string `json:"email"`
+			Primary bool   `json:"primary"`
+		}
+
+		// fetch using /users/email endpoint
+		req, err := http.NewRequest("GET", constants.GithubUserEmails, nil)
+		if err != nil {
+			log.Debug("Failed to create github emails request: ", err)
+			return user, fmt.Errorf("error creating github user info request: %s", err.Error())
+		}
+		req.Header = http.Header{
+			"Authorization": []string{fmt.Sprintf("token %s", oauth2Token.AccessToken)},
+		}
+
+		response, err := client.Do(req)
+		if err != nil {
+			log.Debug("Failed to request github user email: ", err)
+			return user, err
+		}
+
+		defer response.Body.Close()
+		body, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			log.Debug("Failed to read github user email response body: ", err)
+			return user, fmt.Errorf("failed to read github response body: %s", err.Error())
+		}
+		if response.StatusCode >= 400 {
+			log.Debug("Failed to request github user email: ", string(body))
+			return user, fmt.Errorf("failed to request github user info: %s", string(body))
+		}
+
+		emailData := []GithubUserEmails{}
+		err = json.Unmarshal(body, &emailData)
+		if err != nil {
+			log.Debug("Failed to parse github user email: ", err)
+		}
+
+		for _, userEmail := range emailData {
+			email = userEmail.Email
+			if userEmail.Primary {
+				break
+			}
+		}
+	}
 
 	user = models.User{
 		GivenName:  &firstName,
 		FamilyName: &lastName,
 		Picture:    &picture,
-		Email:      userRawData["email"],
+		Email:      email,
 	}
 
 	return user, nil
@@ -317,13 +381,13 @@ func processGithubUserInfo(code string) (models.User, error) {
 
 func processFacebookUserInfo(code string) (models.User, error) {
 	user := models.User{}
-	token, err := oauth.OAuthProviders.FacebookConfig.Exchange(oauth2.NoContext, code)
+	oauth2Token, err := oauth.OAuthProviders.FacebookConfig.Exchange(oauth2.NoContext, code)
 	if err != nil {
 		log.Debug("Invalid facebook exchange code: ", err)
 		return user, fmt.Errorf("invalid facebook exchange code: %s", err.Error())
 	}
 	client := http.Client{}
-	req, err := http.NewRequest("GET", constants.FacebookUserInfoURL+token.AccessToken, nil)
+	req, err := http.NewRequest("GET", constants.FacebookUserInfoURL+oauth2Token.AccessToken, nil)
 	if err != nil {
 		log.Debug("Error creating facebook user info request: ", err)
 		return user, fmt.Errorf("error creating facebook user info request: %s", err.Error())
@@ -342,8 +406,8 @@ func processFacebookUserInfo(code string) (models.User, error) {
 		return user, fmt.Errorf("failed to read facebook response body: %s", err.Error())
 	}
 	if response.StatusCode >= 400 {
-		log.Debug("Failed to request linkedin user info: ", string(body))
-		return user, fmt.Errorf("failed to request linkedin user info: %s", string(body))
+		log.Debug("Failed to request facebook user info: ", string(body))
+		return user, fmt.Errorf("failed to request facebook user info: %s", string(body))
 	}
 	userRawData := make(map[string]interface{})
 	json.Unmarshal(body, &userRawData)
@@ -368,7 +432,7 @@ func processFacebookUserInfo(code string) (models.User, error) {
 
 func processLinkedInUserInfo(code string) (models.User, error) {
 	user := models.User{}
-	token, err := oauth.OAuthProviders.LinkedInConfig.Exchange(oauth2.NoContext, code)
+	oauth2Token, err := oauth.OAuthProviders.LinkedInConfig.Exchange(oauth2.NoContext, code)
 	if err != nil {
 		log.Debug("Failed to exchange code for token: ", err)
 		return user, fmt.Errorf("invalid linkedin exchange code: %s", err.Error())
@@ -381,7 +445,7 @@ func processLinkedInUserInfo(code string) (models.User, error) {
 		return user, fmt.Errorf("error creating linkedin user info request: %s", err.Error())
 	}
 	req.Header = http.Header{
-		"Authorization": []string{fmt.Sprintf("Bearer %s", token.AccessToken)},
+		"Authorization": []string{fmt.Sprintf("Bearer %s", oauth2Token.AccessToken)},
 	}
 
 	response, err := client.Do(req)
@@ -411,7 +475,7 @@ func processLinkedInUserInfo(code string) (models.User, error) {
 		return user, fmt.Errorf("error creating linkedin user info request: %s", err.Error())
 	}
 	req.Header = http.Header{
-		"Authorization": []string{fmt.Sprintf("Bearer %s", token.AccessToken)},
+		"Authorization": []string{fmt.Sprintf("Bearer %s", oauth2Token.AccessToken)},
 	}
 
 	response, err = client.Do(req)
@@ -446,4 +510,57 @@ func processLinkedInUserInfo(code string) (models.User, error) {
 	}
 
 	return user, nil
+}
+
+func processAppleUserInfo(code string) (models.User, error) {
+	user := models.User{}
+	oauth2Token, err := oauth.OAuthProviders.AppleConfig.Exchange(oauth2.NoContext, code)
+	if err != nil {
+		log.Debug("Failed to exchange code for token: ", err)
+		return user, fmt.Errorf("invalid apple exchange code: %s", err.Error())
+	}
+
+	// Extract the ID Token from OAuth2 token.
+	rawIDToken, ok := oauth2Token.Extra("id_token").(string)
+	if !ok {
+		log.Debug("Failed to extract ID Token from OAuth2 token")
+		return user, fmt.Errorf("unable to extract id_token")
+	}
+
+	tokenSplit := strings.Split(rawIDToken, ".")
+	claimsData := tokenSplit[1]
+	decodedClaimsData, err := base64.RawURLEncoding.DecodeString(claimsData)
+	if err != nil {
+		log.Debugf("Failed to decrypt claims %s: %s", claimsData, err.Error())
+		return user, fmt.Errorf("failed to decrypt claims data: %s", err.Error())
+	}
+
+	claims := make(map[string]interface{})
+	err = json.Unmarshal(decodedClaimsData, &claims)
+	if err != nil {
+		log.Debug("Failed to unmarshal claims data: ", err)
+		return user, fmt.Errorf("failed to unmarshal claims data: %s", err.Error())
+	}
+
+	if val, ok := claims["email"]; !ok {
+		log.Debug("Failed to extract email from claims.")
+		return user, fmt.Errorf("unable to extract email, please check the scopes enabled for your app. It needs `email`, `name` scopes")
+	} else {
+		user.Email = val.(string)
+	}
+
+	if val, ok := claims["name"]; ok {
+		nameData := val.(map[string]interface{})
+		if nameVal, ok := nameData["firstName"]; ok {
+			givenName := nameVal.(string)
+			user.GivenName = &givenName
+		}
+
+		if nameVal, ok := nameData["lastName"]; ok {
+			familyName := nameVal.(string)
+			user.FamilyName = &familyName
+		}
+	}
+
+	return user, err
 }

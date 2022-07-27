@@ -19,10 +19,12 @@ type Meta {
 	is_facebook_login_enabled: Boolean!
 	is_github_login_enabled: Boolean!
 	is_linkedin_login_enabled: Boolean!
+	is_apple_login_enabled: Boolean!
 	is_email_verification_enabled: Boolean!
 	is_basic_authentication_enabled: Boolean!
 	is_magic_link_login_enabled: Boolean!
 	is_sign_up_enabled: Boolean!
+	is_strong_password_enabled: Boolean!
 }
 
 type User {
@@ -119,6 +121,7 @@ type Env {
 	DISABLE_LOGIN_PAGE: Boolean!
 	DISABLE_SIGN_UP: Boolean!
 	DISABLE_REDIS_FOR_ENV: Boolean!
+	DISABLE_STRONG_PASSWORD: Boolean!
 	ROLES: [String!]
 	PROTECTED_ROLES: [String!]
 	DEFAULT_ROLES: [String!]
@@ -131,6 +134,8 @@ type Env {
 	FACEBOOK_CLIENT_SECRET: String
 	LINKEDIN_CLIENT_ID: String
 	LINKEDIN_CLIENT_SECRET: String
+	APPLE_CLIENT_ID: String
+	APPLE_CLIENT_SECRET: String
 	ORGANIZATION_NAME: String
 	ORGANIZATION_LOGO: String
 }
@@ -143,6 +148,54 @@ type GenerateJWTKeysResponse {
 	secret: String
 	public_key: String
 	private_key: String
+}
+
+type Webhook {
+	id: ID!
+	event_name: String
+	endpoint: String
+	enabled: Boolean
+	headers: Map
+	created_at: Int64
+	updated_at: Int64
+}
+
+type Webhooks {
+	pagination: Pagination!
+	webhooks: [Webhook!]!
+}
+
+type WebhookLog {
+	id: ID!
+	http_status: Int64
+	response: String
+	request: String
+	webhook_id: ID
+	created_at: Int64
+	updated_at: Int64
+}
+
+type TestEndpointResponse {
+	http_status: Int64
+	response: String
+}
+
+type WebhookLogs {
+	pagination: Pagination!
+	webhook_logs: [WebhookLog!]!
+}
+
+type EmailTemplate {
+	id: ID!
+	event_name: String!
+	template: String!
+	created_at: Int64
+	updated_at: Int64
+}
+
+type EmailTemplates {
+	pagination: Pagination!
+	EmailTemplates: [EmailTemplate!]!
 }
 
 input UpdateEnvInput {
@@ -168,6 +221,7 @@ input UpdateEnvInput {
 	DISABLE_LOGIN_PAGE: Boolean
 	DISABLE_SIGN_UP: Boolean
 	DISABLE_REDIS_FOR_ENV: Boolean
+	DISABLE_STRONG_PASSWORD: Boolean
 	ROLES: [String!]
 	PROTECTED_ROLES: [String!]
 	DEFAULT_ROLES: [String!]
@@ -180,6 +234,8 @@ input UpdateEnvInput {
 	FACEBOOK_CLIENT_SECRET: String
 	LINKEDIN_CLIENT_ID: String
 	LINKEDIN_CLIENT_SECRET: String
+	APPLE_CLIENT_ID: String
+	APPLE_CLIENT_SECRET: String
 	ORGANIZATION_NAME: String
 	ORGANIZATION_LOGO: String
 }
@@ -316,6 +372,51 @@ input GenerateJWTKeysInput {
 	type: String!
 }
 
+input ListWebhookLogRequest {
+	pagination: PaginationInput
+	webhook_id: String
+}
+
+input AddWebhookRequest {
+	event_name: String!
+	endpoint: String!
+	enabled: Boolean!
+	headers: Map
+}
+
+input UpdateWebhookRequest {
+	id: ID!
+	event_name: String
+	endpoint: String
+	enabled: Boolean
+	headers: Map
+}
+
+input WebhookRequest {
+	id: ID!
+}
+
+input TestEndpointRequest {
+	endpoint: String!
+	event_name: String!
+	headers: Map
+}
+
+input AddEmailTemplateRequest {
+	event_name: String!
+	template: String!
+}
+
+input UpdateEmailTemplateRequest {
+	id: ID!
+	event_name: String
+	template: String
+}
+
+input DeleteEmailTemplateRequest {
+	id: ID!
+}
+
 type Mutation {
 	signup(params: SignUpInput!): AuthResponse!
 	login(params: LoginInput!): AuthResponse!
@@ -338,6 +439,13 @@ type Mutation {
 	_revoke_access(param: UpdateAccessInput!): Response!
 	_enable_access(param: UpdateAccessInput!): Response!
 	_generate_jwt_keys(params: GenerateJWTKeysInput!): GenerateJWTKeysResponse!
+	_add_webhook(params: AddWebhookRequest!): Response!
+	_update_webhook(params: UpdateWebhookRequest!): Response!
+	_delete_webhook(params: WebhookRequest!): Response!
+	_test_endpoint(params: TestEndpointRequest!): TestEndpointResponse!
+	_add_email_template(params: AddEmailTemplateRequest!): Response!
+	_update_email_template(params: UpdateEmailTemplateRequest!): Response!
+	_delete_email_template(params: DeleteEmailTemplateRequest!): Response!
 }
 
 type Query {
@@ -350,4 +458,8 @@ type Query {
 	_verification_requests(params: PaginatedInput): VerificationRequests!
 	_admin_session: Response!
 	_env: Env!
+	_webhook(params: WebhookRequest!): Webhook!
+	_webhooks(params: PaginatedInput): Webhooks!
+	_webhook_logs(params: ListWebhookLogRequest): WebhookLogs!
+	_email_templates(params: PaginatedInput): EmailTemplates!
 }

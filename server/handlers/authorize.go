@@ -199,7 +199,7 @@ func AuthorizeHandler() gin.HandlerFunc {
 			return
 		}
 		userID := claims.Subject
-		user, err := db.Provider.GetUserByID(userID)
+		user, err := db.Provider.GetUserByID(gc, userID)
 		if err != nil {
 			if isQuery {
 				gc.Redirect(http.StatusFound, loginURL)
@@ -218,16 +218,18 @@ func AuthorizeHandler() gin.HandlerFunc {
 			return
 		}
 
+		sessionKey := user.ID
+		if claims.LoginMethod != "" {
+			sessionKey = claims.LoginMethod + ":" + user.ID
+		}
+
 		// if user is logged in
-		// based on the response type, generate the response
+		// based on the response type code, generate the response
 		if isResponseTypeCode {
 			// rollover the session for security
-			err = memorystore.Provider.RemoveState(sessionToken)
-			if err != nil {
-				log.Debug("Failed to remove state: ", err)
-			}
+			go memorystore.Provider.DeleteUserSession(sessionKey, claims.Nonce)
 			nonce := uuid.New().String()
-			newSessionTokenData, newSessionToken, err := token.CreateSessionToken(user, nonce, claims.Roles, scope)
+			newSessionTokenData, newSessionToken, err := token.CreateSessionToken(user, nonce, claims.Roles, scope, claims.LoginMethod)
 			if err != nil {
 				if isQuery {
 					gc.Redirect(http.StatusFound, loginURL)
@@ -246,7 +248,7 @@ func AuthorizeHandler() gin.HandlerFunc {
 				return
 			}
 
-			memorystore.Provider.SetState(newSessionToken, newSessionTokenData.Nonce+"@"+user.ID)
+			memorystore.Provider.SetUserSession(user.ID, constants.TokenTypeSessionToken+"_"+newSessionTokenData.Nonce, newSessionToken)
 			cookie.SetSession(gc, newSessionToken)
 			code := uuid.New().String()
 			memorystore.Provider.SetState(codeChallenge, code+"@"+newSessionToken)
@@ -265,7 +267,7 @@ func AuthorizeHandler() gin.HandlerFunc {
 
 		if isResponseTypeToken {
 			// rollover the session for security
-			authToken, err := token.CreateAuthToken(gc, user, claims.Roles, scope)
+			authToken, err := token.CreateAuthToken(gc, user, claims.Roles, scope, claims.LoginMethod)
 			if err != nil {
 				if isQuery {
 					gc.Redirect(http.StatusFound, loginURL)
@@ -283,9 +285,10 @@ func AuthorizeHandler() gin.HandlerFunc {
 				}
 				return
 			}
-			memorystore.Provider.RemoveState(sessionToken)
-			memorystore.Provider.SetState(authToken.FingerPrintHash, authToken.FingerPrint+"@"+user.ID)
-			memorystore.Provider.SetState(authToken.AccessToken.Token, authToken.FingerPrint+"@"+user.ID)
+
+			go memorystore.Provider.DeleteUserSession(sessionKey, claims.Nonce)
+			memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeSessionToken+"_"+authToken.FingerPrint, authToken.FingerPrintHash)
+			memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeAccessToken+"_"+authToken.FingerPrint, authToken.AccessToken.Token)
 			cookie.SetSession(gc, authToken.FingerPrintHash)
 
 			expiresIn := authToken.AccessToken.ExpiresAt - time.Now().Unix()
@@ -308,7 +311,7 @@ func AuthorizeHandler() gin.HandlerFunc {
 			if authToken.RefreshToken != nil {
 				res["refresh_token"] = authToken.RefreshToken.Token
 				params += "&refresh_token=" + authToken.RefreshToken.Token
-				memorystore.Provider.SetState(authToken.RefreshToken.Token, authToken.FingerPrint+"@"+user.ID)
+				memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeRefreshToken+"_"+authToken.FingerPrint, authToken.RefreshToken.Token)
 			}
 
 			if isQuery {

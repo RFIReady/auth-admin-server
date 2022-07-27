@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
+	"golang.org/x/oauth2"
 
 	"github.com/authorizerdev/authorizer/server/constants"
 	"github.com/authorizerdev/authorizer/server/memorystore"
@@ -99,13 +100,13 @@ func OAuthLoginHandler() gin.HandlerFunc {
 		provider := c.Param("oauth_provider")
 		isProviderConfigured := true
 		switch provider {
-		case constants.SignupMethodGoogle:
+		case constants.AuthRecipeMethodGoogle:
 			if oauth.OAuthProviders.GoogleConfig == nil {
 				log.Debug("Google OAuth provider is not configured")
 				isProviderConfigured = false
 				break
 			}
-			err := memorystore.Provider.SetState(oauthStateString, constants.SignupMethodGoogle)
+			err := memorystore.Provider.SetState(oauthStateString, constants.AuthRecipeMethodGoogle)
 			if err != nil {
 				log.Debug("Error setting state: ", err)
 				c.JSON(500, gin.H{
@@ -114,16 +115,16 @@ func OAuthLoginHandler() gin.HandlerFunc {
 				return
 			}
 			// during the init of OAuthProvider authorizer url might be empty
-			oauth.OAuthProviders.GoogleConfig.RedirectURL = hostname + "/oauth_callback/google"
+			oauth.OAuthProviders.GoogleConfig.RedirectURL = hostname + "/oauth_callback/" + constants.AuthRecipeMethodGoogle
 			url := oauth.OAuthProviders.GoogleConfig.AuthCodeURL(oauthStateString)
 			c.Redirect(http.StatusTemporaryRedirect, url)
-		case constants.SignupMethodGithub:
+		case constants.AuthRecipeMethodGithub:
 			if oauth.OAuthProviders.GithubConfig == nil {
 				log.Debug("Github OAuth provider is not configured")
 				isProviderConfigured = false
 				break
 			}
-			err := memorystore.Provider.SetState(oauthStateString, constants.SignupMethodGithub)
+			err := memorystore.Provider.SetState(oauthStateString, constants.AuthRecipeMethodGithub)
 			if err != nil {
 				log.Debug("Error setting state: ", err)
 				c.JSON(500, gin.H{
@@ -131,16 +132,16 @@ func OAuthLoginHandler() gin.HandlerFunc {
 				})
 				return
 			}
-			oauth.OAuthProviders.GithubConfig.RedirectURL = hostname + "/oauth_callback/github"
+			oauth.OAuthProviders.GithubConfig.RedirectURL = hostname + "/oauth_callback/" + constants.AuthRecipeMethodGithub
 			url := oauth.OAuthProviders.GithubConfig.AuthCodeURL(oauthStateString)
 			c.Redirect(http.StatusTemporaryRedirect, url)
-		case constants.SignupMethodFacebook:
+		case constants.AuthRecipeMethodFacebook:
 			if oauth.OAuthProviders.FacebookConfig == nil {
 				log.Debug("Facebook OAuth provider is not configured")
 				isProviderConfigured = false
 				break
 			}
-			err := memorystore.Provider.SetState(oauthStateString, constants.SignupMethodFacebook)
+			err := memorystore.Provider.SetState(oauthStateString, constants.AuthRecipeMethodFacebook)
 			if err != nil {
 				log.Debug("Error setting state: ", err)
 				c.JSON(500, gin.H{
@@ -148,16 +149,16 @@ func OAuthLoginHandler() gin.HandlerFunc {
 				})
 				return
 			}
-			oauth.OAuthProviders.FacebookConfig.RedirectURL = hostname + "/oauth_callback/facebook"
+			oauth.OAuthProviders.FacebookConfig.RedirectURL = hostname + "/oauth_callback/" + constants.AuthRecipeMethodFacebook
 			url := oauth.OAuthProviders.FacebookConfig.AuthCodeURL(oauthStateString)
 			c.Redirect(http.StatusTemporaryRedirect, url)
-		case constants.SignupMethodLinkedIn:
+		case constants.AuthRecipeMethodLinkedIn:
 			if oauth.OAuthProviders.LinkedInConfig == nil {
 				log.Debug("Linkedin OAuth provider is not configured")
 				isProviderConfigured = false
 				break
 			}
-			err := memorystore.Provider.SetState(oauthStateString, constants.SignupMethodLinkedIn)
+			err := memorystore.Provider.SetState(oauthStateString, constants.AuthRecipeMethodLinkedIn)
 			if err != nil {
 				log.Debug("Error setting state: ", err)
 				c.JSON(500, gin.H{
@@ -165,8 +166,27 @@ func OAuthLoginHandler() gin.HandlerFunc {
 				})
 				return
 			}
-			oauth.OAuthProviders.LinkedInConfig.RedirectURL = hostname + "/oauth_callback/linkedin"
+			oauth.OAuthProviders.LinkedInConfig.RedirectURL = hostname + "/oauth_callback/" + constants.AuthRecipeMethodLinkedIn
 			url := oauth.OAuthProviders.LinkedInConfig.AuthCodeURL(oauthStateString)
+			c.Redirect(http.StatusTemporaryRedirect, url)
+		case constants.AuthRecipeMethodApple:
+			if oauth.OAuthProviders.AppleConfig == nil {
+				log.Debug("Apple OAuth provider is not configured")
+				isProviderConfigured = false
+				break
+			}
+			err := memorystore.Provider.SetState(oauthStateString, constants.AuthRecipeMethodApple)
+			if err != nil {
+				log.Debug("Error setting state: ", err)
+				c.JSON(500, gin.H{
+					"error": "internal server error",
+				})
+				return
+			}
+			oauth.OAuthProviders.AppleConfig.RedirectURL = hostname + "/oauth_callback/" + constants.AuthRecipeMethodApple
+			// there is scope encoding issue with oauth2 and how apple expects, hence added scope manually
+			// check: https://github.com/golang/oauth2/issues/449
+			url := oauth.OAuthProviders.AppleConfig.AuthCodeURL(oauthStateString, oauth2.SetAuthURLParam("response_mode", "form_post")) + "&scope=name email"
 			c.Redirect(http.StatusTemporaryRedirect, url)
 		default:
 			log.Debug("Invalid oauth provider: ", provider)

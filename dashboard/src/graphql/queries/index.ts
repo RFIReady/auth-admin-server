@@ -28,6 +28,8 @@ export const EnvVariablesQuery = `
       FACEBOOK_CLIENT_SECRET,
       LINKEDIN_CLIENT_ID,
       LINKEDIN_CLIENT_SECRET,
+      APPLE_CLIENT_ID,
+      APPLE_CLIENT_SECRET,
       DEFAULT_ROLES,
       PROTECTED_ROLES,
       ROLES,
@@ -51,6 +53,7 @@ export const EnvVariablesQuery = `
       DISABLE_EMAIL_VERIFICATION,
       DISABLE_BASIC_AUTHENTICATION,
       DISABLE_SIGN_UP,
+      DISABLE_STRONG_PASSWORD,
       DISABLE_REDIS_FOR_ENV,
       CUSTOM_ACCESS_TOKEN_SCRIPT,
       DATABASE_NAME,
@@ -95,6 +98,46 @@ export const EmailVerificationQuery = `
   query {
     _env{
       DISABLE_EMAIL_VERIFICATION
+    }
+  }
+`;
+
+export const WebhooksDataQuery = `
+  query getWebhooksData($params: PaginatedInput!) {
+    _webhooks(params: $params){
+      webhooks{
+        id
+        event_name
+        endpoint
+        enabled
+        headers
+      }
+      pagination{
+        limit
+        page
+        offset
+        total
+      }
+    }
+  }
+`;
+
+export const WebhookLogsQuery = `
+  query getWebhookLogs($params: ListWebhookLogRequest!) {
+    _webhook_logs(params: $params) {
+      webhook_logs {
+        id
+        http_status
+        request
+        response
+        created_at
+      }
+      pagination {
+        limit
+        page
+        offset
+        total
+      }
     }
   }
 `;

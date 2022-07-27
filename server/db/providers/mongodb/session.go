@@ -1,16 +1,16 @@
 package mongodb
 
 import (
+	"context"
 	"time"
 
 	"github.com/authorizerdev/authorizer/server/db/models"
 	"github.com/google/uuid"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // AddSession to save session information in database
-func (p *provider) AddSession(session models.Session) error {
+func (p *provider) AddSession(ctx context.Context, session models.Session) error {
 	if session.ID == "" {
 		session.ID = uuid.New().String()
 	}
@@ -19,17 +19,7 @@ func (p *provider) AddSession(session models.Session) error {
 	session.CreatedAt = time.Now().Unix()
 	session.UpdatedAt = time.Now().Unix()
 	sessionCollection := p.db.Collection(models.Collections.Session, options.Collection())
-	_, err := sessionCollection.InsertOne(nil, session)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-// DeleteSession to delete session information from database
-func (p *provider) DeleteSession(userId string) error {
-	sessionCollection := p.db.Collection(models.Collections.Session, options.Collection())
-	_, err := sessionCollection.DeleteMany(nil, bson.M{"user_id": userId}, options.Delete())
+	_, err := sessionCollection.InsertOne(ctx, session)
 	if err != nil {
 		return err
 	}

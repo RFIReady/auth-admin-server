@@ -23,6 +23,7 @@ func InitRouter(log *logrus.Logger) *gin.Engine {
 	router.GET("/playground", handlers.PlaygroundHandler())
 	router.GET("/oauth_login/:oauth_provider", handlers.OAuthLoginHandler())
 	router.GET("/oauth_callback/:oauth_provider", handlers.OAuthCallbackHandler())
+	router.POST("/oauth_callback/:oauth_provider", handlers.OAuthCallbackHandler())
 	router.GET("/verify_email", handlers.VerifyEmailHandler())
 	// OPEN ID routes
 	router.GET("/.well-known/openid-configuration", handlers.OpenIDConfigurationHandler())
@@ -31,7 +32,7 @@ func InitRouter(log *logrus.Logger) *gin.Engine {
 	router.GET("/userinfo", handlers.UserInfoHandler())
 	router.GET("/logout", handlers.LogoutHandler())
 	router.POST("/oauth/token", handlers.TokenHandler())
-	router.POST("/oauth/revoke", handlers.RevokeHandler())
+	router.POST("/oauth/revoke", handlers.RevokeRefreshTokenHandler())
 
 	router.LoadHTMLGlob("templates/*")
 	// login page app related routes.

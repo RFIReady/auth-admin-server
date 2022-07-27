@@ -91,6 +91,34 @@ func (r *mutationResolver) GenerateJwtKeys(ctx context.Context, params model.Gen
 	return resolvers.GenerateJWTKeysResolver(ctx, params)
 }
 
+func (r *mutationResolver) AddWebhook(ctx context.Context, params model.AddWebhookRequest) (*model.Response, error) {
+	return resolvers.AddWebhookResolver(ctx, params)
+}
+
+func (r *mutationResolver) UpdateWebhook(ctx context.Context, params model.UpdateWebhookRequest) (*model.Response, error) {
+	return resolvers.UpdateWebhookResolver(ctx, params)
+}
+
+func (r *mutationResolver) DeleteWebhook(ctx context.Context, params model.WebhookRequest) (*model.Response, error) {
+	return resolvers.DeleteWebhookResolver(ctx, params)
+}
+
+func (r *mutationResolver) TestEndpoint(ctx context.Context, params model.TestEndpointRequest) (*model.TestEndpointResponse, error) {
+	return resolvers.TestEndpointResolver(ctx, params)
+}
+
+func (r *mutationResolver) AddEmailTemplate(ctx context.Context, params model.AddEmailTemplateRequest) (*model.Response, error) {
+	return resolvers.AddEmailTemplateResolver(ctx, params)
+}
+
+func (r *mutationResolver) UpdateEmailTemplate(ctx context.Context, params model.UpdateEmailTemplateRequest) (*model.Response, error) {
+	return resolvers.UpdateEmailTemplateResolver(ctx, params)
+}
+
+func (r *mutationResolver) DeleteEmailTemplate(ctx context.Context, params model.DeleteEmailTemplateRequest) (*model.Response, error) {
+	return resolvers.DeleteEmailTemplateResolver(ctx, params)
+}
+
 func (r *queryResolver) Meta(ctx context.Context) (*model.Meta, error) {
 	return resolvers.MetaResolver(ctx)
 }
@@ -121,6 +149,22 @@ func (r *queryResolver) AdminSession(ctx context.Context) (*model.Response, erro
 
 func (r *queryResolver) Env(ctx context.Context) (*model.Env, error) {
 	return resolvers.EnvResolver(ctx)
+}
+
+func (r *queryResolver) Webhook(ctx context.Context, params model.WebhookRequest) (*model.Webhook, error) {
+	return resolvers.WebhookResolver(ctx, params)
+}
+
+func (r *queryResolver) Webhooks(ctx context.Context, params *model.PaginatedInput) (*model.Webhooks, error) {
+	return resolvers.WebhooksResolver(ctx, params)
+}
+
+func (r *queryResolver) WebhookLogs(ctx context.Context, params *model.ListWebhookLogRequest) (*model.WebhookLogs, error) {
+	return resolvers.WebhookLogsResolver(ctx, params)
+}
+
+func (r *queryResolver) EmailTemplates(ctx context.Context, params *model.PaginatedInput) (*model.EmailTemplates, error) {
+	return resolvers.EmailTemplatesResolver(ctx, params)
 }
 
 // Mutation returns generated.MutationResolver implementation.

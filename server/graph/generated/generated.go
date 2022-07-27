@@ -52,11 +52,26 @@ type ComplexityRoot struct {
 		User         func(childComplexity int) int
 	}
 
+	EmailTemplate struct {
+		CreatedAt func(childComplexity int) int
+		EventName func(childComplexity int) int
+		ID        func(childComplexity int) int
+		Template  func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
+	}
+
+	EmailTemplates struct {
+		EmailTemplates func(childComplexity int) int
+		Pagination     func(childComplexity int) int
+	}
+
 	Env struct {
 		AccessTokenExpiryTime      func(childComplexity int) int
 		AdminSecret                func(childComplexity int) int
 		AllowedOrigins             func(childComplexity int) int
 		AppURL                     func(childComplexity int) int
+		AppleClientID              func(childComplexity int) int
+		AppleClientSecret          func(childComplexity int) int
 		ClientID                   func(childComplexity int) int
 		ClientSecret               func(childComplexity int) int
 		CustomAccessTokenScript    func(childComplexity int) int
@@ -74,6 +89,7 @@ type ComplexityRoot struct {
 		DisableMagicLinkLogin      func(childComplexity int) int
 		DisableRedisForEnv         func(childComplexity int) int
 		DisableSignUp              func(childComplexity int) int
+		DisableStrongPassword      func(childComplexity int) int
 		FacebookClientID           func(childComplexity int) int
 		FacebookClientSecret       func(childComplexity int) int
 		GithubClientID             func(childComplexity int) int
@@ -113,6 +129,7 @@ type ComplexityRoot struct {
 
 	Meta struct {
 		ClientID                     func(childComplexity int) int
+		IsAppleLoginEnabled          func(childComplexity int) int
 		IsBasicAuthenticationEnabled func(childComplexity int) int
 		IsEmailVerificationEnabled   func(childComplexity int) int
 		IsFacebookLoginEnabled       func(childComplexity int) int
@@ -121,30 +138,38 @@ type ComplexityRoot struct {
 		IsLinkedinLoginEnabled       func(childComplexity int) int
 		IsMagicLinkLoginEnabled      func(childComplexity int) int
 		IsSignUpEnabled              func(childComplexity int) int
+		IsStrongPasswordEnabled      func(childComplexity int) int
 		Version                      func(childComplexity int) int
 	}
 
 	Mutation struct {
-		AdminLogin        func(childComplexity int, params model.AdminLoginInput) int
-		AdminLogout       func(childComplexity int) int
-		AdminSignup       func(childComplexity int, params model.AdminSignupInput) int
-		DeleteUser        func(childComplexity int, params model.DeleteUserInput) int
-		EnableAccess      func(childComplexity int, param model.UpdateAccessInput) int
-		ForgotPassword    func(childComplexity int, params model.ForgotPasswordInput) int
-		GenerateJwtKeys   func(childComplexity int, params model.GenerateJWTKeysInput) int
-		InviteMembers     func(childComplexity int, params model.InviteMemberInput) int
-		Login             func(childComplexity int, params model.LoginInput) int
-		Logout            func(childComplexity int) int
-		MagicLinkLogin    func(childComplexity int, params model.MagicLinkLoginInput) int
-		ResendVerifyEmail func(childComplexity int, params model.ResendVerifyEmailInput) int
-		ResetPassword     func(childComplexity int, params model.ResetPasswordInput) int
-		Revoke            func(childComplexity int, params model.OAuthRevokeInput) int
-		RevokeAccess      func(childComplexity int, param model.UpdateAccessInput) int
-		Signup            func(childComplexity int, params model.SignUpInput) int
-		UpdateEnv         func(childComplexity int, params model.UpdateEnvInput) int
-		UpdateProfile     func(childComplexity int, params model.UpdateProfileInput) int
-		UpdateUser        func(childComplexity int, params model.UpdateUserInput) int
-		VerifyEmail       func(childComplexity int, params model.VerifyEmailInput) int
+		AddEmailTemplate    func(childComplexity int, params model.AddEmailTemplateRequest) int
+		AddWebhook          func(childComplexity int, params model.AddWebhookRequest) int
+		AdminLogin          func(childComplexity int, params model.AdminLoginInput) int
+		AdminLogout         func(childComplexity int) int
+		AdminSignup         func(childComplexity int, params model.AdminSignupInput) int
+		DeleteEmailTemplate func(childComplexity int, params model.DeleteEmailTemplateRequest) int
+		DeleteUser          func(childComplexity int, params model.DeleteUserInput) int
+		DeleteWebhook       func(childComplexity int, params model.WebhookRequest) int
+		EnableAccess        func(childComplexity int, param model.UpdateAccessInput) int
+		ForgotPassword      func(childComplexity int, params model.ForgotPasswordInput) int
+		GenerateJwtKeys     func(childComplexity int, params model.GenerateJWTKeysInput) int
+		InviteMembers       func(childComplexity int, params model.InviteMemberInput) int
+		Login               func(childComplexity int, params model.LoginInput) int
+		Logout              func(childComplexity int) int
+		MagicLinkLogin      func(childComplexity int, params model.MagicLinkLoginInput) int
+		ResendVerifyEmail   func(childComplexity int, params model.ResendVerifyEmailInput) int
+		ResetPassword       func(childComplexity int, params model.ResetPasswordInput) int
+		Revoke              func(childComplexity int, params model.OAuthRevokeInput) int
+		RevokeAccess        func(childComplexity int, param model.UpdateAccessInput) int
+		Signup              func(childComplexity int, params model.SignUpInput) int
+		TestEndpoint        func(childComplexity int, params model.TestEndpointRequest) int
+		UpdateEmailTemplate func(childComplexity int, params model.UpdateEmailTemplateRequest) int
+		UpdateEnv           func(childComplexity int, params model.UpdateEnvInput) int
+		UpdateProfile       func(childComplexity int, params model.UpdateProfileInput) int
+		UpdateUser          func(childComplexity int, params model.UpdateUserInput) int
+		UpdateWebhook       func(childComplexity int, params model.UpdateWebhookRequest) int
+		VerifyEmail         func(childComplexity int, params model.VerifyEmailInput) int
 	}
 
 	Pagination struct {
@@ -156,6 +181,7 @@ type ComplexityRoot struct {
 
 	Query struct {
 		AdminSession         func(childComplexity int) int
+		EmailTemplates       func(childComplexity int, params *model.PaginatedInput) int
 		Env                  func(childComplexity int) int
 		Meta                 func(childComplexity int) int
 		Profile              func(childComplexity int) int
@@ -163,10 +189,18 @@ type ComplexityRoot struct {
 		Users                func(childComplexity int, params *model.PaginatedInput) int
 		ValidateJwtToken     func(childComplexity int, params model.ValidateJWTTokenInput) int
 		VerificationRequests func(childComplexity int, params *model.PaginatedInput) int
+		Webhook              func(childComplexity int, params model.WebhookRequest) int
+		WebhookLogs          func(childComplexity int, params *model.ListWebhookLogRequest) int
+		Webhooks             func(childComplexity int, params *model.PaginatedInput) int
 	}
 
 	Response struct {
 		Message func(childComplexity int) int
+	}
+
+	TestEndpointResponse struct {
+		HTTPStatus func(childComplexity int) int
+		Response   func(childComplexity int) int
 	}
 
 	User struct {
@@ -215,6 +249,36 @@ type ComplexityRoot struct {
 		Pagination           func(childComplexity int) int
 		VerificationRequests func(childComplexity int) int
 	}
+
+	Webhook struct {
+		CreatedAt func(childComplexity int) int
+		Enabled   func(childComplexity int) int
+		Endpoint  func(childComplexity int) int
+		EventName func(childComplexity int) int
+		Headers   func(childComplexity int) int
+		ID        func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
+	}
+
+	WebhookLog struct {
+		CreatedAt  func(childComplexity int) int
+		HTTPStatus func(childComplexity int) int
+		ID         func(childComplexity int) int
+		Request    func(childComplexity int) int
+		Response   func(childComplexity int) int
+		UpdatedAt  func(childComplexity int) int
+		WebhookID  func(childComplexity int) int
+	}
+
+	WebhookLogs struct {
+		Pagination  func(childComplexity int) int
+		WebhookLogs func(childComplexity int) int
+	}
+
+	Webhooks struct {
+		Pagination func(childComplexity int) int
+		Webhooks   func(childComplexity int) int
+	}
 }
 
 type MutationResolver interface {
@@ -238,6 +302,13 @@ type MutationResolver interface {
 	RevokeAccess(ctx context.Context, param model.UpdateAccessInput) (*model.Response, error)
 	EnableAccess(ctx context.Context, param model.UpdateAccessInput) (*model.Response, error)
 	GenerateJwtKeys(ctx context.Context, params model.GenerateJWTKeysInput) (*model.GenerateJWTKeysResponse, error)
+	AddWebhook(ctx context.Context, params model.AddWebhookRequest) (*model.Response, error)
+	UpdateWebhook(ctx context.Context, params model.UpdateWebhookRequest) (*model.Response, error)
+	DeleteWebhook(ctx context.Context, params model.WebhookRequest) (*model.Response, error)
+	TestEndpoint(ctx context.Context, params model.TestEndpointRequest) (*model.TestEndpointResponse, error)
+	AddEmailTemplate(ctx context.Context, params model.AddEmailTemplateRequest) (*model.Response, error)
+	UpdateEmailTemplate(ctx context.Context, params model.UpdateEmailTemplateRequest) (*model.Response, error)
+	DeleteEmailTemplate(ctx context.Context, params model.DeleteEmailTemplateRequest) (*model.Response, error)
 }
 type QueryResolver interface {
 	Meta(ctx context.Context) (*model.Meta, error)
@@ -248,6 +319,10 @@ type QueryResolver interface {
 	VerificationRequests(ctx context.Context, params *model.PaginatedInput) (*model.VerificationRequests, error)
 	AdminSession(ctx context.Context) (*model.Response, error)
 	Env(ctx context.Context) (*model.Env, error)
+	Webhook(ctx context.Context, params model.WebhookRequest) (*model.Webhook, error)
+	Webhooks(ctx context.Context, params *model.PaginatedInput) (*model.Webhooks, error)
+	WebhookLogs(ctx context.Context, params *model.ListWebhookLogRequest) (*model.WebhookLogs, error)
+	EmailTemplates(ctx context.Context, params *model.PaginatedInput) (*model.EmailTemplates, error)
 }
 
 type executableSchema struct {
@@ -307,6 +382,55 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.AuthResponse.User(childComplexity), true
 
+	case "EmailTemplate.created_at":
+		if e.complexity.EmailTemplate.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.CreatedAt(childComplexity), true
+
+	case "EmailTemplate.event_name":
+		if e.complexity.EmailTemplate.EventName == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.EventName(childComplexity), true
+
+	case "EmailTemplate.id":
+		if e.complexity.EmailTemplate.ID == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.ID(childComplexity), true
+
+	case "EmailTemplate.template":
+		if e.complexity.EmailTemplate.Template == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.Template(childComplexity), true
+
+	case "EmailTemplate.updated_at":
+		if e.complexity.EmailTemplate.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplate.UpdatedAt(childComplexity), true
+
+	case "EmailTemplates.EmailTemplates":
+		if e.complexity.EmailTemplates.EmailTemplates == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplates.EmailTemplates(childComplexity), true
+
+	case "EmailTemplates.pagination":
+		if e.complexity.EmailTemplates.Pagination == nil {
+			break
+		}
+
+		return e.complexity.EmailTemplates.Pagination(childComplexity), true
+
 	case "Env.ACCESS_TOKEN_EXPIRY_TIME":
 		if e.complexity.Env.AccessTokenExpiryTime == nil {
 			break
@@ -334,6 +458,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Env.AppURL(childComplexity), true
+
+	case "Env.APPLE_CLIENT_ID":
+		if e.complexity.Env.AppleClientID == nil {
+			break
+		}
+
+		return e.complexity.Env.AppleClientID(childComplexity), true
+
+	case "Env.APPLE_CLIENT_SECRET":
+		if e.complexity.Env.AppleClientSecret == nil {
+			break
+		}
+
+		return e.complexity.Env.AppleClientSecret(childComplexity), true
 
 	case "Env.CLIENT_ID":
 		if e.complexity.Env.ClientID == nil {
@@ -453,6 +591,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Env.DisableSignUp(childComplexity), true
+
+	case "Env.DISABLE_STRONG_PASSWORD":
+		if e.complexity.Env.DisableStrongPassword == nil {
+			break
+		}
+
+		return e.complexity.Env.DisableStrongPassword(childComplexity), true
 
 	case "Env.FACEBOOK_CLIENT_ID":
 		if e.complexity.Env.FacebookClientID == nil {
@@ -664,6 +809,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Meta.ClientID(childComplexity), true
 
+	case "Meta.is_apple_login_enabled":
+		if e.complexity.Meta.IsAppleLoginEnabled == nil {
+			break
+		}
+
+		return e.complexity.Meta.IsAppleLoginEnabled(childComplexity), true
+
 	case "Meta.is_basic_authentication_enabled":
 		if e.complexity.Meta.IsBasicAuthenticationEnabled == nil {
 			break
@@ -720,12 +872,43 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Meta.IsSignUpEnabled(childComplexity), true
 
+	case "Meta.is_strong_password_enabled":
+		if e.complexity.Meta.IsStrongPasswordEnabled == nil {
+			break
+		}
+
+		return e.complexity.Meta.IsStrongPasswordEnabled(childComplexity), true
+
 	case "Meta.version":
 		if e.complexity.Meta.Version == nil {
 			break
 		}
 
 		return e.complexity.Meta.Version(childComplexity), true
+
+	case "Mutation._add_email_template":
+		if e.complexity.Mutation.AddEmailTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation__add_email_template_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.AddEmailTemplate(childComplexity, args["params"].(model.AddEmailTemplateRequest)), true
+
+	case "Mutation._add_webhook":
+		if e.complexity.Mutation.AddWebhook == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation__add_webhook_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.AddWebhook(childComplexity, args["params"].(model.AddWebhookRequest)), true
 
 	case "Mutation._admin_login":
 		if e.complexity.Mutation.AdminLogin == nil {
@@ -758,6 +941,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.AdminSignup(childComplexity, args["params"].(model.AdminSignupInput)), true
 
+	case "Mutation._delete_email_template":
+		if e.complexity.Mutation.DeleteEmailTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation__delete_email_template_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteEmailTemplate(childComplexity, args["params"].(model.DeleteEmailTemplateRequest)), true
+
 	case "Mutation._delete_user":
 		if e.complexity.Mutation.DeleteUser == nil {
 			break
@@ -769,6 +964,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.DeleteUser(childComplexity, args["params"].(model.DeleteUserInput)), true
+
+	case "Mutation._delete_webhook":
+		if e.complexity.Mutation.DeleteWebhook == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation__delete_webhook_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteWebhook(childComplexity, args["params"].(model.WebhookRequest)), true
 
 	case "Mutation._enable_access":
 		if e.complexity.Mutation.EnableAccess == nil {
@@ -909,6 +1116,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.Signup(childComplexity, args["params"].(model.SignUpInput)), true
 
+	case "Mutation._test_endpoint":
+		if e.complexity.Mutation.TestEndpoint == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation__test_endpoint_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.TestEndpoint(childComplexity, args["params"].(model.TestEndpointRequest)), true
+
+	case "Mutation._update_email_template":
+		if e.complexity.Mutation.UpdateEmailTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation__update_email_template_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateEmailTemplate(childComplexity, args["params"].(model.UpdateEmailTemplateRequest)), true
+
 	case "Mutation._update_env":
 		if e.complexity.Mutation.UpdateEnv == nil {
 			break
@@ -944,6 +1175,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateUser(childComplexity, args["params"].(model.UpdateUserInput)), true
+
+	case "Mutation._update_webhook":
+		if e.complexity.Mutation.UpdateWebhook == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation__update_webhook_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateWebhook(childComplexity, args["params"].(model.UpdateWebhookRequest)), true
 
 	case "Mutation.verify_email":
 		if e.complexity.Mutation.VerifyEmail == nil {
@@ -991,6 +1234,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.AdminSession(childComplexity), true
+
+	case "Query._email_templates":
+		if e.complexity.Query.EmailTemplates == nil {
+			break
+		}
+
+		args, err := ec.field_Query__email_templates_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.EmailTemplates(childComplexity, args["params"].(*model.PaginatedInput)), true
 
 	case "Query._env":
 		if e.complexity.Query.Env == nil {
@@ -1061,12 +1316,62 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.VerificationRequests(childComplexity, args["params"].(*model.PaginatedInput)), true
 
+	case "Query._webhook":
+		if e.complexity.Query.Webhook == nil {
+			break
+		}
+
+		args, err := ec.field_Query__webhook_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Webhook(childComplexity, args["params"].(model.WebhookRequest)), true
+
+	case "Query._webhook_logs":
+		if e.complexity.Query.WebhookLogs == nil {
+			break
+		}
+
+		args, err := ec.field_Query__webhook_logs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WebhookLogs(childComplexity, args["params"].(*model.ListWebhookLogRequest)), true
+
+	case "Query._webhooks":
+		if e.complexity.Query.Webhooks == nil {
+			break
+		}
+
+		args, err := ec.field_Query__webhooks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Webhooks(childComplexity, args["params"].(*model.PaginatedInput)), true
+
 	case "Response.message":
 		if e.complexity.Response.Message == nil {
 			break
 		}
 
 		return e.complexity.Response.Message(childComplexity), true
+
+	case "TestEndpointResponse.http_status":
+		if e.complexity.TestEndpointResponse.HTTPStatus == nil {
+			break
+		}
+
+		return e.complexity.TestEndpointResponse.HTTPStatus(childComplexity), true
+
+	case "TestEndpointResponse.response":
+		if e.complexity.TestEndpointResponse.Response == nil {
+			break
+		}
+
+		return e.complexity.TestEndpointResponse.Response(childComplexity), true
 
 	case "User.birthdate":
 		if e.complexity.User.Birthdate == nil {
@@ -1292,6 +1597,132 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.VerificationRequests.VerificationRequests(childComplexity), true
 
+	case "Webhook.created_at":
+		if e.complexity.Webhook.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Webhook.CreatedAt(childComplexity), true
+
+	case "Webhook.enabled":
+		if e.complexity.Webhook.Enabled == nil {
+			break
+		}
+
+		return e.complexity.Webhook.Enabled(childComplexity), true
+
+	case "Webhook.endpoint":
+		if e.complexity.Webhook.Endpoint == nil {
+			break
+		}
+
+		return e.complexity.Webhook.Endpoint(childComplexity), true
+
+	case "Webhook.event_name":
+		if e.complexity.Webhook.EventName == nil {
+			break
+		}
+
+		return e.complexity.Webhook.EventName(childComplexity), true
+
+	case "Webhook.headers":
+		if e.complexity.Webhook.Headers == nil {
+			break
+		}
+
+		return e.complexity.Webhook.Headers(childComplexity), true
+
+	case "Webhook.id":
+		if e.complexity.Webhook.ID == nil {
+			break
+		}
+
+		return e.complexity.Webhook.ID(childComplexity), true
+
+	case "Webhook.updated_at":
+		if e.complexity.Webhook.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Webhook.UpdatedAt(childComplexity), true
+
+	case "WebhookLog.created_at":
+		if e.complexity.WebhookLog.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.WebhookLog.CreatedAt(childComplexity), true
+
+	case "WebhookLog.http_status":
+		if e.complexity.WebhookLog.HTTPStatus == nil {
+			break
+		}
+
+		return e.complexity.WebhookLog.HTTPStatus(childComplexity), true
+
+	case "WebhookLog.id":
+		if e.complexity.WebhookLog.ID == nil {
+			break
+		}
+
+		return e.complexity.WebhookLog.ID(childComplexity), true
+
+	case "WebhookLog.request":
+		if e.complexity.WebhookLog.Request == nil {
+			break
+		}
+
+		return e.complexity.WebhookLog.Request(childComplexity), true
+
+	case "WebhookLog.response":
+		if e.complexity.WebhookLog.Response == nil {
+			break
+		}
+
+		return e.complexity.WebhookLog.Response(childComplexity), true
+
+	case "WebhookLog.updated_at":
+		if e.complexity.WebhookLog.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.WebhookLog.UpdatedAt(childComplexity), true
+
+	case "WebhookLog.webhook_id":
+		if e.complexity.WebhookLog.WebhookID == nil {
+			break
+		}
+
+		return e.complexity.WebhookLog.WebhookID(childComplexity), true
+
+	case "WebhookLogs.pagination":
+		if e.complexity.WebhookLogs.Pagination == nil {
+			break
+		}
+
+		return e.complexity.WebhookLogs.Pagination(childComplexity), true
+
+	case "WebhookLogs.webhook_logs":
+		if e.complexity.WebhookLogs.WebhookLogs == nil {
+			break
+		}
+
+		return e.complexity.WebhookLogs.WebhookLogs(childComplexity), true
+
+	case "Webhooks.pagination":
+		if e.complexity.Webhooks.Pagination == nil {
+			break
+		}
+
+		return e.complexity.Webhooks.Pagination(childComplexity), true
+
+	case "Webhooks.webhooks":
+		if e.complexity.Webhooks.Webhooks == nil {
+			break
+		}
+
+		return e.complexity.Webhooks.Webhooks(childComplexity), true
+
 	}
 	return 0, false
 }
@@ -1377,10 +1808,12 @@ type Meta {
 	is_facebook_login_enabled: Boolean!
 	is_github_login_enabled: Boolean!
 	is_linkedin_login_enabled: Boolean!
+	is_apple_login_enabled: Boolean!
 	is_email_verification_enabled: Boolean!
 	is_basic_authentication_enabled: Boolean!
 	is_magic_link_login_enabled: Boolean!
 	is_sign_up_enabled: Boolean!
+	is_strong_password_enabled: Boolean!
 }
 
 type User {
@@ -1477,6 +1910,7 @@ type Env {
 	DISABLE_LOGIN_PAGE: Boolean!
 	DISABLE_SIGN_UP: Boolean!
 	DISABLE_REDIS_FOR_ENV: Boolean!
+	DISABLE_STRONG_PASSWORD: Boolean!
 	ROLES: [String!]
 	PROTECTED_ROLES: [String!]
 	DEFAULT_ROLES: [String!]
@@ -1489,6 +1923,8 @@ type Env {
 	FACEBOOK_CLIENT_SECRET: String
 	LINKEDIN_CLIENT_ID: String
 	LINKEDIN_CLIENT_SECRET: String
+	APPLE_CLIENT_ID: String
+	APPLE_CLIENT_SECRET: String
 	ORGANIZATION_NAME: String
 	ORGANIZATION_LOGO: String
 }
@@ -1501,6 +1937,54 @@ type GenerateJWTKeysResponse {
 	secret: String
 	public_key: String
 	private_key: String
+}
+
+type Webhook {
+	id: ID!
+	event_name: String
+	endpoint: String
+	enabled: Boolean
+	headers: Map
+	created_at: Int64
+	updated_at: Int64
+}
+
+type Webhooks {
+	pagination: Pagination!
+	webhooks: [Webhook!]!
+}
+
+type WebhookLog {
+	id: ID!
+	http_status: Int64
+	response: String
+	request: String
+	webhook_id: ID
+	created_at: Int64
+	updated_at: Int64
+}
+
+type TestEndpointResponse {
+	http_status: Int64
+	response: String
+}
+
+type WebhookLogs {
+	pagination: Pagination!
+	webhook_logs: [WebhookLog!]!
+}
+
+type EmailTemplate {
+	id: ID!
+	event_name: String!
+	template: String!
+	created_at: Int64
+	updated_at: Int64
+}
+
+type EmailTemplates {
+	pagination: Pagination!
+	EmailTemplates: [EmailTemplate!]!
 }
 
 input UpdateEnvInput {
@@ -1526,6 +2010,7 @@ input UpdateEnvInput {
 	DISABLE_LOGIN_PAGE: Boolean
 	DISABLE_SIGN_UP: Boolean
 	DISABLE_REDIS_FOR_ENV: Boolean
+	DISABLE_STRONG_PASSWORD: Boolean
 	ROLES: [String!]
 	PROTECTED_ROLES: [String!]
 	DEFAULT_ROLES: [String!]
@@ -1538,6 +2023,8 @@ input UpdateEnvInput {
 	FACEBOOK_CLIENT_SECRET: String
 	LINKEDIN_CLIENT_ID: String
 	LINKEDIN_CLIENT_SECRET: String
+	APPLE_CLIENT_ID: String
+	APPLE_CLIENT_SECRET: String
 	ORGANIZATION_NAME: String
 	ORGANIZATION_LOGO: String
 }
@@ -1674,6 +2161,51 @@ input GenerateJWTKeysInput {
 	type: String!
 }
 
+input ListWebhookLogRequest {
+	pagination: PaginationInput
+	webhook_id: String
+}
+
+input AddWebhookRequest {
+	event_name: String!
+	endpoint: String!
+	enabled: Boolean!
+	headers: Map
+}
+
+input UpdateWebhookRequest {
+	id: ID!
+	event_name: String
+	endpoint: String
+	enabled: Boolean
+	headers: Map
+}
+
+input WebhookRequest {
+	id: ID!
+}
+
+input TestEndpointRequest {
+	endpoint: String!
+	event_name: String!
+	headers: Map
+}
+
+input AddEmailTemplateRequest {
+	event_name: String!
+	template: String!
+}
+
+input UpdateEmailTemplateRequest {
+	id: ID!
+	event_name: String
+	template: String
+}
+
+input DeleteEmailTemplateRequest {
+	id: ID!
+}
+
 type Mutation {
 	signup(params: SignUpInput!): AuthResponse!
 	login(params: LoginInput!): AuthResponse!
@@ -1696,6 +2228,13 @@ type Mutation {
 	_revoke_access(param: UpdateAccessInput!): Response!
 	_enable_access(param: UpdateAccessInput!): Response!
 	_generate_jwt_keys(params: GenerateJWTKeysInput!): GenerateJWTKeysResponse!
+	_add_webhook(params: AddWebhookRequest!): Response!
+	_update_webhook(params: UpdateWebhookRequest!): Response!
+	_delete_webhook(params: WebhookRequest!): Response!
+	_test_endpoint(params: TestEndpointRequest!): TestEndpointResponse!
+	_add_email_template(params: AddEmailTemplateRequest!): Response!
+	_update_email_template(params: UpdateEmailTemplateRequest!): Response!
+	_delete_email_template(params: DeleteEmailTemplateRequest!): Response!
 }
 
 type Query {
@@ -1708,6 +2247,10 @@ type Query {
 	_verification_requests(params: PaginatedInput): VerificationRequests!
 	_admin_session: Response!
 	_env: Env!
+	_webhook(params: WebhookRequest!): Webhook!
+	_webhooks(params: PaginatedInput): Webhooks!
+	_webhook_logs(params: ListWebhookLogRequest): WebhookLogs!
+	_email_templates(params: PaginatedInput): EmailTemplates!
 }
 `, BuiltIn: false},
 }
@@ -1716,6 +2259,36 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
+
+func (ec *executionContext) field_Mutation__add_email_template_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.AddEmailTemplateRequest
+	if tmp, ok := rawArgs["params"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("params"))
+		arg0, err = ec.unmarshalNAddEmailTemplateRequest2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐAddEmailTemplateRequest(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["params"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation__add_webhook_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.AddWebhookRequest
+	if tmp, ok := rawArgs["params"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("params"))
+		arg0, err = ec.unmarshalNAddWebhookRequest2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐAddWebhookRequest(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["params"] = arg0
+	return args, nil
+}
 
 func (ec *executionContext) field_Mutation__admin_login_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
@@ -1747,6 +2320,21 @@ func (ec *executionContext) field_Mutation__admin_signup_args(ctx context.Contex
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation__delete_email_template_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.DeleteEmailTemplateRequest
+	if tmp, ok := rawArgs["params"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("params"))
+		arg0, err = ec.unmarshalNDeleteEmailTemplateRequest2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐDeleteEmailTemplateRequest(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["params"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation__delete_user_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -1754,6 +2342,21 @@ func (ec *executionContext) field_Mutation__delete_user_args(ctx context.Context
 	if tmp, ok := rawArgs["params"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("params"))
 		arg0, err = ec.unmarshalNDeleteUserInput2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐDeleteUserInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["params"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation__delete_webhook_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.WebhookRequest
+	if tmp, ok := rawArgs["params"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("params"))
+		arg0, err = ec.unmarshalNWebhookRequest2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhookRequest(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1822,6 +2425,36 @@ func (ec *executionContext) field_Mutation__revoke_access_args(ctx context.Conte
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation__test_endpoint_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.TestEndpointRequest
+	if tmp, ok := rawArgs["params"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("params"))
+		arg0, err = ec.unmarshalNTestEndpointRequest2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐTestEndpointRequest(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["params"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation__update_email_template_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.UpdateEmailTemplateRequest
+	if tmp, ok := rawArgs["params"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("params"))
+		arg0, err = ec.unmarshalNUpdateEmailTemplateRequest2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐUpdateEmailTemplateRequest(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["params"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation__update_env_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -1844,6 +2477,21 @@ func (ec *executionContext) field_Mutation__update_user_args(ctx context.Context
 	if tmp, ok := rawArgs["params"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("params"))
 		arg0, err = ec.unmarshalNUpdateUserInput2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐUpdateUserInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["params"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation__update_webhook_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.UpdateWebhookRequest
+	if tmp, ok := rawArgs["params"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("params"))
+		arg0, err = ec.unmarshalNUpdateWebhookRequest2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐUpdateWebhookRequest(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2002,6 +2650,21 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 	return args, nil
 }
 
+func (ec *executionContext) field_Query__email_templates_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.PaginatedInput
+	if tmp, ok := rawArgs["params"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("params"))
+		arg0, err = ec.unmarshalOPaginatedInput2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐPaginatedInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["params"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query__users_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2018,6 +2681,51 @@ func (ec *executionContext) field_Query__users_args(ctx context.Context, rawArgs
 }
 
 func (ec *executionContext) field_Query__verification_requests_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.PaginatedInput
+	if tmp, ok := rawArgs["params"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("params"))
+		arg0, err = ec.unmarshalOPaginatedInput2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐPaginatedInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["params"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query__webhook_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.WebhookRequest
+	if tmp, ok := rawArgs["params"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("params"))
+		arg0, err = ec.unmarshalNWebhookRequest2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhookRequest(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["params"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query__webhook_logs_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.ListWebhookLogRequest
+	if tmp, ok := rawArgs["params"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("params"))
+		arg0, err = ec.unmarshalOListWebhookLogRequest2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐListWebhookLogRequest(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["params"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query__webhooks_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 *model.PaginatedInput
@@ -2293,6 +3001,245 @@ func (ec *executionContext) _AuthResponse_user(ctx context.Context, field graphq
 	res := resTmp.(*model.User)
 	fc.Result = res
 	return ec.marshalOUser2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _EmailTemplate_id(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplate) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "EmailTemplate",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _EmailTemplate_event_name(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplate) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "EmailTemplate",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EventName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _EmailTemplate_template(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplate) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "EmailTemplate",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Template, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _EmailTemplate_created_at(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplate) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "EmailTemplate",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int64)
+	fc.Result = res
+	return ec.marshalOInt642ᚖint64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _EmailTemplate_updated_at(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplate) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "EmailTemplate",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int64)
+	fc.Result = res
+	return ec.marshalOInt642ᚖint64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _EmailTemplates_pagination(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplates) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "EmailTemplates",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Pagination, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Pagination)
+	fc.Result = res
+	return ec.marshalNPagination2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐPagination(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _EmailTemplates_EmailTemplates(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplates) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "EmailTemplates",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EmailTemplates, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.EmailTemplate)
+	fc.Result = res
+	return ec.marshalNEmailTemplate2ᚕᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐEmailTemplateᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Env_ACCESS_TOKEN_EXPIRY_TIME(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
@@ -3311,6 +4258,41 @@ func (ec *executionContext) _Env_DISABLE_REDIS_FOR_ENV(ctx context.Context, fiel
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Env_DISABLE_STRONG_PASSWORD(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Env",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DisableStrongPassword, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Env_ROLES(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -3682,6 +4664,70 @@ func (ec *executionContext) _Env_LINKEDIN_CLIENT_SECRET(ctx context.Context, fie
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.LinkedinClientSecret, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Env_APPLE_CLIENT_ID(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Env",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AppleClientID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Env_APPLE_CLIENT_SECRET(ctx context.Context, field graphql.CollectedField, obj *model.Env) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Env",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AppleClientSecret, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4135,6 +5181,41 @@ func (ec *executionContext) _Meta_is_linkedin_login_enabled(ctx context.Context,
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Meta_is_apple_login_enabled(ctx context.Context, field graphql.CollectedField, obj *model.Meta) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Meta",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IsAppleLoginEnabled, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Meta_is_email_verification_enabled(ctx context.Context, field graphql.CollectedField, obj *model.Meta) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -4259,6 +5340,41 @@ func (ec *executionContext) _Meta_is_sign_up_enabled(ctx context.Context, field 
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.IsSignUpEnabled, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Meta_is_strong_password_enabled(ctx context.Context, field graphql.CollectedField, obj *model.Meta) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Meta",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IsStrongPasswordEnabled, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5101,6 +6217,300 @@ func (ec *executionContext) _Mutation__generate_jwt_keys(ctx context.Context, fi
 	return ec.marshalNGenerateJWTKeysResponse2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐGenerateJWTKeysResponse(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Mutation__add_webhook(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation__add_webhook_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().AddWebhook(rctx, args["params"].(model.AddWebhookRequest))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Response)
+	fc.Result = res
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation__update_webhook(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation__update_webhook_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateWebhook(rctx, args["params"].(model.UpdateWebhookRequest))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Response)
+	fc.Result = res
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation__delete_webhook(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation__delete_webhook_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteWebhook(rctx, args["params"].(model.WebhookRequest))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Response)
+	fc.Result = res
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation__test_endpoint(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation__test_endpoint_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().TestEndpoint(rctx, args["params"].(model.TestEndpointRequest))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.TestEndpointResponse)
+	fc.Result = res
+	return ec.marshalNTestEndpointResponse2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐTestEndpointResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation__add_email_template(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation__add_email_template_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().AddEmailTemplate(rctx, args["params"].(model.AddEmailTemplateRequest))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Response)
+	fc.Result = res
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation__update_email_template(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation__update_email_template_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateEmailTemplate(rctx, args["params"].(model.UpdateEmailTemplateRequest))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Response)
+	fc.Result = res
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation__delete_email_template(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation__delete_email_template_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteEmailTemplate(rctx, args["params"].(model.DeleteEmailTemplateRequest))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Response)
+	fc.Result = res
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐResponse(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Pagination_limit(ctx context.Context, field graphql.CollectedField, obj *model.Pagination) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -5549,6 +6959,174 @@ func (ec *executionContext) _Query__env(ctx context.Context, field graphql.Colle
 	return ec.marshalNEnv2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐEnv(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Query__webhook(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query__webhook_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Webhook(rctx, args["params"].(model.WebhookRequest))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Webhook)
+	fc.Result = res
+	return ec.marshalNWebhook2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhook(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query__webhooks(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query__webhooks_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Webhooks(rctx, args["params"].(*model.PaginatedInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Webhooks)
+	fc.Result = res
+	return ec.marshalNWebhooks2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhooks(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query__webhook_logs(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query__webhook_logs_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().WebhookLogs(rctx, args["params"].(*model.ListWebhookLogRequest))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.WebhookLogs)
+	fc.Result = res
+	return ec.marshalNWebhookLogs2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhookLogs(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query__email_templates(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query__email_templates_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().EmailTemplates(rctx, args["params"].(*model.PaginatedInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.EmailTemplates)
+	fc.Result = res
+	return ec.marshalNEmailTemplates2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐEmailTemplates(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -5653,6 +7231,70 @@ func (ec *executionContext) _Response_message(ctx context.Context, field graphql
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _TestEndpointResponse_http_status(ctx context.Context, field graphql.CollectedField, obj *model.TestEndpointResponse) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "TestEndpointResponse",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.HTTPStatus, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int64)
+	fc.Result = res
+	return ec.marshalOInt642ᚖint64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _TestEndpointResponse_response(ctx context.Context, field graphql.CollectedField, obj *model.TestEndpointResponse) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "TestEndpointResponse",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Response, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
@@ -6710,6 +8352,600 @@ func (ec *executionContext) _VerificationRequests_verification_requests(ctx cont
 	res := resTmp.([]*model.VerificationRequest)
 	fc.Result = res
 	return ec.marshalNVerificationRequest2ᚕᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐVerificationRequestᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Webhook_id(ctx context.Context, field graphql.CollectedField, obj *model.Webhook) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Webhook",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Webhook_event_name(ctx context.Context, field graphql.CollectedField, obj *model.Webhook) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Webhook",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EventName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Webhook_endpoint(ctx context.Context, field graphql.CollectedField, obj *model.Webhook) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Webhook",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Endpoint, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Webhook_enabled(ctx context.Context, field graphql.CollectedField, obj *model.Webhook) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Webhook",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Enabled, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Webhook_headers(ctx context.Context, field graphql.CollectedField, obj *model.Webhook) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Webhook",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Headers, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(map[string]interface{})
+	fc.Result = res
+	return ec.marshalOMap2map(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Webhook_created_at(ctx context.Context, field graphql.CollectedField, obj *model.Webhook) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Webhook",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int64)
+	fc.Result = res
+	return ec.marshalOInt642ᚖint64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Webhook_updated_at(ctx context.Context, field graphql.CollectedField, obj *model.Webhook) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Webhook",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int64)
+	fc.Result = res
+	return ec.marshalOInt642ᚖint64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _WebhookLog_id(ctx context.Context, field graphql.CollectedField, obj *model.WebhookLog) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "WebhookLog",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _WebhookLog_http_status(ctx context.Context, field graphql.CollectedField, obj *model.WebhookLog) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "WebhookLog",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.HTTPStatus, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int64)
+	fc.Result = res
+	return ec.marshalOInt642ᚖint64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _WebhookLog_response(ctx context.Context, field graphql.CollectedField, obj *model.WebhookLog) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "WebhookLog",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Response, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _WebhookLog_request(ctx context.Context, field graphql.CollectedField, obj *model.WebhookLog) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "WebhookLog",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Request, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _WebhookLog_webhook_id(ctx context.Context, field graphql.CollectedField, obj *model.WebhookLog) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "WebhookLog",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.WebhookID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _WebhookLog_created_at(ctx context.Context, field graphql.CollectedField, obj *model.WebhookLog) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "WebhookLog",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int64)
+	fc.Result = res
+	return ec.marshalOInt642ᚖint64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _WebhookLog_updated_at(ctx context.Context, field graphql.CollectedField, obj *model.WebhookLog) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "WebhookLog",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int64)
+	fc.Result = res
+	return ec.marshalOInt642ᚖint64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _WebhookLogs_pagination(ctx context.Context, field graphql.CollectedField, obj *model.WebhookLogs) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "WebhookLogs",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Pagination, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Pagination)
+	fc.Result = res
+	return ec.marshalNPagination2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐPagination(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _WebhookLogs_webhook_logs(ctx context.Context, field graphql.CollectedField, obj *model.WebhookLogs) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "WebhookLogs",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.WebhookLogs, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.WebhookLog)
+	fc.Result = res
+	return ec.marshalNWebhookLog2ᚕᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhookLogᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Webhooks_pagination(ctx context.Context, field graphql.CollectedField, obj *model.Webhooks) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Webhooks",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Pagination, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Pagination)
+	fc.Result = res
+	return ec.marshalNPagination2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐPagination(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Webhooks_webhooks(ctx context.Context, field graphql.CollectedField, obj *model.Webhooks) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Webhooks",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Webhooks, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Webhook)
+	fc.Result = res
+	return ec.marshalNWebhook2ᚕᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhookᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -7834,6 +10070,84 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputAddEmailTemplateRequest(ctx context.Context, obj interface{}) (model.AddEmailTemplateRequest, error) {
+	var it model.AddEmailTemplateRequest
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "event_name":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("event_name"))
+			it.EventName, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "template":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("template"))
+			it.Template, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputAddWebhookRequest(ctx context.Context, obj interface{}) (model.AddWebhookRequest, error) {
+	var it model.AddWebhookRequest
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "event_name":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("event_name"))
+			it.EventName, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "endpoint":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endpoint"))
+			it.Endpoint, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "enabled":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("enabled"))
+			it.Enabled, err = ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "headers":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("headers"))
+			it.Headers, err = ec.unmarshalOMap2map(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputAdminLoginInput(ctx context.Context, obj interface{}) (model.AdminLoginInput, error) {
 	var it model.AdminLoginInput
 	asMap := map[string]interface{}{}
@@ -7871,6 +10185,29 @@ func (ec *executionContext) unmarshalInputAdminSignupInput(ctx context.Context, 
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("admin_secret"))
 			it.AdminSecret, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputDeleteEmailTemplateRequest(ctx context.Context, obj interface{}) (model.DeleteEmailTemplateRequest, error) {
+	var it model.DeleteEmailTemplateRequest
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -7987,6 +10324,37 @@ func (ec *executionContext) unmarshalInputInviteMemberInput(ctx context.Context,
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("redirect_uri"))
 			it.RedirectURI, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputListWebhookLogRequest(ctx context.Context, obj interface{}) (model.ListWebhookLogRequest, error) {
+	var it model.ListWebhookLogRequest
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "pagination":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
+			it.Pagination, err = ec.unmarshalOPaginationInput2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐPaginationInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "webhook_id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("webhook_id"))
+			it.WebhookID, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8403,6 +10771,45 @@ func (ec *executionContext) unmarshalInputSignUpInput(ctx context.Context, obj i
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputTestEndpointRequest(ctx context.Context, obj interface{}) (model.TestEndpointRequest, error) {
+	var it model.TestEndpointRequest
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "endpoint":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endpoint"))
+			it.Endpoint, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "event_name":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("event_name"))
+			it.EventName, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "headers":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("headers"))
+			it.Headers, err = ec.unmarshalOMap2map(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUpdateAccessInput(ctx context.Context, obj interface{}) (model.UpdateAccessInput, error) {
 	var it model.UpdateAccessInput
 	asMap := map[string]interface{}{}
@@ -8417,6 +10824,45 @@ func (ec *executionContext) unmarshalInputUpdateAccessInput(ctx context.Context,
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("user_id"))
 			it.UserID, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateEmailTemplateRequest(ctx context.Context, obj interface{}) (model.UpdateEmailTemplateRequest, error) {
+	var it model.UpdateEmailTemplateRequest
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "event_name":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("event_name"))
+			it.EventName, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "template":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("template"))
+			it.Template, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8611,6 +11057,14 @@ func (ec *executionContext) unmarshalInputUpdateEnvInput(ctx context.Context, ob
 			if err != nil {
 				return it, err
 			}
+		case "DISABLE_STRONG_PASSWORD":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("DISABLE_STRONG_PASSWORD"))
+			it.DisableStrongPassword, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "ROLES":
 			var err error
 
@@ -8704,6 +11158,22 @@ func (ec *executionContext) unmarshalInputUpdateEnvInput(ctx context.Context, ob
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("LINKEDIN_CLIENT_SECRET"))
 			it.LinkedinClientSecret, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "APPLE_CLIENT_ID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("APPLE_CLIENT_ID"))
+			it.AppleClientID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "APPLE_CLIENT_SECRET":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("APPLE_CLIENT_SECRET"))
+			it.AppleClientSecret, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8951,6 +11421,61 @@ func (ec *executionContext) unmarshalInputUpdateUserInput(ctx context.Context, o
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdateWebhookRequest(ctx context.Context, obj interface{}) (model.UpdateWebhookRequest, error) {
+	var it model.UpdateWebhookRequest
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "event_name":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("event_name"))
+			it.EventName, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "endpoint":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endpoint"))
+			it.Endpoint, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "enabled":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("enabled"))
+			it.Enabled, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "headers":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("headers"))
+			it.Headers, err = ec.unmarshalOMap2map(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputValidateJWTTokenInput(ctx context.Context, obj interface{}) (model.ValidateJWTTokenInput, error) {
 	var it model.ValidateJWTTokenInput
 	asMap := map[string]interface{}{}
@@ -9013,6 +11538,29 @@ func (ec *executionContext) unmarshalInputVerifyEmailInput(ctx context.Context, 
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputWebhookRequest(ctx context.Context, obj interface{}) (model.WebhookRequest, error) {
+	var it model.WebhookRequest
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -9047,6 +11595,79 @@ func (ec *executionContext) _AuthResponse(ctx context.Context, sel ast.Selection
 			out.Values[i] = ec._AuthResponse_expires_in(ctx, field, obj)
 		case "user":
 			out.Values[i] = ec._AuthResponse_user(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var emailTemplateImplementors = []string{"EmailTemplate"}
+
+func (ec *executionContext) _EmailTemplate(ctx context.Context, sel ast.SelectionSet, obj *model.EmailTemplate) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, emailTemplateImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("EmailTemplate")
+		case "id":
+			out.Values[i] = ec._EmailTemplate_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "event_name":
+			out.Values[i] = ec._EmailTemplate_event_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "template":
+			out.Values[i] = ec._EmailTemplate_template(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "created_at":
+			out.Values[i] = ec._EmailTemplate_created_at(ctx, field, obj)
+		case "updated_at":
+			out.Values[i] = ec._EmailTemplate_updated_at(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var emailTemplatesImplementors = []string{"EmailTemplates"}
+
+func (ec *executionContext) _EmailTemplates(ctx context.Context, sel ast.SelectionSet, obj *model.EmailTemplates) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, emailTemplatesImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("EmailTemplates")
+		case "pagination":
+			out.Values[i] = ec._EmailTemplates_pagination(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "EmailTemplates":
+			out.Values[i] = ec._EmailTemplates_EmailTemplates(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9155,6 +11776,11 @@ func (ec *executionContext) _Env(ctx context.Context, sel ast.SelectionSet, obj 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "DISABLE_STRONG_PASSWORD":
+			out.Values[i] = ec._Env_DISABLE_STRONG_PASSWORD(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "ROLES":
 			out.Values[i] = ec._Env_ROLES(ctx, field, obj)
 		case "PROTECTED_ROLES":
@@ -9179,6 +11805,10 @@ func (ec *executionContext) _Env(ctx context.Context, sel ast.SelectionSet, obj 
 			out.Values[i] = ec._Env_LINKEDIN_CLIENT_ID(ctx, field, obj)
 		case "LINKEDIN_CLIENT_SECRET":
 			out.Values[i] = ec._Env_LINKEDIN_CLIENT_SECRET(ctx, field, obj)
+		case "APPLE_CLIENT_ID":
+			out.Values[i] = ec._Env_APPLE_CLIENT_ID(ctx, field, obj)
+		case "APPLE_CLIENT_SECRET":
+			out.Values[i] = ec._Env_APPLE_CLIENT_SECRET(ctx, field, obj)
 		case "ORGANIZATION_NAME":
 			out.Values[i] = ec._Env_ORGANIZATION_NAME(ctx, field, obj)
 		case "ORGANIZATION_LOGO":
@@ -9295,6 +11925,11 @@ func (ec *executionContext) _Meta(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "is_apple_login_enabled":
+			out.Values[i] = ec._Meta_is_apple_login_enabled(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "is_email_verification_enabled":
 			out.Values[i] = ec._Meta_is_email_verification_enabled(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -9312,6 +11947,11 @@ func (ec *executionContext) _Meta(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "is_sign_up_enabled":
 			out.Values[i] = ec._Meta_is_sign_up_enabled(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "is_strong_password_enabled":
+			out.Values[i] = ec._Meta_is_strong_password_enabled(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -9438,6 +12078,41 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			}
 		case "_generate_jwt_keys":
 			out.Values[i] = ec._Mutation__generate_jwt_keys(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "_add_webhook":
+			out.Values[i] = ec._Mutation__add_webhook(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "_update_webhook":
+			out.Values[i] = ec._Mutation__update_webhook(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "_delete_webhook":
+			out.Values[i] = ec._Mutation__delete_webhook(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "_test_endpoint":
+			out.Values[i] = ec._Mutation__test_endpoint(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "_add_email_template":
+			out.Values[i] = ec._Mutation__add_email_template(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "_update_email_template":
+			out.Values[i] = ec._Mutation__update_email_template(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "_delete_email_template":
+			out.Values[i] = ec._Mutation__delete_email_template(ctx, field)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -9621,6 +12296,62 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				}
 				return res
 			})
+		case "_webhook":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query__webhook(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			})
+		case "_webhooks":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query__webhooks(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			})
+		case "_webhook_logs":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query__webhook_logs(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			})
+		case "_email_templates":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query__email_templates(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			})
 		case "__type":
 			out.Values[i] = ec._Query___type(ctx, field)
 		case "__schema":
@@ -9652,6 +12383,32 @@ func (ec *executionContext) _Response(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var testEndpointResponseImplementors = []string{"TestEndpointResponse"}
+
+func (ec *executionContext) _TestEndpointResponse(ctx context.Context, sel ast.SelectionSet, obj *model.TestEndpointResponse) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, testEndpointResponseImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TestEndpointResponse")
+		case "http_status":
+			out.Values[i] = ec._TestEndpointResponse_http_status(ctx, field, obj)
+		case "response":
+			out.Values[i] = ec._TestEndpointResponse_response(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9856,6 +12613,148 @@ func (ec *executionContext) _VerificationRequests(ctx context.Context, sel ast.S
 			}
 		case "verification_requests":
 			out.Values[i] = ec._VerificationRequests_verification_requests(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var webhookImplementors = []string{"Webhook"}
+
+func (ec *executionContext) _Webhook(ctx context.Context, sel ast.SelectionSet, obj *model.Webhook) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, webhookImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Webhook")
+		case "id":
+			out.Values[i] = ec._Webhook_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "event_name":
+			out.Values[i] = ec._Webhook_event_name(ctx, field, obj)
+		case "endpoint":
+			out.Values[i] = ec._Webhook_endpoint(ctx, field, obj)
+		case "enabled":
+			out.Values[i] = ec._Webhook_enabled(ctx, field, obj)
+		case "headers":
+			out.Values[i] = ec._Webhook_headers(ctx, field, obj)
+		case "created_at":
+			out.Values[i] = ec._Webhook_created_at(ctx, field, obj)
+		case "updated_at":
+			out.Values[i] = ec._Webhook_updated_at(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var webhookLogImplementors = []string{"WebhookLog"}
+
+func (ec *executionContext) _WebhookLog(ctx context.Context, sel ast.SelectionSet, obj *model.WebhookLog) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, webhookLogImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("WebhookLog")
+		case "id":
+			out.Values[i] = ec._WebhookLog_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "http_status":
+			out.Values[i] = ec._WebhookLog_http_status(ctx, field, obj)
+		case "response":
+			out.Values[i] = ec._WebhookLog_response(ctx, field, obj)
+		case "request":
+			out.Values[i] = ec._WebhookLog_request(ctx, field, obj)
+		case "webhook_id":
+			out.Values[i] = ec._WebhookLog_webhook_id(ctx, field, obj)
+		case "created_at":
+			out.Values[i] = ec._WebhookLog_created_at(ctx, field, obj)
+		case "updated_at":
+			out.Values[i] = ec._WebhookLog_updated_at(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var webhookLogsImplementors = []string{"WebhookLogs"}
+
+func (ec *executionContext) _WebhookLogs(ctx context.Context, sel ast.SelectionSet, obj *model.WebhookLogs) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, webhookLogsImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("WebhookLogs")
+		case "pagination":
+			out.Values[i] = ec._WebhookLogs_pagination(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "webhook_logs":
+			out.Values[i] = ec._WebhookLogs_webhook_logs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var webhooksImplementors = []string{"Webhooks"}
+
+func (ec *executionContext) _Webhooks(ctx context.Context, sel ast.SelectionSet, obj *model.Webhooks) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, webhooksImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Webhooks")
+		case "pagination":
+			out.Values[i] = ec._Webhooks_pagination(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "webhooks":
+			out.Values[i] = ec._Webhooks_webhooks(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -10120,6 +13019,16 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) unmarshalNAddEmailTemplateRequest2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐAddEmailTemplateRequest(ctx context.Context, v interface{}) (model.AddEmailTemplateRequest, error) {
+	res, err := ec.unmarshalInputAddEmailTemplateRequest(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNAddWebhookRequest2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐAddWebhookRequest(ctx context.Context, v interface{}) (model.AddWebhookRequest, error) {
+	res, err := ec.unmarshalInputAddWebhookRequest(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNAdminLoginInput2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐAdminLoginInput(ctx context.Context, v interface{}) (model.AdminLoginInput, error) {
 	res, err := ec.unmarshalInputAdminLoginInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -10159,9 +13068,82 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) unmarshalNDeleteEmailTemplateRequest2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐDeleteEmailTemplateRequest(ctx context.Context, v interface{}) (model.DeleteEmailTemplateRequest, error) {
+	res, err := ec.unmarshalInputDeleteEmailTemplateRequest(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNDeleteUserInput2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐDeleteUserInput(ctx context.Context, v interface{}) (model.DeleteUserInput, error) {
 	res, err := ec.unmarshalInputDeleteUserInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNEmailTemplate2ᚕᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐEmailTemplateᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.EmailTemplate) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNEmailTemplate2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐEmailTemplate(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNEmailTemplate2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐEmailTemplate(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplate) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._EmailTemplate(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNEmailTemplates2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐEmailTemplates(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplates) graphql.Marshaler {
+	return ec._EmailTemplates(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNEmailTemplates2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐEmailTemplates(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplates) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._EmailTemplates(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNEnv2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐEnv(ctx context.Context, sel ast.SelectionSet, v model.Env) graphql.Marshaler {
@@ -10356,8 +13338,32 @@ func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel
 	return ret
 }
 
+func (ec *executionContext) unmarshalNTestEndpointRequest2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐTestEndpointRequest(ctx context.Context, v interface{}) (model.TestEndpointRequest, error) {
+	res, err := ec.unmarshalInputTestEndpointRequest(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNTestEndpointResponse2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐTestEndpointResponse(ctx context.Context, sel ast.SelectionSet, v model.TestEndpointResponse) graphql.Marshaler {
+	return ec._TestEndpointResponse(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNTestEndpointResponse2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐTestEndpointResponse(ctx context.Context, sel ast.SelectionSet, v *model.TestEndpointResponse) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._TestEndpointResponse(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNUpdateAccessInput2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐUpdateAccessInput(ctx context.Context, v interface{}) (model.UpdateAccessInput, error) {
 	res, err := ec.unmarshalInputUpdateAccessInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateEmailTemplateRequest2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐUpdateEmailTemplateRequest(ctx context.Context, v interface{}) (model.UpdateEmailTemplateRequest, error) {
+	res, err := ec.unmarshalInputUpdateEmailTemplateRequest(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -10373,6 +13379,11 @@ func (ec *executionContext) unmarshalNUpdateProfileInput2githubᚗcomᚋauthoriz
 
 func (ec *executionContext) unmarshalNUpdateUserInput2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐUpdateUserInput(ctx context.Context, v interface{}) (model.UpdateUserInput, error) {
 	res, err := ec.unmarshalInputUpdateUserInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateWebhookRequest2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐUpdateWebhookRequest(ctx context.Context, v interface{}) (model.UpdateWebhookRequest, error) {
+	res, err := ec.unmarshalInputUpdateWebhookRequest(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -10538,6 +13549,151 @@ func (ec *executionContext) marshalNVerificationRequests2ᚖgithubᚗcomᚋautho
 func (ec *executionContext) unmarshalNVerifyEmailInput2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐVerifyEmailInput(ctx context.Context, v interface{}) (model.VerifyEmailInput, error) {
 	res, err := ec.unmarshalInputVerifyEmailInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNWebhook2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhook(ctx context.Context, sel ast.SelectionSet, v model.Webhook) graphql.Marshaler {
+	return ec._Webhook(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNWebhook2ᚕᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhookᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Webhook) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNWebhook2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhook(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNWebhook2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhook(ctx context.Context, sel ast.SelectionSet, v *model.Webhook) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._Webhook(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNWebhookLog2ᚕᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhookLogᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.WebhookLog) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNWebhookLog2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhookLog(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNWebhookLog2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhookLog(ctx context.Context, sel ast.SelectionSet, v *model.WebhookLog) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._WebhookLog(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNWebhookLogs2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhookLogs(ctx context.Context, sel ast.SelectionSet, v model.WebhookLogs) graphql.Marshaler {
+	return ec._WebhookLogs(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNWebhookLogs2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhookLogs(ctx context.Context, sel ast.SelectionSet, v *model.WebhookLogs) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._WebhookLogs(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNWebhookRequest2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhookRequest(ctx context.Context, v interface{}) (model.WebhookRequest, error) {
+	res, err := ec.unmarshalInputWebhookRequest(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNWebhooks2githubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhooks(ctx context.Context, sel ast.SelectionSet, v model.Webhooks) graphql.Marshaler {
+	return ec._Webhooks(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNWebhooks2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐWebhooks(ctx context.Context, sel ast.SelectionSet, v *model.Webhooks) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._Webhooks(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {
@@ -10821,6 +13977,21 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return graphql.MarshalBoolean(*v)
 }
 
+func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalID(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return graphql.MarshalID(*v)
+}
+
 func (ec *executionContext) unmarshalOInt642ᚖint64(ctx context.Context, v interface{}) (*int64, error) {
 	if v == nil {
 		return nil, nil
@@ -10834,6 +14005,29 @@ func (ec *executionContext) marshalOInt642ᚖint64(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 	return graphql.MarshalInt64(*v)
+}
+
+func (ec *executionContext) unmarshalOListWebhookLogRequest2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐListWebhookLogRequest(ctx context.Context, v interface{}) (*model.ListWebhookLogRequest, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputListWebhookLogRequest(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOMap2map(ctx context.Context, v interface{}) (map[string]interface{}, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalMap(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOMap2map(ctx context.Context, sel ast.SelectionSet, v map[string]interface{}) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return graphql.MarshalMap(v)
 }
 
 func (ec *executionContext) unmarshalOPaginatedInput2ᚖgithubᚗcomᚋauthorizerdevᚋauthorizerᚋserverᚋgraphᚋmodelᚐPaginatedInput(ctx context.Context, v interface{}) (*model.PaginatedInput, error) {

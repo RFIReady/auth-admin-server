@@ -5,6 +5,7 @@ import (
 	"crypto/x509"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/authorizerdev/authorizer/server/constants"
 	"github.com/authorizerdev/authorizer/server/crypto"
@@ -96,6 +97,8 @@ func NewProvider() (*provider, error) {
 		NumRetries: 3,
 	}
 	cassandraClient.Consistency = gocql.LocalQuorum
+	cassandraClient.ConnectTimeout = 10 * time.Second
+	cassandraClient.ProtoVersion = 4
 
 	session, err := cassandraClient.CreateSession()
 	if err != nil {
@@ -140,6 +143,11 @@ func NewProvider() (*provider, error) {
 	if err != nil {
 		return nil, err
 	}
+	sessionIndexQuery := fmt.Sprintf("CREATE INDEX IF NOT EXISTS authorizer_session_user_id ON %s.%s (user_id)", KeySpace, models.Collections.Session)
+	err = session.Query(sessionIndexQuery).Exec()
+	if err != nil {
+		return nil, err
+	}
 
 	userCollectionQuery := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s.%s (id text, email text, email_verified_at bigint, password text, signup_methods text, given_name text, family_name text, middle_name text, nickname text, gender text, birthdate text, phone_number text, phone_number_verified_at bigint, picture text, roles text, updated_at bigint, created_at bigint, revoked_timestamp bigint, PRIMARY KEY (id))", KeySpace, models.Collections.User)
 	err = session.Query(userCollectionQuery).Exec()
@@ -170,6 +178,39 @@ func NewProvider() (*provider, error) {
 	}
 	verificationRequestIndexQuery = fmt.Sprintf("CREATE INDEX IF NOT EXISTS authorizer_verification_request_jwt_token ON %s.%s (jwt_token)", KeySpace, models.Collections.VerificationRequest)
 	err = session.Query(verificationRequestIndexQuery).Exec()
+	if err != nil {
+		return nil, err
+	}
+
+	webhookCollectionQuery := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s.%s (id text, event_name text, endpoint text, enabled boolean, headers text, updated_at bigint, created_at bigint, PRIMARY KEY (id))", KeySpace, models.Collections.Webhook)
+	err = session.Query(webhookCollectionQuery).Exec()
+	if err != nil {
+		return nil, err
+	}
+	webhookIndexQuery := fmt.Sprintf("CREATE INDEX IF NOT EXISTS authorizer_webhook_event_name ON %s.%s (event_name)", KeySpace, models.Collections.Webhook)
+	err = session.Query(webhookIndexQuery).Exec()
+	if err != nil {
+		return nil, err
+	}
+
+	webhookLogCollectionQuery := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s.%s (id text, http_status bigint, response text, request text, webhook_id text,updated_at bigint, created_at bigint, PRIMARY KEY (id))", KeySpace, models.Collections.WebhookLog)
+	err = session.Query(webhookLogCollectionQuery).Exec()
+	if err != nil {
+		return nil, err
+	}
+	webhookLogIndexQuery := fmt.Sprintf("CREATE INDEX IF NOT EXISTS authorizer_webhook_log_webhook_id ON %s.%s (webhook_id)", KeySpace, models.Collections.WebhookLog)
+	err = session.Query(webhookLogIndexQuery).Exec()
+	if err != nil {
+		return nil, err
+	}
+
+	emailTemplateCollectionQuery := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s.%s (id text, event_name text, template text, updated_at bigint, created_at bigint, PRIMARY KEY (id))", KeySpace, models.Collections.EmailTemplate)
+	err = session.Query(emailTemplateCollectionQuery).Exec()
+	if err != nil {
+		return nil, err
+	}
+	emailTemplateIndexQuery := fmt.Sprintf("CREATE INDEX IF NOT EXISTS authorizer_email_template_event_name ON %s.%s (event_name)", KeySpace, models.Collections.EmailTemplate)
+	err = session.Query(emailTemplateIndexQuery).Exec()
 	if err != nil {
 		return nil, err
 	}

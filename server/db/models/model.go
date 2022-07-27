@@ -6,6 +6,9 @@ type CollectionList struct {
 	VerificationRequest string
 	Session             string
 	Env                 string
+	Webhook             string
+	WebhookLog          string
+	EmailTemplate       string
 }
 
 var (
@@ -17,5 +20,8 @@ var (
 		VerificationRequest: Prefix + "verification_requests",
 		Session:             Prefix + "sessions",
 		Env:                 Prefix + "env",
+		Webhook:             Prefix + "webhooks",
+		WebhookLog:          Prefix + "webhook_logs",
+		EmailTemplate:       Prefix + "email_templates",
 	}
 )

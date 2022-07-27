@@ -1,44 +1,75 @@
 package providers
 
 import (
+	"context"
+
 	"github.com/authorizerdev/authorizer/server/db/models"
 	"github.com/authorizerdev/authorizer/server/graph/model"
 )
 
 type Provider interface {
 	// AddUser to save user information in database
-	AddUser(user models.User) (models.User, error)
+	AddUser(ctx context.Context, user models.User) (models.User, error)
 	// UpdateUser to update user information in database
-	UpdateUser(user models.User) (models.User, error)
+	UpdateUser(ctx context.Context, user models.User) (models.User, error)
 	// DeleteUser to delete user information from database
-	DeleteUser(user models.User) error
+	DeleteUser(ctx context.Context, user models.User) error
 	// ListUsers to get list of users from database
-	ListUsers(pagination model.Pagination) (*model.Users, error)
+	ListUsers(ctx context.Context, pagination model.Pagination) (*model.Users, error)
 	// GetUserByEmail to get user information from database using email address
-	GetUserByEmail(email string) (models.User, error)
+	GetUserByEmail(ctx context.Context, email string) (models.User, error)
 	// GetUserByID to get user information from database using user ID
-	GetUserByID(id string) (models.User, error)
+	GetUserByID(ctx context.Context, id string) (models.User, error)
 
 	// AddVerification to save verification request in database
-	AddVerificationRequest(verificationRequest models.VerificationRequest) (models.VerificationRequest, error)
+	AddVerificationRequest(ctx context.Context, verificationRequest models.VerificationRequest) (models.VerificationRequest, error)
 	// GetVerificationRequestByToken to get verification request from database using token
-	GetVerificationRequestByToken(token string) (models.VerificationRequest, error)
+	GetVerificationRequestByToken(ctx context.Context, token string) (models.VerificationRequest, error)
 	// GetVerificationRequestByEmail to get verification request by email from database
-	GetVerificationRequestByEmail(email string, identifier string) (models.VerificationRequest, error)
+	GetVerificationRequestByEmail(ctx context.Context, email string, identifier string) (models.VerificationRequest, error)
 	// ListVerificationRequests to get list of verification requests from database
-	ListVerificationRequests(pagination model.Pagination) (*model.VerificationRequests, error)
+	ListVerificationRequests(ctx context.Context, pagination model.Pagination) (*model.VerificationRequests, error)
 	// DeleteVerificationRequest to delete verification request from database
-	DeleteVerificationRequest(verificationRequest models.VerificationRequest) error
+	DeleteVerificationRequest(ctx context.Context, verificationRequest models.VerificationRequest) error
 
 	// AddSession to save session information in database
-	AddSession(session models.Session) error
-	// DeleteSession to delete session information from database
-	DeleteSession(userId string) error
+	AddSession(ctx context.Context, session models.Session) error
 
 	// AddEnv to save environment information in database
-	AddEnv(env models.Env) (models.Env, error)
+	AddEnv(ctx context.Context, env models.Env) (models.Env, error)
 	// UpdateEnv to update environment information in database
-	UpdateEnv(env models.Env) (models.Env, error)
+	UpdateEnv(ctx context.Context, env models.Env) (models.Env, error)
 	// GetEnv to get environment information from database
-	GetEnv() (models.Env, error)
+	GetEnv(ctx context.Context) (models.Env, error)
+
+	// AddWebhook to add webhook
+	AddWebhook(ctx context.Context, webhook models.Webhook) (*model.Webhook, error)
+	// UpdateWebhook to update webhook
+	UpdateWebhook(ctx context.Context, webhook models.Webhook) (*model.Webhook, error)
+	// ListWebhooks to list webhook
+	ListWebhook(ctx context.Context, pagination model.Pagination) (*model.Webhooks, error)
+	// GetWebhookByID to get webhook by id
+	GetWebhookByID(ctx context.Context, webhookID string) (*model.Webhook, error)
+	// GetWebhookByEventName to get webhook by event_name
+	GetWebhookByEventName(ctx context.Context, eventName string) (*model.Webhook, error)
+	// DeleteWebhook to delete webhook
+	DeleteWebhook(ctx context.Context, webhook *model.Webhook) error
+
+	// AddWebhookLog to add webhook log
+	AddWebhookLog(ctx context.Context, webhookLog models.WebhookLog) (*model.WebhookLog, error)
+	// ListWebhookLogs to list webhook logs
+	ListWebhookLogs(ctx context.Context, pagination model.Pagination, webhookID string) (*model.WebhookLogs, error)
+
+	// AddEmailTemplate to add EmailTemplate
+	AddEmailTemplate(ctx context.Context, emailTemplate models.EmailTemplate) (*model.EmailTemplate, error)
+	// UpdateEmailTemplate to update EmailTemplate
+	UpdateEmailTemplate(ctx context.Context, emailTemplate models.EmailTemplate) (*model.EmailTemplate, error)
+	// ListEmailTemplates to list EmailTemplate
+	ListEmailTemplate(ctx context.Context, pagination model.Pagination) (*model.EmailTemplates, error)
+	// GetEmailTemplateByID to get EmailTemplate by id
+	GetEmailTemplateByID(ctx context.Context, emailTemplateID string) (*model.EmailTemplate, error)
+	// GetEmailTemplateByEventName to get EmailTemplate by event_name
+	GetEmailTemplateByEventName(ctx context.Context, eventName string) (*model.EmailTemplate, error)
+	// DeleteEmailTemplate to delete EmailTemplate
+	DeleteEmailTemplate(ctx context.Context, emailTemplate *model.EmailTemplate) error
 }

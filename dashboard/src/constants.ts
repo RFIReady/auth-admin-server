@@ -8,6 +8,7 @@ export const TextInputType = {
 	GITHUB_CLIENT_ID: 'GITHUB_CLIENT_ID',
 	FACEBOOK_CLIENT_ID: 'FACEBOOK_CLIENT_ID',
 	LINKEDIN_CLIENT_ID: 'LINKEDIN_CLIENT_ID',
+	APPLE_CLIENT_ID: 'APPLE_CLIENT_ID',
 	JWT_ROLE_CLAIM: 'JWT_ROLE_CLAIM',
 	REDIS_URL: 'REDIS_URL',
 	SMTP_HOST: 'SMTP_HOST',
@@ -33,6 +34,7 @@ export const HiddenInputType = {
 	GITHUB_CLIENT_SECRET: 'GITHUB_CLIENT_SECRET',
 	FACEBOOK_CLIENT_SECRET: 'FACEBOOK_CLIENT_SECRET',
 	LINKEDIN_CLIENT_SECRET: 'LINKEDIN_CLIENT_SECRET',
+	APPLE_CLIENT_SECRET: 'APPLE_CLIENT_SECRET',
 	JWT_SECRET: 'JWT_SECRET',
 	SMTP_PASSWORD: 'SMTP_PASSWORD',
 	ADMIN_SECRET: 'ADMIN_SECRET',
@@ -65,6 +67,7 @@ export const SwitchInputType = {
 	DISABLE_BASIC_AUTHENTICATION: 'DISABLE_BASIC_AUTHENTICATION',
 	DISABLE_SIGN_UP: 'DISABLE_SIGN_UP',
 	DISABLE_REDIS_FOR_ENV: 'DISABLE_REDIS_FOR_ENV',
+	DISABLE_STRONG_PASSWORD: 'DISABLE_STRONG_PASSWORD',
 };
 
 export const DateInputType = {
@@ -103,6 +106,8 @@ export interface envVarTypes {
 	FACEBOOK_CLIENT_SECRET: string;
 	LINKEDIN_CLIENT_ID: string;
 	LINKEDIN_CLIENT_SECRET: string;
+	APPLE_CLIENT_ID: string;
+	APPLE_CLIENT_SECRET: string;
 	ROLES: [string] | [];
 	DEFAULT_ROLES: [string] | [];
 	PROTECTED_ROLES: [string] | [];
@@ -127,6 +132,7 @@ export interface envVarTypes {
 	DISABLE_EMAIL_VERIFICATION: boolean;
 	DISABLE_BASIC_AUTHENTICATION: boolean;
 	DISABLE_SIGN_UP: boolean;
+	DISABLE_STRONG_PASSWORD: boolean;
 	OLD_ADMIN_SECRET: string;
 	DATABASE_NAME: string;
 	DATABASE_TYPE: string;
@@ -147,3 +153,38 @@ export const envSubViews = {
 	ADMIN_SECRET: 'admin-secret',
 	DB_CRED: 'db-cred',
 };
+
+export enum WebhookInputDataFields {
+	ID = 'id',
+	EVENT_NAME = 'event_name',
+	ENDPOINT = 'endpoint',
+	ENABLED = 'enabled',
+	HEADERS = 'headers',
+}
+
+export enum WebhookInputHeaderFields {
+	KEY = 'key',
+	VALUE = 'value',
+}
+
+export enum UpdateWebhookModalViews {
+	ADD = 'add',
+	Edit = 'edit',
+}
+
+export const pageLimits: number[] = [5, 10, 15];
+
+export const webhookEventNames = {
+	USER_SIGNUP: 'user.signup',
+	USER_CREATED: 'user.created',
+	USER_LOGIN: 'user.login',
+	USER_DELETED: 'user.deleted',
+	USER_ACCESS_ENABLED: 'user.access_enabled',
+	USER_ACCESS_REVOKED: 'user.access_revoked',
+};
+
+export enum webhookVerifiedStatus {
+	VERIFIED = 'verified',
+	NOT_VERIFIED = 'not_verified',
+	PENDING = 'verification_pending',
+}

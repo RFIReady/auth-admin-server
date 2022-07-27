@@ -8,6 +8,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
+	"github.com/authorizerdev/authorizer/server/constants"
 	"github.com/authorizerdev/authorizer/server/cookie"
 	"github.com/authorizerdev/authorizer/server/db"
 	"github.com/authorizerdev/authorizer/server/graph/model"
@@ -29,7 +30,7 @@ func SessionResolver(ctx context.Context, params *model.SessionQueryInput) (*mod
 
 	sessionToken, err := cookie.GetSession(gc)
 	if err != nil {
-		log.Debug("Failed to get session token", err)
+		log.Debug("Failed to get session token: ", err)
 		return res, errors.New("unauthorized")
 	}
 
@@ -45,7 +46,7 @@ func SessionResolver(ctx context.Context, params *model.SessionQueryInput) (*mod
 		"user_id": userID,
 	})
 
-	user, err := db.Provider.GetUserByID(userID)
+	user, err := db.Provider.GetUserByID(ctx, userID)
 	if err != nil {
 		return res, err
 	}
@@ -69,17 +70,18 @@ func SessionResolver(ctx context.Context, params *model.SessionQueryInput) (*mod
 		scope = params.Scope
 	}
 
-	authToken, err := token.CreateAuthToken(gc, user, claimRoles, scope)
+	authToken, err := token.CreateAuthToken(gc, user, claimRoles, scope, claims.LoginMethod)
 	if err != nil {
 		log.Debug("Failed to create auth token: ", err)
 		return res, err
 	}
 
 	// rollover the session for security
-	memorystore.Provider.RemoveState(sessionToken)
-	memorystore.Provider.SetState(authToken.FingerPrintHash, authToken.FingerPrint+"@"+user.ID)
-	memorystore.Provider.SetState(authToken.AccessToken.Token, authToken.FingerPrint+"@"+user.ID)
-	cookie.SetSession(gc, authToken.FingerPrintHash)
+	sessionKey := userID
+	if claims.LoginMethod != "" {
+		sessionKey = claims.LoginMethod + ":" + userID
+	}
+	go memorystore.Provider.DeleteUserSession(sessionKey, claims.Nonce)
 
 	expiresIn := authToken.AccessToken.ExpiresAt - time.Now().Unix()
 	if expiresIn <= 0 {
@@ -94,10 +96,13 @@ func SessionResolver(ctx context.Context, params *model.SessionQueryInput) (*mod
 		User:        user.AsAPIUser(),
 	}
 
+	cookie.SetSession(gc, authToken.FingerPrintHash)
+	memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeSessionToken+"_"+authToken.FingerPrint, authToken.FingerPrintHash)
+	memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeAccessToken+"_"+authToken.FingerPrint, authToken.AccessToken.Token)
+
 	if authToken.RefreshToken != nil {
 		res.RefreshToken = &authToken.RefreshToken.Token
-		memorystore.Provider.SetState(authToken.RefreshToken.Token, authToken.FingerPrint+"@"+user.ID)
+		memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeRefreshToken+"_"+authToken.FingerPrint, authToken.RefreshToken.Token)
 	}
-
 	return res, nil
 }

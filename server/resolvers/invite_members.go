@@ -70,7 +70,7 @@ func InviteMembersResolver(ctx context.Context, params model.InviteMemberInput) 
 	// for each emails check if emails exists in db
 	newEmails := []string{}
 	for _, email := range emails {
-		_, err := db.Provider.GetUserByEmail(email)
+		_, err := db.Provider.GetUserByEmail(ctx, email)
 		if err != nil {
 			log.Debugf("User with %s email not found, so inviting user", email)
 			newEmails = append(newEmails, email)
@@ -129,24 +129,24 @@ func InviteMembersResolver(ctx context.Context, params model.InviteMemberInput) 
 
 		// use magic link login if that option is on
 		if !isMagicLinkLoginDisabled {
-			user.SignupMethods = constants.SignupMethodMagicLinkLogin
+			user.SignupMethods = constants.AuthRecipeMethodMagicLinkLogin
 			verificationRequest.Identifier = constants.VerificationTypeMagicLinkLogin
 		} else {
 			// use basic authentication if that option is on
-			user.SignupMethods = constants.SignupMethodBasicAuth
+			user.SignupMethods = constants.AuthRecipeMethodBasicAuth
 			verificationRequest.Identifier = constants.VerificationTypeForgotPassword
 
 			verifyEmailURL = appURL + "/setup-password"
 
 		}
 
-		user, err = db.Provider.AddUser(user)
+		user, err = db.Provider.AddUser(ctx, user)
 		if err != nil {
 			log.Debugf("Error adding user: %s, err: %v", email, err)
 			return nil, err
 		}
 
-		_, err = db.Provider.AddVerificationRequest(verificationRequest)
+		_, err = db.Provider.AddVerificationRequest(ctx, verificationRequest)
 		if err != nil {
 			log.Debugf("Error adding verification request: %s, err: %v", email, err)
 			return nil, err

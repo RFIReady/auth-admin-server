@@ -46,11 +46,11 @@ func NewProvider() (*provider, error) {
 	dbURL := memorystore.RequiredEnvStoreObj.GetRequiredEnv().DatabaseURL
 
 	switch dbType {
-	case constants.DbTypePostgres, constants.DbTypeYugabyte:
+	case constants.DbTypePostgres, constants.DbTypeYugabyte, constants.DbTypeCockroachDB:
 		sqlDB, err = gorm.Open(postgres.Open(dbURL), ormConfig)
 	case constants.DbTypeSqlite:
 		sqlDB, err = gorm.Open(sqlite.Open(dbURL), ormConfig)
-	case constants.DbTypeMysql, constants.DbTypeMariaDB:
+	case constants.DbTypeMysql, constants.DbTypeMariaDB, constants.DbTypePlanetScaleDB:
 		sqlDB, err = gorm.Open(mysql.Open(dbURL), ormConfig)
 	case constants.DbTypeSqlserver:
 		sqlDB, err = gorm.Open(sqlserver.Open(dbURL), ormConfig)
@@ -60,7 +60,7 @@ func NewProvider() (*provider, error) {
 		return nil, err
 	}
 
-	err = sqlDB.AutoMigrate(&models.User{}, &models.VerificationRequest{}, &models.Session{}, &models.Env{})
+	err = sqlDB.AutoMigrate(&models.User{}, &models.VerificationRequest{}, &models.Session{}, &models.Env{}, &models.Webhook{}, models.WebhookLog{}, models.EmailTemplate{})
 	if err != nil {
 		return nil, err
 	}

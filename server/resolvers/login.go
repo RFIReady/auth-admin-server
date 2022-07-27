@@ -45,7 +45,7 @@ func LoginResolver(ctx context.Context, params model.LoginInput) (*model.AuthRes
 		"email": params.Email,
 	})
 	params.Email = strings.ToLower(params.Email)
-	user, err := db.Provider.GetUserByEmail(params.Email)
+	user, err := db.Provider.GetUserByEmail(ctx, params.Email)
 	if err != nil {
 		log.Debug("Failed to get user by email: ", err)
 		return res, fmt.Errorf(`user with this email not found`)
@@ -56,7 +56,7 @@ func LoginResolver(ctx context.Context, params model.LoginInput) (*model.AuthRes
 		return res, fmt.Errorf(`user access has been revoked`)
 	}
 
-	if !strings.Contains(user.SignupMethods, constants.SignupMethodBasicAuth) {
+	if !strings.Contains(user.SignupMethods, constants.AuthRecipeMethodBasicAuth) {
 		log.Debug("User signup method is not basic auth")
 		return res, fmt.Errorf(`user has not signed up email & password`)
 	}
@@ -97,7 +97,7 @@ func LoginResolver(ctx context.Context, params model.LoginInput) (*model.AuthRes
 		scope = params.Scope
 	}
 
-	authToken, err := token.CreateAuthToken(gc, user, roles, scope)
+	authToken, err := token.CreateAuthToken(gc, user, roles, scope, constants.AuthRecipeMethodBasicAuth)
 	if err != nil {
 		log.Debug("Failed to create auth token", err)
 		return res, err
@@ -117,19 +117,23 @@ func LoginResolver(ctx context.Context, params model.LoginInput) (*model.AuthRes
 	}
 
 	cookie.SetSession(gc, authToken.FingerPrintHash)
-	memorystore.Provider.SetState(authToken.FingerPrintHash, authToken.FingerPrint+"@"+user.ID)
-	memorystore.Provider.SetState(authToken.AccessToken.Token, authToken.FingerPrint+"@"+user.ID)
+	sessionStoreKey := constants.AuthRecipeMethodBasicAuth + ":" + user.ID
+	memorystore.Provider.SetUserSession(sessionStoreKey, constants.TokenTypeSessionToken+"_"+authToken.FingerPrint, authToken.FingerPrintHash)
+	memorystore.Provider.SetUserSession(sessionStoreKey, constants.TokenTypeAccessToken+"_"+authToken.FingerPrint, authToken.AccessToken.Token)
 
 	if authToken.RefreshToken != nil {
 		res.RefreshToken = &authToken.RefreshToken.Token
-		memorystore.Provider.SetState(authToken.RefreshToken.Token, authToken.FingerPrint+"@"+user.ID)
+		memorystore.Provider.SetUserSession(sessionStoreKey, constants.TokenTypeRefreshToken+"_"+authToken.FingerPrint, authToken.RefreshToken.Token)
 	}
 
-	go db.Provider.AddSession(models.Session{
-		UserID:    user.ID,
-		UserAgent: utils.GetUserAgent(gc.Request),
-		IP:        utils.GetIP(gc.Request),
-	})
+	go func() {
+		utils.RegisterEvent(ctx, constants.UserLoginWebhookEvent, constants.AuthRecipeMethodBasicAuth, user)
+		db.Provider.AddSession(ctx, models.Session{
+			UserID:    user.ID,
+			UserAgent: utils.GetUserAgent(gc.Request),
+			IP:        utils.GetIP(gc.Request),
+		})
+	}()
 
 	return res, nil
 }
