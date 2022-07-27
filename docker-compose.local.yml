@@ -8,20 +8,26 @@ services:
       dockerfile: ./Dockerfile
     working_dir: /root
     environment:
+      - ADMIN_SECRET=admin123!
       - DATABASE_URL=mongodb://root:admin123!@authdb:27017/
       - DATABASE_TYPE=mongodb
       - AUTHORIZER_URL=http://localhost:8081
       - ENV=production
-      - SMTP_HOST=smtp.gmail.com
-      - SMTP_PORT=465
-      - SMTP_USERNAME=admin@rfiready.co
-      - SMTP_PASSWORD='Admin123!!'
-      - SENDER_EMAIL=admin@rfiready.co
+      # - SMTP_HOST=smtp.gmail.com
+      # - SMTP_PORT=465
+      # - SMTP_USERNAME=admin@rfiready.co
+      # - SMTP_PASSWORD=Admin123!!
+      # - SENDER_EMAIL=admin@rfiready.co
       - RESET_PASSWORD_URL=http://localhost:3000/resetpassword
       - DISABLE_MAGIC_LINK_LOGIN=true
-      - DISABLE_EMAIL_VERIFICATION=true
+      # - DISABLE_EMAIL_VERIFICATION=true
       - ORGANIZATION_NAME=RFIReady
       - ORGANIZATION_LOGO=https://rfireadyasset.s3.amazonaws.com/logo.png
+      - LINKEDIN_CLIENT_ID=77jyah3dfw7kz3
+      - LINKEDIN_CLIENT_SECRET=PzXxPYTV6arIdpMW
+      - ROLES=user,customer,vendor,admin
+      - DEFAULT_ROLES=customer
+      - REDIS_URL=redis://redis:7000
     deploy:
       replicas: 1
       restart_policy:
@@ -42,6 +48,16 @@ services:
     #   interval: 60s
     #   retries: 5
     #   timeout: 10s
+    networks:
+      - api-service
+
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_PORT_NUMBER=7000
+    ports:
+      - 7000:7000
     networks:
       - api-service
 
