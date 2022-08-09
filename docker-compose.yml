@@ -26,7 +26,7 @@ services:
       - LINKEDIN_CLIENT_SECRET=PzXxPYTV6arIdpMW
       - ROLES=user,customer,vendor,admin
       - DEFAULT_ROLES=customer
-      # - REDIS_URL=redis://redis:7000
+      - REDIS_URL=redis://redis:7000
     deploy:
       replicas: 1
       restart_policy:
@@ -81,15 +81,15 @@ services:
     #   timeout: 10s
     networks:
       - api-service
-  # redis:
-  #   image: 'bitnami/redis:latest'
-  #   environment:
-  #     - ALLOW_EMPTY_PASSWORD=yes
-  #     - REDIS_PORT_NUMBER=7000
-  #   ports:
-  #     - 7000:7000
-  #   networks:
-  #     - api-service
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_PORT_NUMBER=7000
+    ports:
+      - 7000:7000
+    networks:
+      - api-service
 
 networks:
   api-service:
