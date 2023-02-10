@@ -2,12 +2,9 @@ version: "3.9"
 
 services:
   authserver:
-    image: rfiready.co:5000/authserver:${DEP_ENV}
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    working_dir: /root
+    image: lakhansamani/authorizer:1.1.37
     environment:
+      - ADMIN_SECRET=admin123!
       - DATABASE_URL=mongodb://root:admin123!@authdb:27017/
       - DATABASE_TYPE=mongodb
       - AUTHORIZER_URL=https://www.admin.rfiready.co
