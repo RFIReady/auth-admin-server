@@ -24,6 +24,7 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import {
+<<<<<<< HEAD
   FiUser,
   FiCode,
   FiSettings,
@@ -46,6 +47,31 @@ import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useAuthContext } from "../contexts/AuthContext";
 import { AdminLogout } from "../graphql/mutation";
 import { MetaQuery } from "../graphql/queries";
+=======
+	FiUser,
+	FiCode,
+	FiSettings,
+	FiMenu,
+	FiUsers,
+	FiChevronDown,
+	FiLink,
+	FiFileText,
+} from 'react-icons/fi';
+import { BiCustomize } from 'react-icons/bi';
+import { AiOutlineKey } from 'react-icons/ai';
+import { SiOpenaccess, SiJsonwebtokens } from 'react-icons/si';
+import { MdSecurity } from 'react-icons/md';
+import { RiDatabase2Line } from 'react-icons/ri';
+import { BsCheck2Circle } from 'react-icons/bs';
+import { HiOutlineMail, HiOutlineOfficeBuilding } from 'react-icons/hi';
+import { IconType } from 'react-icons';
+import { ReactText } from 'react';
+import { useMutation, useQuery } from 'urql';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { useAuthContext } from '../contexts/AuthContext';
+import { AdminLogout } from '../graphql/mutation';
+import { MetaQuery } from '../graphql/queries';
+>>>>>>> 330f35f2fcf9fab6fb3fae8c014d7fa2822c163f
 
 interface SubRoutes {
   name: string;
@@ -71,6 +97,7 @@ const LinkItems: Array<LinkItemProps> = [
         route: "/oauth-setting",
       },
 
+<<<<<<< HEAD
       { name: "Roles", icon: FiUser, route: "/roles" },
       {
         name: "JWT Secrets",
@@ -113,6 +140,51 @@ const LinkItems: Array<LinkItemProps> = [
   },
   { name: "Users", icon: FiUsers, route: "/users" },
   { name: "Webhooks", icon: FiLink, route: "/webhooks" },
+=======
+			{ name: 'Roles', icon: FiUser, route: '/roles' },
+			{
+				name: 'JWT Secrets',
+				icon: SiJsonwebtokens,
+				route: '/jwt-config',
+			},
+			{
+				name: 'Session Storage',
+				icon: RiDatabase2Line,
+				route: '/session-storage',
+			},
+			{
+				name: 'Email Configurations',
+				icon: HiOutlineMail,
+				route: '/email-config',
+			},
+			{
+				name: 'Domain White Listing',
+				icon: BsCheck2Circle,
+				route: '/whitelist-variables',
+			},
+			{
+				name: 'Organization Info',
+				icon: HiOutlineOfficeBuilding,
+				route: '/organization-info',
+			},
+			{ name: 'Access Token', icon: SiOpenaccess, route: '/access-token' },
+			{
+				name: 'Features',
+				icon: BiCustomize,
+				route: '/features',
+			},
+			{ name: 'Database', icon: RiDatabase2Line, route: '/db-cred' },
+			{
+				name: ' Security',
+				icon: MdSecurity,
+				route: '/admin-secret',
+			},
+		],
+	},
+	{ name: 'Users', icon: FiUsers, route: '/users' },
+	{ name: 'Webhooks', icon: FiLink, route: '/webhooks' },
+	{ name: 'Email Templates', icon: FiFileText, route: '/email-templates' },
+>>>>>>> 330f35f2fcf9fab6fb3fae8c014d7fa2822c163f
 ];
 
 interface SidebarProps extends BoxProps {
@@ -156,6 +228,7 @@ export const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
 
+<<<<<<< HEAD
       <Accordion defaultIndex={[0]} allowMultiple>
         <AccordionItem textAlign="center" border="none" w="100%">
           {LinkItems.map((link) =>
@@ -220,6 +293,82 @@ export const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
           )}
         </AccordionItem>
       </Accordion>
+=======
+			<Accordion defaultIndex={[0]} allowMultiple>
+				<AccordionItem textAlign="center" border="none" w="100%">
+					{LinkItems.map((link) =>
+						link?.subRoutes ? (
+							<div key={link.name}>
+								<AccordionButton _focus={{ boxShadow: 'none' }}>
+									<Text as="div" fontSize="md">
+										<NavItem
+											icon={link.icon}
+											color={pathname === link.route ? 'blue.500' : ''}
+											style={{ outline: 'unset' }}
+											height={12}
+											ml={-1}
+											mb={isNotSmallerScreen ? -1 : -4}
+											w={isNotSmallerScreen ? '100%' : '310%'}
+										>
+											<Fragment>
+												{link.name}
+												<Box display={{ base: 'none', md: 'flex' }} ml={12}>
+													<FiChevronDown />
+												</Box>
+											</Fragment>
+										</NavItem>
+									</Text>
+								</AccordionButton>
+								<AccordionPanel>
+									{link.subRoutes?.map((sublink) => (
+										<NavLink
+											key={sublink.name}
+											to={sublink.route}
+											onClick={onClose}
+										>
+											{' '}
+											<Text as="div" fontSize="xs" ml={2}>
+												<NavItem
+													icon={sublink.icon}
+													color={pathname === sublink.route ? 'blue.500' : ''}
+													height={8}
+												>
+													{sublink.name}
+												</NavItem>{' '}
+											</Text>
+										</NavLink>
+									))}
+								</AccordionPanel>
+							</div>
+						) : (
+							<NavLink key={link.name} to={link.route}>
+								{' '}
+								<Text as="div" fontSize="md" w="100%" mt={-2}>
+									<NavItem
+										icon={link.icon}
+										color={pathname === link.route ? 'blue.500' : ''}
+										height={12}
+										onClick={onClose}
+									>
+										{link.name}
+									</NavItem>{' '}
+								</Text>
+							</NavLink>
+						),
+					)}
+					<Link
+						href="/playground"
+						target="_blank"
+						style={{
+							textDecoration: 'none',
+						}}
+						_focus={{ _boxShadow: 'none' }}
+					>
+						<NavItem icon={FiCode}>API Playground</NavItem>
+					</Link>
+				</AccordionItem>
+			</Accordion>
+>>>>>>> 330f35f2fcf9fab6fb3fae8c014d7fa2822c163f
 
       {data?.meta?.version && (
         <Flex alignContent="center">

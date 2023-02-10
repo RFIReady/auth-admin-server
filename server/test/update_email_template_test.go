@@ -31,6 +31,8 @@ func updateEmailTemplateTest(t *testing.T, s TestSetup) {
 		res, err := resolvers.UpdateEmailTemplateResolver(ctx, model.UpdateEmailTemplateRequest{
 			ID:       emailTemplate.ID,
 			Template: refs.NewStringRef("Updated test template"),
+			Subject:  refs.NewStringRef("Updated subject"),
+			Design:   refs.NewStringRef("Updated design"),
 		})
 
 		assert.NoError(t, err)
@@ -42,5 +44,7 @@ func updateEmailTemplateTest(t *testing.T, s TestSetup) {
 		assert.NotNil(t, updatedEmailTemplate)
 		assert.Equal(t, emailTemplate.ID, updatedEmailTemplate.ID)
 		assert.Equal(t, updatedEmailTemplate.Template, "Updated test template")
+		assert.Equal(t, updatedEmailTemplate.Subject, "Updated subject")
+		assert.Equal(t, updatedEmailTemplate.Design, "Updated design")
 	})
 }

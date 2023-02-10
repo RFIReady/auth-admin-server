@@ -21,6 +21,12 @@ const (
 	EnvKeyDatabaseType = "DATABASE_TYPE"
 	// EnvKeyDatabaseURL key for env variable DATABASE_URL
 	EnvKeyDatabaseURL = "DATABASE_URL"
+	// EnvAwsRegion key for env variable AWS REGION
+	EnvAwsRegion = "AWS_REGION"
+	// EnvAwsAccessKeyID key for env variable AWS_ACCESS_KEY_ID
+	EnvAwsAccessKeyID = "AWS_ACCESS_KEY_ID"
+	// EnvAwsAccessKey key for env variable AWS_SECRET_ACCESS_KEY
+	EnvAwsSecretAccessKey = "AWS_SECRET_ACCESS_KEY"
 	// EnvKeyDatabaseName key for env variable DATABASE_NAME
 	EnvKeyDatabaseName = "DATABASE_NAME"
 	// EnvKeyDatabaseUsername key for env variable DATABASE_USERNAME
@@ -37,6 +43,13 @@ const (
 	EnvKeyDatabaseCertKey = "DATABASE_CERT_KEY"
 	// EnvKeyDatabaseCACert key for env variable DATABASE_CA_CERT
 	EnvKeyDatabaseCACert = "DATABASE_CA_CERT"
+	// EnvCouchbaseBucket key for env variable COUCHBASE_BUCKET
+	EnvCouchbaseBucket = "COUCHBASE_BUCKET"
+	// EnvCouchbaseBucketRAMQuotaMB key for env variable COUCHBASE_BUCKET_RAM_QUOTA
+	// This value should be parsed as number
+	EnvCouchbaseBucketRAMQuotaMB = "COUCHBASE_BUCKET_RAM_QUOTA"
+	// EnvCouchbaseBucket key for env variable COUCHBASE_SCOPE
+	EnvCouchbaseScope = "COUCHBASE_SCOPE"
 	// EnvKeySmtpHost key for env variable SMTP_HOST
 	EnvKeySmtpHost = "SMTP_HOST"
 	// EnvKeySmtpPort key for env variable SMTP_PORT
@@ -45,8 +58,16 @@ const (
 	EnvKeySmtpUsername = "SMTP_USERNAME"
 	// EnvKeySmtpPassword key for env variable SMTP_PASSWORD
 	EnvKeySmtpPassword = "SMTP_PASSWORD"
+	// EnvKeySmtpLocalName key for env variable SMTP_LOCAL_NAME
+	EnvKeySmtpLocalName = "SMTP_LOCAL_NAME"
 	// EnvKeySenderEmail key for env variable SENDER_EMAIL
 	EnvKeySenderEmail = "SENDER_EMAIL"
+	// EnvKeyIsEmailServiceEnabled key for env variable IS_EMAIL_SERVICE_ENABLED
+	EnvKeyIsEmailServiceEnabled = "IS_EMAIL_SERVICE_ENABLED"
+	// EnvKeyAppCookieSecure key for env variable APP_COOKIE_SECURE
+	EnvKeyAppCookieSecure = "APP_COOKIE_SECURE"
+	// EnvKeyAdminCookieSecure key for env variable ADMIN_COOKIE_SECURE
+	EnvKeyAdminCookieSecure = "ADMIN_COOKIE_SECURE"
 	// EnvKeyJwtType key for env variable JWT_TYPE
 	EnvKeyJwtType = "JWT_TYPE"
 	// EnvKeyJwtSecret key for env variable JWT_SECRET
@@ -83,6 +104,10 @@ const (
 	EnvKeyAppleClientID = "APPLE_CLIENT_ID"
 	// EnvKeyAppleClientSecret key for env variable APPLE_CLIENT_SECRET
 	EnvKeyAppleClientSecret = "APPLE_CLIENT_SECRET"
+	// EnvKeyTwitterClientID key for env variable TWITTER_CLIENT_ID
+	EnvKeyTwitterClientID = "TWITTER_CLIENT_ID"
+	// EnvKeyTwitterClientSecret key for env variable TWITTER_CLIENT_SECRET
+	EnvKeyTwitterClientSecret = "TWITTER_CLIENT_SECRET"
 	// EnvKeyOrganizationName key for env variable ORGANIZATION_NAME
 	EnvKeyOrganizationName = "ORGANIZATION_NAME"
 	// EnvKeyOrganizationLogo key for env variable ORGANIZATION_LOGO
@@ -107,6 +132,8 @@ const (
 	EnvKeyDisableEmailVerification = "DISABLE_EMAIL_VERIFICATION"
 	// EnvKeyDisableBasicAuthentication key for env variable DISABLE_BASIC_AUTH
 	EnvKeyDisableBasicAuthentication = "DISABLE_BASIC_AUTHENTICATION"
+	// EnvKeyDisableBasicAuthentication key for env variable DISABLE_MOBILE_BASIC_AUTH
+	EnvKeyDisableMobileBasicAuthentication = "DISABLE_MOBILE_BASIC_AUTHENTICATION"
 	// EnvKeyDisableMagicLinkLogin key for env variable DISABLE_MAGIC_LINK_LOGIN
 	EnvKeyDisableMagicLinkLogin = "DISABLE_MAGIC_LINK_LOGIN"
 	// EnvKeyDisableLoginPage key for env variable DISABLE_LOGIN_PAGE
@@ -117,6 +144,12 @@ const (
 	EnvKeyDisableRedisForEnv = "DISABLE_REDIS_FOR_ENV"
 	// EnvKeyDisableStrongPassword key for env variable DISABLE_STRONG_PASSWORD
 	EnvKeyDisableStrongPassword = "DISABLE_STRONG_PASSWORD"
+	// EnvKeyEnforceMultiFactorAuthentication is key for env variable ENFORCE_MULTI_FACTOR_AUTHENTICATION
+	// If enforced and changed later on, existing user will have MFA but new user will not have MFA
+	EnvKeyEnforceMultiFactorAuthentication = "ENFORCE_MULTI_FACTOR_AUTHENTICATION"
+	// EnvKeyDisableMultiFactorAuthentication is key for env variable DISABLE_MULTI_FACTOR_AUTHENTICATION
+	// this variable is used to completely disable multi factor authentication. It will have no effect on profile preference
+	EnvKeyDisableMultiFactorAuthentication = "DISABLE_MULTI_FACTOR_AUTHENTICATION"
 
 	// Slice variables
 	// EnvKeyRoles key for env variable ROLES

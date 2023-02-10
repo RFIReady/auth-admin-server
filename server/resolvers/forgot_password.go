@@ -15,6 +15,7 @@ import (
 	"github.com/authorizerdev/authorizer/server/graph/model"
 	"github.com/authorizerdev/authorizer/server/memorystore"
 	"github.com/authorizerdev/authorizer/server/parsers"
+	"github.com/authorizerdev/authorizer/server/refs"
 	"github.com/authorizerdev/authorizer/server/token"
 	"github.com/authorizerdev/authorizer/server/utils"
 	"github.com/authorizerdev/authorizer/server/validators"
@@ -49,7 +50,7 @@ func ForgotPasswordResolver(ctx context.Context, params model.ForgotPasswordInpu
 	log := log.WithFields(log.Fields{
 		"email": params.Email,
 	})
-	_, err = db.Provider.GetUserByEmail(ctx, params.Email)
+	user, err := db.Provider.GetUserByEmail(ctx, params.Email)
 	if err != nil {
 		log.Debug("User not found: ", err)
 		return res, fmt.Errorf(`user with this email not found`)
@@ -61,12 +62,21 @@ func ForgotPasswordResolver(ctx context.Context, params model.ForgotPasswordInpu
 		log.Debug("Failed to generate nonce: ", err)
 		return res, err
 	}
-	redirectURL := parsers.GetAppURL(gc) + "/reset-password"
-	if params.RedirectURI != nil {
-		redirectURL = *params.RedirectURI
+
+	redirectURI := ""
+	// give higher preference to params redirect uri
+	if strings.TrimSpace(refs.StringValue(params.RedirectURI)) != "" {
+		redirectURI = refs.StringValue(params.RedirectURI)
+	} else {
+		redirectURI, err = memorystore.Provider.GetStringStoreEnvVariable(constants.EnvKeyResetPasswordURL)
+		if err != nil {
+			log.Debug("ResetPasswordURL not found using default app url: ", err)
+			redirectURI = hostname + "/app/reset-password"
+			memorystore.Provider.UpdateEnvVariable(constants.EnvKeyResetPasswordURL, redirectURI)
+		}
 	}
 
-	verificationToken, err := token.CreateVerificationToken(params.Email, constants.VerificationTypeForgotPassword, hostname, nonceHash, redirectURL)
+	verificationToken, err := token.CreateVerificationToken(params.Email, constants.VerificationTypeForgotPassword, hostname, nonceHash, redirectURI)
 	if err != nil {
 		log.Debug("Failed to create verification token", err)
 		return res, err
@@ -77,15 +87,19 @@ func ForgotPasswordResolver(ctx context.Context, params model.ForgotPasswordInpu
 		ExpiresAt:   time.Now().Add(time.Minute * 30).Unix(),
 		Email:       params.Email,
 		Nonce:       nonceHash,
-		RedirectURI: redirectURL,
+		RedirectURI: redirectURI,
 	})
 	if err != nil {
 		log.Debug("Failed to add verification request", err)
 		return res, err
 	}
 
-	// exec it as go routin so that we can reduce the api latency
-	go email.SendForgotPasswordMail(params.Email, verificationToken, hostname)
+	// execute it as go routine so that we can reduce the api latency
+	go email.SendEmail([]string{params.Email}, constants.VerificationTypeForgotPassword, map[string]interface{}{
+		"user":             user.ToMap(),
+		"organization":     utils.GetOrganization(),
+		"verification_url": utils.GetForgotPasswordURL(verificationToken, redirectURI),
+	})
 
 	res = &model.Response{
 		Message: `Please check your inbox! We have sent a password reset link.`,

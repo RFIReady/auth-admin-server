@@ -7,7 +7,7 @@ import (
 	"github.com/authorizerdev/authorizer/server/constants"
 )
 
-// SetUserSession sets the user session
+// SetUserSession sets the user session for given user identifier in form recipe:user_id
 func (c *provider) SetUserSession(userId, key, token string) error {
 	c.sessionStore.Set(userId, key, token)
 	return nil
@@ -34,6 +34,7 @@ func (c *provider) DeleteAllUserSessions(userId string) error {
 		constants.AuthRecipeMethodGithub,
 		constants.AuthRecipeMethodGoogle,
 		constants.AuthRecipeMethodLinkedIn,
+		constants.AuthRecipeMethodTwitter,
 	}
 
 	for _, namespace := range namespaces {

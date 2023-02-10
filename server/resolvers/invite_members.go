@@ -16,6 +16,7 @@ import (
 	"github.com/authorizerdev/authorizer/server/graph/model"
 	"github.com/authorizerdev/authorizer/server/memorystore"
 	"github.com/authorizerdev/authorizer/server/parsers"
+	"github.com/authorizerdev/authorizer/server/refs"
 	"github.com/authorizerdev/authorizer/server/token"
 	"github.com/authorizerdev/authorizer/server/utils"
 	"github.com/authorizerdev/authorizer/server/validators"
@@ -35,13 +36,13 @@ func InviteMembersResolver(ctx context.Context, params model.InviteMemberInput) 
 	}
 
 	// this feature is only allowed if email server is configured
-	isEmailVerificationDisabled, err := memorystore.Provider.GetBoolStoreEnvVariable(constants.EnvKeyDisableEmailVerification)
+	EnvKeyIsEmailServiceEnabled, err := memorystore.Provider.GetBoolStoreEnvVariable(constants.EnvKeyIsEmailServiceEnabled)
 	if err != nil {
 		log.Debug("Error getting email verification disabled: ", err)
-		isEmailVerificationDisabled = true
+		EnvKeyIsEmailServiceEnabled = false
 	}
 
-	if isEmailVerificationDisabled {
+	if !EnvKeyIsEmailServiceEnabled {
 		log.Debug("Email server is not configured")
 		return nil, errors.New("email sending is disabled")
 	}
@@ -114,7 +115,7 @@ func InviteMembersResolver(ctx context.Context, params model.InviteMemberInput) 
 			return nil, err
 		}
 
-		verificationToken, err := token.CreateVerificationToken(email, constants.VerificationTypeForgotPassword, hostname, nonceHash, redirectURL)
+		verificationToken, err := token.CreateVerificationToken(email, constants.VerificationTypeInviteMember, hostname, nonceHash, redirectURL)
 		if err != nil {
 			log.Debug("Failed to create verification token: ", err)
 		}
@@ -134,8 +135,17 @@ func InviteMembersResolver(ctx context.Context, params model.InviteMemberInput) 
 		} else {
 			// use basic authentication if that option is on
 			user.SignupMethods = constants.AuthRecipeMethodBasicAuth
-			verificationRequest.Identifier = constants.VerificationTypeForgotPassword
+			verificationRequest.Identifier = constants.VerificationTypeInviteMember
 
+			isMFAEnforced, err := memorystore.Provider.GetBoolStoreEnvVariable(constants.EnvKeyEnforceMultiFactorAuthentication)
+			if err != nil {
+				log.Debug("MFA service not enabled: ", err)
+				isMFAEnforced = false
+			}
+
+			if isMFAEnforced {
+				user.IsMultiFactorAuthEnabled = refs.NewBoolRef(true)
+			}
 			verifyEmailURL = appURL + "/setup-password"
 
 		}
@@ -152,7 +162,12 @@ func InviteMembersResolver(ctx context.Context, params model.InviteMemberInput) 
 			return nil, err
 		}
 
-		go emailservice.InviteEmail(email, verificationToken, verifyEmailURL, redirectURL)
+		// exec it as go routine so that we can reduce the api latency
+		go emailservice.SendEmail([]string{user.Email}, constants.VerificationTypeInviteMember, map[string]interface{}{
+			"user":             user.ToMap(),
+			"organization":     utils.GetOrganization(),
+			"verification_url": utils.GetInviteVerificationURL(verifyEmailURL, verificationToken, redirectURL),
+		})
 	}
 
 	return &model.Response{

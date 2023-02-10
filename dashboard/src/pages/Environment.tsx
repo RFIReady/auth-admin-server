@@ -50,6 +50,8 @@ const Environment = () => {
 		LINKEDIN_CLIENT_SECRET: '',
 		APPLE_CLIENT_ID: '',
 		APPLE_CLIENT_SECRET: '',
+		TWITTER_CLIENT_ID: '',
+		TWITTER_CLIENT_SECRET: '',
 		ROLES: [],
 		DEFAULT_ROLES: [],
 		PROTECTED_ROLES: [],
@@ -63,12 +65,15 @@ const Environment = () => {
 		SMTP_PORT: '',
 		SMTP_USERNAME: '',
 		SMTP_PASSWORD: '',
+		SMTP_LOCAL_NAME: '',
 		SENDER_EMAIL: '',
 		ALLOWED_ORIGINS: [],
 		ORGANIZATION_NAME: '',
 		ORGANIZATION_LOGO: '',
 		CUSTOM_ACCESS_TOKEN_SCRIPT: '',
 		ADMIN_SECRET: '',
+		APP_COOKIE_SECURE: false,
+		ADMIN_COOKIE_SECURE: false,
 		DISABLE_LOGIN_PAGE: false,
 		DISABLE_MAGIC_LINK_LOGIN: false,
 		DISABLE_EMAIL_VERIFICATION: false,
@@ -80,6 +85,8 @@ const Environment = () => {
 		DATABASE_TYPE: '',
 		DATABASE_URL: '',
 		ACCESS_TOKEN_EXPIRY_TIME: '',
+		DISABLE_MULTI_FACTOR_AUTHENTICATION: false,
+		ENFORCE_MULTI_FACTOR_AUTHENTICATION: false,
 	});
 
 	const [fieldVisibility, setFieldVisibility] = React.useState<
@@ -90,6 +97,7 @@ const Environment = () => {
 		FACEBOOK_CLIENT_SECRET: false,
 		LINKEDIN_CLIENT_SECRET: false,
 		APPLE_CLIENT_SECRET: false,
+		TWITTER_CLIENT_SECRET: false,
 		JWT_SECRET: false,
 		SMTP_PASSWORD: false,
 		ADMIN_SECRET: false,
@@ -150,7 +158,7 @@ const Environment = () => {
 				// @ts-ignore
 				[property]: envVariables[property],
 			}),
-			{}
+			{},
 		);
 		if (
 			updatedEnvVariables[HiddenInputType.ADMIN_SECRET] === '' ||
@@ -195,7 +203,7 @@ const Environment = () => {
 			} variables`,
 			isClosable: true,
 			status: 'success',
-			position: 'bottom-right',
+			position: 'top-right',
 		});
 	};
 

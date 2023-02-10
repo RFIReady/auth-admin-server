@@ -25,12 +25,18 @@ func InitMemStore() error {
 		constants.EnvKeyOrganizationLogo: "https://www.authorizer.dev/images/logo.png",
 
 		// boolean envs
-		constants.EnvKeyDisableBasicAuthentication: false,
-		constants.EnvKeyDisableMagicLinkLogin:      false,
-		constants.EnvKeyDisableEmailVerification:   false,
-		constants.EnvKeyDisableLoginPage:           false,
-		constants.EnvKeyDisableSignUp:              false,
-		constants.EnvKeyDisableStrongPassword:      false,
+		constants.EnvKeyDisableBasicAuthentication:       false,
+		constants.EnvKeyDisableMobileBasicAuthentication: false,
+		constants.EnvKeyDisableMagicLinkLogin:            false,
+		constants.EnvKeyDisableEmailVerification:         false,
+		constants.EnvKeyDisableLoginPage:                 false,
+		constants.EnvKeyDisableSignUp:                    false,
+		constants.EnvKeyDisableStrongPassword:            false,
+		constants.EnvKeyIsEmailServiceEnabled:            false,
+		constants.EnvKeyEnforceMultiFactorAuthentication: false,
+		constants.EnvKeyDisableMultiFactorAuthentication: false,
+		constants.EnvKeyAppCookieSecure:                  true,
+		constants.EnvKeyAdminCookieSecure:                true,
 	}
 
 	requiredEnvs := RequiredEnvStoreObj.GetRequiredEnv()
@@ -52,7 +58,7 @@ func InitMemStore() error {
 	}
 
 	redisURL := requiredEnvs.RedisURL
-	if redisURL != "" && !requiredEnvs.disableRedisForEnv {
+	if redisURL != "" && !requiredEnvs.DisableRedisForEnv {
 		log.Info("Initializing Redis memory store")
 		Provider, err = redis.NewRedisProvider(redisURL)
 		if err != nil {

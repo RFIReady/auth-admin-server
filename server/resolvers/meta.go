@@ -77,6 +77,18 @@ func MetaResolver(ctx context.Context) (*model.Meta, error) {
 		githubClientSecret = ""
 	}
 
+	twitterClientID, err := memorystore.Provider.GetStringStoreEnvVariable(constants.EnvKeyTwitterClientID)
+	if err != nil {
+		log.Debug("Failed to get Twitter Client ID from environment variable", err)
+		twitterClientID = ""
+	}
+
+	twitterClientSecret, err := memorystore.Provider.GetStringStoreEnvVariable(constants.EnvKeyTwitterClientSecret)
+	if err != nil {
+		log.Debug("Failed to get Twitter Client Secret from environment variable", err)
+		twitterClientSecret = ""
+	}
+
 	isBasicAuthDisabled, err := memorystore.Provider.GetBoolStoreEnvVariable(constants.EnvKeyDisableBasicAuthentication)
 	if err != nil {
 		log.Debug("Failed to get Disable Basic Authentication from environment variable", err)
@@ -107,6 +119,12 @@ func MetaResolver(ctx context.Context) (*model.Meta, error) {
 		isSignUpDisabled = true
 	}
 
+	isMultiFactorAuthenticationEnabled, err := memorystore.Provider.GetBoolStoreEnvVariable(constants.EnvKeyDisableMultiFactorAuthentication)
+	if err != nil {
+		log.Debug("Failed to get Disable Multi Factor Authentication from environment variable", err)
+		isSignUpDisabled = true
+	}
+
 	metaInfo := model.Meta{
 		Version:                      constants.VERSION,
 		ClientID:                     clientID,
@@ -115,11 +133,13 @@ func MetaResolver(ctx context.Context) (*model.Meta, error) {
 		IsFacebookLoginEnabled:       facebookClientID != "" && facebookClientSecret != "",
 		IsLinkedinLoginEnabled:       linkedClientID != "" && linkedInClientSecret != "",
 		IsAppleLoginEnabled:          appleClientID != "" && appleClientSecret != "",
+		IsTwitterLoginEnabled:        twitterClientID != "" && twitterClientSecret != "",
 		IsBasicAuthenticationEnabled: !isBasicAuthDisabled,
 		IsEmailVerificationEnabled:   !isEmailVerificationDisabled,
 		IsMagicLinkLoginEnabled:      !isMagicLinkLoginDisabled,
 		IsSignUpEnabled:              !isSignUpDisabled,
 		IsStrongPasswordEnabled:      !isStrongPasswordDisabled,
+		IsMultiFactorAuthEnabled:     !isMultiFactorAuthenticationEnabled,
 	}
 	return &metaInfo, nil
 }

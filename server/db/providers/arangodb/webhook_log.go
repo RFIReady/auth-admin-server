@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/arangodb/go-driver"
 	arangoDriver "github.com/arangodb/go-driver"
 	"github.com/authorizerdev/authorizer/server/db/models"
 	"github.com/authorizerdev/authorizer/server/graph/model"
@@ -16,6 +15,7 @@ import (
 func (p *provider) AddWebhookLog(ctx context.Context, webhookLog models.WebhookLog) (*model.WebhookLog, error) {
 	if webhookLog.ID == "" {
 		webhookLog.ID = uuid.New().String()
+		webhookLog.Key = webhookLog.ID
 	}
 
 	webhookLog.Key = webhookLog.ID
@@ -43,7 +43,7 @@ func (p *provider) ListWebhookLogs(ctx context.Context, pagination model.Paginat
 		}
 	}
 
-	sctx := driver.WithQueryFullCount(ctx)
+	sctx := arangoDriver.WithQueryFullCount(ctx)
 	cursor, err := p.db.Query(sctx, query, bindVariables)
 	if err != nil {
 		return nil, err

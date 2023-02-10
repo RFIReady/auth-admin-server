@@ -8,13 +8,12 @@ import (
 	"github.com/authorizerdev/authorizer/server/db"
 	"github.com/authorizerdev/authorizer/server/db/models"
 	"github.com/authorizerdev/authorizer/server/graph/model"
+	"github.com/authorizerdev/authorizer/server/refs"
 	"github.com/authorizerdev/authorizer/server/token"
 	"github.com/authorizerdev/authorizer/server/utils"
 	"github.com/authorizerdev/authorizer/server/validators"
 	log "github.com/sirupsen/logrus"
 )
-
-// TODO add template validator
 
 // AddEmailTemplateResolver resolver for add email template mutation
 func AddEmailTemplateResolver(ctx context.Context, params model.AddEmailTemplateRequest) (*model.Response, error) {
@@ -34,13 +33,25 @@ func AddEmailTemplateResolver(ctx context.Context, params model.AddEmailTemplate
 		return nil, fmt.Errorf("invalid event name %s", params.EventName)
 	}
 
+	if strings.TrimSpace(params.Subject) == "" {
+		return nil, fmt.Errorf("empty subject not allowed")
+	}
+
 	if strings.TrimSpace(params.Template) == "" {
 		return nil, fmt.Errorf("empty template not allowed")
+	}
+
+	var design string
+
+	if params.Design == nil || strings.TrimSpace(refs.StringValue(params.Design)) == "" {
+		design = ""
 	}
 
 	_, err = db.Provider.AddEmailTemplate(ctx, models.EmailTemplate{
 		EventName: params.EventName,
 		Template:  params.Template,
+		Subject:   params.Subject,
+		Design:    design,
 	})
 	if err != nil {
 		log.Debug("Failed to add email template: ", err)

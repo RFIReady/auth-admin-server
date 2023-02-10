@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import {
 	Button,
 	Center,
+	Code,
+	Collapse,
 	Flex,
 	Input,
 	InputGroup,
@@ -19,20 +21,33 @@ import {
 	Text,
 	useDisclosure,
 	useToast,
+	Alert,
+	AlertIcon,
+	Divider,
 } from '@chakra-ui/react';
-import { FaMinusCircle, FaPlus } from 'react-icons/fa';
+import {
+	FaAngleDown,
+	FaAngleUp,
+	FaMinusCircle,
+	FaPlus,
+	FaRegClone,
+} from 'react-icons/fa';
 import { useClient } from 'urql';
 import {
 	webhookEventNames,
 	ArrayInputOperations,
 	WebhookInputDataFields,
 	WebhookInputHeaderFields,
-	UpdateWebhookModalViews,
+	UpdateModalViews,
 	webhookVerifiedStatus,
+	webhookPayloadExample,
 } from '../constants';
-import { capitalizeFirstLetter, validateURI } from '../utils';
+import {
+	capitalizeFirstLetter,
+	copyTextToClipboard,
+	validateURI,
+} from '../utils';
 import { AddWebhook, EditWebhook, TestEndpoint } from '../graphql/mutation';
-import { rest } from 'lodash';
 import { BiCheckCircle, BiError, BiErrorCircle } from 'react-icons/bi';
 
 interface headersDataType {
@@ -54,7 +69,7 @@ interface selecetdWebhookDataTypes {
 }
 
 interface UpdateWebhookModalInputPropTypes {
-	view: UpdateWebhookModalViews;
+	view: UpdateModalViews;
 	selectedWebhook?: selecetdWebhookDataTypes;
 	fetchWebookData: Function;
 }
@@ -82,7 +97,7 @@ interface validatorDataType {
 }
 
 const initWebhookData: webhookDataType = {
-	[WebhookInputDataFields.EVENT_NAME]: webhookEventNames.USER_LOGIN,
+	[WebhookInputDataFields.EVENT_NAME]: webhookEventNames['User login'],
 	[WebhookInputDataFields.ENDPOINT]: '',
 	[WebhookInputDataFields.ENABLED]: true,
 	[WebhookInputDataFields.HEADERS]: [{ ...initHeadersData }],
@@ -103,6 +118,7 @@ const UpdateWebhookModal = ({
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [loading, setLoading] = useState<boolean>(false);
 	const [verifyingEndpoint, setVerifyingEndpoint] = useState<boolean>(false);
+	const [isShowingPayload, setIsShowingPayload] = useState<boolean>(false);
 	const [webhook, setWebhook] = useState<webhookDataType>({
 		...initWebhookData,
 	});
@@ -110,13 +126,13 @@ const UpdateWebhookModal = ({
 		...initWebhookValidatorData,
 	});
 	const [verifiedStatus, setVerifiedStatus] = useState<webhookVerifiedStatus>(
-		webhookVerifiedStatus.PENDING
+		webhookVerifiedStatus.PENDING,
 	);
 	const inputChangehandler = (
 		inputType: string,
 		value: any,
 		headerInputType: string = WebhookInputHeaderFields.KEY,
-		headerIndex: number = 0
+		headerIndex: number = 0,
 	) => {
 		if (
 			verifiedStatus !== webhookVerifiedStatus.PENDING &&
@@ -222,7 +238,7 @@ const UpdateWebhookModal = ({
 			validator[WebhookInputDataFields.ENDPOINT] &&
 			!validator[WebhookInputDataFields.HEADERS].some(
 				(headerData: headersValidatorDataType) =>
-					!headerData.key || !headerData.value
+					!headerData.key || !headerData.value,
 			)
 		);
 	};
@@ -240,7 +256,7 @@ const UpdateWebhookModal = ({
 				(acc, data) => {
 					return data.key ? { ...acc, [data.key]: data.value } : acc;
 				},
-				{}
+				{},
 			);
 			if (Object.keys(headers).length) {
 				params[WebhookInputDataFields.HEADERS] = headers;
@@ -254,7 +270,7 @@ const UpdateWebhookModal = ({
 		const params = getParams();
 		let res: any = {};
 		if (
-			view === UpdateWebhookModalViews.Edit &&
+			view === UpdateModalViews.Edit &&
 			selectedWebhook?.[WebhookInputDataFields.ID]
 		) {
 			res = await client
@@ -274,16 +290,16 @@ const UpdateWebhookModal = ({
 				title: capitalizeFirstLetter(res.error.message),
 				isClosable: true,
 				status: 'error',
-				position: 'bottom-right',
+				position: 'top-right',
 			});
 		} else if (res.data?._add_webhook || res.data?._update_webhook) {
 			toast({
 				title: capitalizeFirstLetter(
-					res.data?._add_webhook?.message || res.data?._update_webhook?.message
+					res.data?._add_webhook?.message || res.data?._update_webhook?.message,
 				),
 				isClosable: true,
 				status: 'success',
-				position: 'bottom-right',
+				position: 'top-right',
 			});
 			setWebhook({
 				...initWebhookData,
@@ -292,12 +308,12 @@ const UpdateWebhookModal = ({
 			setValidator({ ...initWebhookValidatorData });
 			fetchWebookData();
 		}
-		view === UpdateWebhookModalViews.ADD && onClose();
+		view === UpdateModalViews.ADD && onClose();
 	};
 	useEffect(() => {
 		if (
 			isOpen &&
-			view === UpdateWebhookModalViews.Edit &&
+			view === UpdateModalViews.Edit &&
 			selectedWebhook &&
 			Object.keys(selectedWebhook || {}).length
 		) {
@@ -317,7 +333,7 @@ const UpdateWebhookModal = ({
 				setValidator({
 					...validator,
 					[WebhookInputDataFields.HEADERS]: new Array(
-						formattedHeadersData.length
+						formattedHeadersData.length,
 					)
 						.fill({})
 						.map(() => ({ ...initHeadersValidatorData })),
@@ -347,7 +363,7 @@ const UpdateWebhookModal = ({
 	};
 	return (
 		<>
-			{view === UpdateWebhookModalViews.ADD ? (
+			{view === UpdateModalViews.ADD ? (
 				<Button
 					leftIcon={<FaPlus />}
 					colorScheme="blue"
@@ -365,9 +381,7 @@ const UpdateWebhookModal = ({
 				<ModalOverlay />
 				<ModalContent>
 					<ModalHeader>
-						{view === UpdateWebhookModalViews.ADD
-							? 'Add New Webhook'
-							: 'Edit Webhook'}
+						{view === UpdateModalViews.ADD ? 'Add New Webhook' : 'Edit Webhook'}
 					</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
@@ -392,7 +406,7 @@ const UpdateWebhookModal = ({
 										onChange={(e) =>
 											inputChangehandler(
 												WebhookInputDataFields.EVENT_NAME,
-												e.currentTarget.value
+												e.currentTarget.value,
 											)
 										}
 									>
@@ -401,7 +415,7 @@ const UpdateWebhookModal = ({
 												<option value={value} key={key}>
 													{key}
 												</option>
-											)
+											),
 										)}
 									</Select>
 								</Flex>
@@ -424,7 +438,7 @@ const UpdateWebhookModal = ({
 											onChange={(e) =>
 												inputChangehandler(
 													WebhookInputDataFields.ENDPOINT,
-													e.currentTarget.value
+													e.currentTarget.value,
 												)
 											}
 										/>
@@ -448,7 +462,7 @@ const UpdateWebhookModal = ({
 										onChange={() =>
 											inputChangehandler(
 												WebhookInputDataFields.ENABLED,
-												!webhook[WebhookInputDataFields.ENABLED]
+												!webhook[WebhookInputDataFields.ENABLED],
 											)
 										}
 									/>
@@ -457,11 +471,12 @@ const UpdateWebhookModal = ({
 									</Text>
 								</Flex>
 							</Flex>
+
 							<Flex
 								width="100%"
 								justifyContent="space-between"
 								alignItems="center"
-								marginBottom="2%"
+								marginBottom="5%"
 							>
 								<Flex>Headers</Flex>
 								<Flex>
@@ -478,7 +493,8 @@ const UpdateWebhookModal = ({
 									</Button>
 								</Flex>
 							</Flex>
-							<Flex flexDirection="column" maxH={220} overflowY="scroll">
+
+							<Flex flexDirection="column" maxH={220} overflowY="auto">
 								{webhook[WebhookInputDataFields.HEADERS]?.map(
 									(headerData, index) => (
 										<Flex
@@ -501,7 +517,7 @@ const UpdateWebhookModal = ({
 															WebhookInputDataFields.HEADERS,
 															e.target.value,
 															WebhookInputHeaderFields.KEY,
-															index
+															index,
 														)
 													}
 													width="30%"
@@ -524,7 +540,7 @@ const UpdateWebhookModal = ({
 															WebhookInputDataFields.HEADERS,
 															e.target.value,
 															WebhookInputHeaderFields.VALUE,
-															index
+															index,
 														)
 													}
 													width="65%"
@@ -544,9 +560,57 @@ const UpdateWebhookModal = ({
 												</InputRightElement>
 											</InputGroup>
 										</Flex>
-									)
+									),
 								)}
 							</Flex>
+							<Divider marginY={5} />
+
+							<Alert
+								status="info"
+								onClick={() => setIsShowingPayload(!isShowingPayload)}
+								borderRadius="5"
+								cursor="pointer"
+								fontSize="sm"
+							>
+								<AlertIcon />
+								<Flex
+									width="100%"
+									justifyContent="space-between"
+									alignItems="center"
+								>
+									Checkout the example payload
+									{isShowingPayload ? <FaAngleUp /> : <FaAngleDown />}
+								</Flex>
+							</Alert>
+							<Collapse
+								style={{
+									marginTop: 10,
+									width: '100%',
+								}}
+								in={isShowingPayload}
+							>
+								<Code
+									width="inherit"
+									borderRadius={5}
+									padding={2}
+									position="relative"
+								>
+									<pre style={{ overflow: 'auto' }}>
+										{webhookPayloadExample}
+									</pre>
+									{isShowingPayload && (
+										<Flex
+											position="absolute"
+											top={4}
+											right={4}
+											cursor="pointer"
+											onClick={() => copyTextToClipboard(webhookPayloadExample)}
+										>
+											<FaRegClone color="#bfbfbf" />
+										</Flex>
+									)}
+								</Code>
+							</Collapse>
 						</Flex>
 					</ModalBody>
 					<ModalFooter>

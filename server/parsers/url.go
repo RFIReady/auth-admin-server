@@ -11,8 +11,8 @@ import (
 )
 
 // GetHost returns hostname from request context
-// if X-Authorizer-URL header is set it is given highest priority
-// if EnvKeyAuthorizerURL is set it is given second highest priority.
+// if EnvKeyAuthorizerURL is set it is given highest priority.
+// if X-Authorizer-URL header is set it is given second highest priority
 // if above 2 are not set the requesting host name is used
 func GetHost(c *gin.Context) string {
 	authorizerURL, err := memorystore.Provider.GetStringStoreEnvVariable(constants.EnvKeyAuthorizerURL)
@@ -20,12 +20,12 @@ func GetHost(c *gin.Context) string {
 		authorizerURL = ""
 	}
 	if authorizerURL != "" {
-		return authorizerURL
+		return strings.TrimSuffix(authorizerURL, "/")
 	}
 
 	authorizerURL = c.Request.Header.Get("X-Authorizer-URL")
 	if authorizerURL != "" {
-		return authorizerURL
+		return strings.TrimSuffix(authorizerURL, "/")
 	}
 
 	scheme := c.Request.Header.Get("X-Forwarded-Proto")
@@ -33,7 +33,7 @@ func GetHost(c *gin.Context) string {
 		scheme = "http"
 	}
 	host := c.Request.Host
-	return scheme + "://" + host
+	return strings.TrimSuffix(scheme+"://"+host, "/")
 }
 
 // GetHostName function returns hostname and port
@@ -91,7 +91,7 @@ func GetDomainName(uri string) string {
 	return host
 }
 
-// GetAppURL to get /app/ url if not configured by user
+// GetAppURL to get /app url if not configured by user
 func GetAppURL(gc *gin.Context) string {
 	envAppURL, err := memorystore.Provider.GetStringStoreEnvVariable(constants.EnvKeyAppURL)
 	if envAppURL == "" || err != nil {

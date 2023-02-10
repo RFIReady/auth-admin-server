@@ -25,23 +25,31 @@ import (
 // remove the session tokens for those methods
 func clearSessionIfRequired(currentData, updatedData map[string]interface{}) {
 	isCurrentBasicAuthEnabled := !currentData[constants.EnvKeyDisableBasicAuthentication].(bool)
+	isCurrentMobileBasicAuthEnabled := !currentData[constants.EnvKeyDisableMobileBasicAuthentication].(bool)
 	isCurrentMagicLinkLoginEnabled := !currentData[constants.EnvKeyDisableMagicLinkLogin].(bool)
 	isCurrentAppleLoginEnabled := currentData[constants.EnvKeyAppleClientID] != nil && currentData[constants.EnvKeyAppleClientSecret] != nil && currentData[constants.EnvKeyAppleClientID].(string) != "" && currentData[constants.EnvKeyAppleClientSecret].(string) != ""
 	isCurrentFacebookLoginEnabled := currentData[constants.EnvKeyFacebookClientID] != nil && currentData[constants.EnvKeyFacebookClientSecret] != nil && currentData[constants.EnvKeyFacebookClientID].(string) != "" && currentData[constants.EnvKeyFacebookClientSecret].(string) != ""
 	isCurrentGoogleLoginEnabled := currentData[constants.EnvKeyGoogleClientID] != nil && currentData[constants.EnvKeyGoogleClientSecret] != nil && currentData[constants.EnvKeyGoogleClientID].(string) != "" && currentData[constants.EnvKeyGoogleClientSecret].(string) != ""
 	isCurrentGithubLoginEnabled := currentData[constants.EnvKeyGithubClientID] != nil && currentData[constants.EnvKeyGithubClientSecret] != nil && currentData[constants.EnvKeyGithubClientID].(string) != "" && currentData[constants.EnvKeyGithubClientSecret].(string) != ""
 	isCurrentLinkedInLoginEnabled := currentData[constants.EnvKeyLinkedInClientID] != nil && currentData[constants.EnvKeyLinkedInClientSecret] != nil && currentData[constants.EnvKeyLinkedInClientID].(string) != "" && currentData[constants.EnvKeyLinkedInClientSecret].(string) != ""
+	isCurrentTwitterLoginEnabled := currentData[constants.EnvKeyTwitterClientID] != nil && currentData[constants.EnvKeyTwitterClientSecret] != nil && currentData[constants.EnvKeyTwitterClientID].(string) != "" && currentData[constants.EnvKeyTwitterClientSecret].(string) != ""
 
 	isUpdatedBasicAuthEnabled := !updatedData[constants.EnvKeyDisableBasicAuthentication].(bool)
+	isUpdatedMobileBasicAuthEnabled := !updatedData[constants.EnvKeyDisableMobileBasicAuthentication].(bool)
 	isUpdatedMagicLinkLoginEnabled := !updatedData[constants.EnvKeyDisableMagicLinkLogin].(bool)
 	isUpdatedAppleLoginEnabled := updatedData[constants.EnvKeyAppleClientID] != nil && updatedData[constants.EnvKeyAppleClientSecret] != nil && updatedData[constants.EnvKeyAppleClientID].(string) != "" && updatedData[constants.EnvKeyAppleClientSecret].(string) != ""
 	isUpdatedFacebookLoginEnabled := updatedData[constants.EnvKeyFacebookClientID] != nil && updatedData[constants.EnvKeyFacebookClientSecret] != nil && updatedData[constants.EnvKeyFacebookClientID].(string) != "" && updatedData[constants.EnvKeyFacebookClientSecret].(string) != ""
 	isUpdatedGoogleLoginEnabled := updatedData[constants.EnvKeyGoogleClientID] != nil && updatedData[constants.EnvKeyGoogleClientSecret] != nil && updatedData[constants.EnvKeyGoogleClientID].(string) != "" && updatedData[constants.EnvKeyGoogleClientSecret].(string) != ""
 	isUpdatedGithubLoginEnabled := updatedData[constants.EnvKeyGithubClientID] != nil && updatedData[constants.EnvKeyGithubClientSecret] != nil && updatedData[constants.EnvKeyGithubClientID].(string) != "" && updatedData[constants.EnvKeyGithubClientSecret].(string) != ""
 	isUpdatedLinkedInLoginEnabled := updatedData[constants.EnvKeyLinkedInClientID] != nil && updatedData[constants.EnvKeyLinkedInClientSecret] != nil && updatedData[constants.EnvKeyLinkedInClientID].(string) != "" && updatedData[constants.EnvKeyLinkedInClientSecret].(string) != ""
+	isUpdatedTwitterLoginEnabled := updatedData[constants.EnvKeyTwitterClientID] != nil && updatedData[constants.EnvKeyTwitterClientSecret] != nil && updatedData[constants.EnvKeyTwitterClientID].(string) != "" && updatedData[constants.EnvKeyTwitterClientSecret].(string) != ""
 
 	if isCurrentBasicAuthEnabled && !isUpdatedBasicAuthEnabled {
 		memorystore.Provider.DeleteSessionForNamespace(constants.AuthRecipeMethodBasicAuth)
+	}
+
+	if isCurrentMobileBasicAuthEnabled && !isUpdatedMobileBasicAuthEnabled {
+		memorystore.Provider.DeleteSessionForNamespace(constants.AuthRecipeMethodMobileBasicAuth)
 	}
 
 	if isCurrentMagicLinkLoginEnabled && !isUpdatedMagicLinkLoginEnabled {
@@ -66,6 +74,10 @@ func clearSessionIfRequired(currentData, updatedData map[string]interface{}) {
 
 	if isCurrentLinkedInLoginEnabled && !isUpdatedLinkedInLoginEnabled {
 		memorystore.Provider.DeleteSessionForNamespace(constants.AuthRecipeMethodLinkedIn)
+	}
+
+	if isCurrentTwitterLoginEnabled && !isUpdatedTwitterLoginEnabled {
+		memorystore.Provider.DeleteSessionForNamespace(constants.AuthRecipeMethodTwitter)
 	}
 }
 
@@ -234,6 +246,8 @@ func UpdateEnvResolver(ctx context.Context, params model.UpdateEnvInput) (*model
 	// handle derivative cases like disabling email verification & magic login
 	// in case SMTP is off but env is set to true
 	if updatedData[constants.EnvKeySmtpHost] == "" || updatedData[constants.EnvKeySmtpUsername] == "" || updatedData[constants.EnvKeySmtpPassword] == "" || updatedData[constants.EnvKeySenderEmail] == "" && updatedData[constants.EnvKeySmtpPort] == "" {
+		updatedData[constants.EnvKeyIsEmailServiceEnabled] = false
+		updatedData[constants.EnvKeyDisableMultiFactorAuthentication] = true
 		if !updatedData[constants.EnvKeyDisableEmailVerification].(bool) {
 			updatedData[constants.EnvKeyDisableEmailVerification] = true
 		}
@@ -241,6 +255,16 @@ func UpdateEnvResolver(ctx context.Context, params model.UpdateEnvInput) (*model
 		if !updatedData[constants.EnvKeyDisableMagicLinkLogin].(bool) {
 			updatedData[constants.EnvKeyDisableMagicLinkLogin] = true
 		}
+	}
+
+	if updatedData[constants.EnvKeySmtpHost] != "" || updatedData[constants.EnvKeySmtpUsername] != "" || updatedData[constants.EnvKeySmtpPassword] != "" || updatedData[constants.EnvKeySenderEmail] != "" && updatedData[constants.EnvKeySmtpPort] != "" {
+		updatedData[constants.EnvKeyIsEmailServiceEnabled] = true
+	}
+
+	if !currentData[constants.EnvKeyEnforceMultiFactorAuthentication].(bool) && updatedData[constants.EnvKeyEnforceMultiFactorAuthentication].(bool) && !updatedData[constants.EnvKeyDisableMultiFactorAuthentication].(bool) {
+		go db.Provider.UpdateUsers(ctx, map[string]interface{}{
+			"is_multi_factor_auth_enabled": true,
+		}, nil)
 	}
 
 	// check the roles change
@@ -264,8 +288,6 @@ func UpdateEnvResolver(ctx context.Context, params model.UpdateEnvInput) (*model
 			}
 		}
 	}
-
-	go clearSessionIfRequired(currentData, updatedData)
 
 	// Update local store
 	memorystore.Provider.UpdateEnvStore(updatedData)
@@ -319,6 +341,8 @@ func UpdateEnvResolver(ctx context.Context, params model.UpdateEnvInput) (*model
 		log.Debug("Failed to update env: ", err)
 		return res, err
 	}
+
+	go clearSessionIfRequired(currentData, updatedData)
 
 	res = &model.Response{
 		Message: "configurations updated successfully",

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/arangodb/go-driver"
 	arangoDriver "github.com/arangodb/go-driver"
 	"github.com/authorizerdev/authorizer/server/db/models"
 	"github.com/authorizerdev/authorizer/server/graph/model"
@@ -16,6 +15,7 @@ import (
 func (p *provider) AddWebhook(ctx context.Context, webhook models.Webhook) (*model.Webhook, error) {
 	if webhook.ID == "" {
 		webhook.ID = uuid.New().String()
+		webhook.Key = webhook.ID
 	}
 
 	webhook.Key = webhook.ID
@@ -49,7 +49,7 @@ func (p *provider) ListWebhook(ctx context.Context, pagination model.Pagination)
 
 	query := fmt.Sprintf("FOR d in %s SORT d.created_at DESC LIMIT %d, %d RETURN d", models.Collections.Webhook, pagination.Offset, pagination.Limit)
 
-	sctx := driver.WithQueryFullCount(ctx)
+	sctx := arangoDriver.WithQueryFullCount(ctx)
 	cursor, err := p.db.Query(sctx, query, nil)
 	if err != nil {
 		return nil, err

@@ -89,6 +89,9 @@ func EnvResolver(ctx context.Context) (*model.Env, error) {
 	if val, ok := store[constants.EnvKeySenderEmail]; ok {
 		res.SenderEmail = refs.NewStringRef(val.(string))
 	}
+	if val, ok := store[constants.EnvKeySmtpLocalName]; ok {
+		res.SMTPLocalName = refs.NewStringRef(val.(string))
+	}
 	if val, ok := store[constants.EnvKeyJwtType]; ok {
 		res.JwtType = refs.NewStringRef(val.(string))
 	}
@@ -143,6 +146,13 @@ func EnvResolver(ctx context.Context) (*model.Env, error) {
 	if val, ok := store[constants.EnvKeyAppleClientSecret]; ok {
 		res.AppleClientSecret = refs.NewStringRef(val.(string))
 	}
+	if val, ok := store[constants.EnvKeyTwitterClientID]; ok {
+		res.TwitterClientID = refs.NewStringRef(val.(string))
+	}
+	if val, ok := store[constants.EnvKeyTwitterClientSecret]; ok {
+		res.TwitterClientSecret = refs.NewStringRef(val.(string))
+	}
+
 	if val, ok := store[constants.EnvKeyOrganizationName]; ok {
 		res.OrganizationName = refs.NewStringRef(val.(string))
 	}
@@ -170,6 +180,10 @@ func EnvResolver(ctx context.Context) (*model.Env, error) {
 	res.DisableLoginPage = store[constants.EnvKeyDisableLoginPage].(bool)
 	res.DisableSignUp = store[constants.EnvKeyDisableSignUp].(bool)
 	res.DisableStrongPassword = store[constants.EnvKeyDisableStrongPassword].(bool)
+	res.EnforceMultiFactorAuthentication = store[constants.EnvKeyEnforceMultiFactorAuthentication].(bool)
+	res.DisableMultiFactorAuthentication = store[constants.EnvKeyDisableMultiFactorAuthentication].(bool)
+	res.AdminCookieSecure = store[constants.EnvKeyAdminCookieSecure].(bool)
+	res.AppCookieSecure = store[constants.EnvKeyAppCookieSecure].(bool)
 
 	return res, nil
 }

@@ -29,19 +29,16 @@ const fallbackCopyTextToClipboard = (text: string) => {
 	document.body.removeChild(textArea);
 };
 
-export const copyTextToClipboard = (text: string) => {
+export const copyTextToClipboard = async (text: string) => {
 	if (!navigator.clipboard) {
 		fallbackCopyTextToClipboard(text);
 		return;
 	}
-	navigator.clipboard.writeText(text).then(
-		() => {
-			console.log('Async: Copying to clipboard was successful!');
-		},
-		(err) => {
-			console.error('Async: Could not copy text: ', err);
-		}
-	);
+	try {
+		navigator.clipboard.writeText(text);
+	} catch (err) {
+		throw err;
+	}
 };
 
 export const getObjectDiff = (obj1: any, obj2: any) => {
@@ -70,7 +67,7 @@ export const validateEmail = (email: string) => {
 	return email
 		.toLowerCase()
 		.match(
-			/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+			/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 		)
 		? true
 		: false;
@@ -81,7 +78,7 @@ export const validateURI = (uri: string) => {
 	return uri
 		.toLowerCase()
 		.match(
-			/(?:^|\s)((https?:\/\/)?(?:localhost|[\w-]+(?:\.[\w-]+)+)(:\d+)?(\/\S*)?)/
+			/(?:^|\s)((https?:\/\/)?(?:localhost|[\w-]+(?:\.[\w-]+)+)(:\d+)?(\/\S*)?)/,
 		)
 		? true
 		: false;

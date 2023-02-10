@@ -15,8 +15,6 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// TODO add template validator
-
 // UpdateEmailTemplateResolver resolver for update email template mutation
 func UpdateEmailTemplateResolver(ctx context.Context, params model.UpdateEmailTemplateRequest) (*model.Response, error) {
 	gc, err := utils.GinContextFromContext(ctx)
@@ -51,12 +49,28 @@ func UpdateEmailTemplateResolver(ctx context.Context, params model.UpdateEmailTe
 		emailTemplateDetails.EventName = refs.StringValue(params.EventName)
 	}
 
+	if params.Subject != nil && emailTemplateDetails.Subject != refs.StringValue(params.Subject) {
+		if strings.TrimSpace(refs.StringValue(params.Subject)) == "" {
+			log.Debug("empty subject not allowed")
+			return nil, fmt.Errorf("empty subject not allowed")
+		}
+		emailTemplateDetails.Subject = refs.StringValue(params.Subject)
+	}
+
 	if params.Template != nil && emailTemplateDetails.Template != refs.StringValue(params.Template) {
 		if strings.TrimSpace(refs.StringValue(params.Template)) == "" {
 			log.Debug("empty template not allowed")
 			return nil, fmt.Errorf("empty template not allowed")
 		}
 		emailTemplateDetails.Template = refs.StringValue(params.Template)
+	}
+
+	if params.Design != nil && emailTemplateDetails.Design != refs.StringValue(params.Design) {
+		if strings.TrimSpace(refs.StringValue(params.Design)) == "" {
+			log.Debug("empty design not allowed")
+			return nil, fmt.Errorf("empty design not allowed")
+		}
+		emailTemplateDetails.Design = refs.StringValue(params.Design)
 	}
 
 	_, err = db.Provider.UpdateEmailTemplate(ctx, emailTemplateDetails)

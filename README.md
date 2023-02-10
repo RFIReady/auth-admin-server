@@ -7,19 +7,17 @@
   Authorizer
 </h1>
 
-**Authorizer** is an open-source authentication and authorization solution for your applications. Bring your database and have complete control over the user information. You can self-host authorizer instances and connect to any database (Currently supports [Postgres](https://www.postgresql.org/), [MySQL](https://www.mysql.com/), [SQLite](https://www.sqlite.org/index.html), [SQLServer](https://www.microsoft.com/en-us/sql-server/), [MongoDB](https://mongodb.com/), [ArangoDB](https://www.arangodb.com/)).
+**Authorizer** is an open-source authentication and authorization solution for your applications. Bring your database and have complete control over the user information. You can self-host authorizer instances and connect to any database (Currently supports 11+ databases including [Postgres](https://www.postgresql.org/), [MySQL](https://www.mysql.com/), [SQLite](https://www.sqlite.org/index.html), [SQLServer](https://www.microsoft.com/en-us/sql-server/), [YugaByte](https://www.yugabyte.com/),  [MariaDB](https://mariadb.org/), [PlanetScale](https://planetscale.com/), [CassandraDB](https://cassandra.apache.org/_/index.html), [ScyllaDB](https://www.scylladb.com/), [MongoDB](https://mongodb.com/), [ArangoDB](https://www.arangodb.com/)).
 
-## Table of contents
+For more information check:
 
-- [Introduction](#introduction)
-- [Getting Started](#getting-started)
-- [Contributing](https://github.com/authorizerdev/authorizer/blob/main/.github/CONTRIBUTING.md)
 - [Docs](http://docs.authorizer.dev/)
-- [Join Community](https://discord.gg/Zv2D5h6kkK)
+- [Discord Community](https://discord.gg/Zv2D5h6kkK)
+- [Contributing Guide](https://github.com/authorizerdev/authorizer/blob/main/.github/CONTRIBUTING.md)
 
 # Introduction
 
-<img src="https://github.com/authorizerdev/authorizer/blob/main/assets/authorizer-architecture.png" style="height:20em"/>
+<img src="https://docs.authorizer.dev/images/authorizer-arch.png" style="height:20em"/>
 
 #### We offer the following functionality
 
@@ -29,20 +27,22 @@
 - ✅ OAuth2 and OpenID compatible APIs
 - ✅ APIs to update profile securely
 - ✅ Forgot password flow using email
-- ✅ Social logins (Google, Github, Facebook, more coming soon)
+- ✅ Social logins (Google, Github, Facebook, LinkedIn, Apple more coming soon)
 - ✅ Role-based access management
 - ✅ Password-less login with magic link login
+- ✅ Multi factor authentication
+- ✅ Email templating
+- ✅ Webhooks
 
 ## Roadmap
 
-- 2 Factor authentication
-- VueJS SDK
-- Svelte SDK
+- [VueJS SDK](https://github.com/authorizerdev/authorizer-vue)
+- [Svelte SDK](https://github.com/authorizerdev/authorizer-svelte)
+- [Golang SDK](https://github.com/authorizerdev/authorizer-go)
 - React Native SDK
 - Flutter SDK
 - Android Native SDK
 - iOS native SDK
-- Golang SDK
 - Python SDK
 - PHP SDK
 - WordPress plugin
@@ -63,11 +63,11 @@
 
 Deploy production ready Authorizer instance using one click deployment options available below
 
-| **Infra provider** |                                                                                                        **One-click link**                                                                                                        |               **Additional information**               |
-| :----------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------: |
-|    Railway.app     | <a href="https://railway.app/new/template?template=https://github.com/authorizerdev/authorizer-railway&amp;plugins=postgresql,redis"><img src="https://railway.app/button.svg" style="height: 44px" alt="Deploy on Railway"></a> | [docs](https://docs.authorizer.dev/deployment/railway) |
-|       Heroku       |             <a href="https://heroku.com/deploy?template=https://github.com/authorizerdev/authorizer-heroku"><img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy to Heroku" style="height: 44px;"></a>             | [docs](https://docs.authorizer.dev/deployment/heroku)  |
-|       Render       |                                 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/authorizerdev/authorizer-render)                                  | [docs](https://docs.authorizer.dev/deployment/render)  |
+| **Infra provider** |                                                                                            **One-click link**                                                                                            |               **Additional information**               |
+| :----------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------: |
+|    Railway.app     |                    <a href="https://railway.app/new/template/nwXp1C?referralCode=FEF4uT"><img src="https://railway.app/button.svg" style="height: 44px" alt="Deploy on Railway"></a>                     | [docs](https://docs.authorizer.dev/deployment/railway) |
+|       Heroku       | <a href="https://heroku.com/deploy?template=https://github.com/authorizerdev/authorizer-heroku"><img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy to Heroku" style="height: 44px;"></a> | [docs](https://docs.authorizer.dev/deployment/heroku)  |
+|       Render       |                     [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/authorizerdev/authorizer-render)                      | [docs](https://docs.authorizer.dev/deployment/render)  |
 
 ### Deploy Authorizer Using Source Code
 

@@ -5,7 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strconv"
 	"strings"
@@ -13,6 +13,7 @@ import (
 
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/oauth2"
 
@@ -55,18 +56,20 @@ func OAuthCallbackHandler() gin.HandlerFunc {
 		scopes := strings.Split(sessionSplit[3], ",")
 
 		user := models.User{}
-		code := ctx.Request.FormValue("code")
+		oauthCode := ctx.Request.FormValue("code")
 		switch provider {
 		case constants.AuthRecipeMethodGoogle:
-			user, err = processGoogleUserInfo(code)
+			user, err = processGoogleUserInfo(oauthCode)
 		case constants.AuthRecipeMethodGithub:
-			user, err = processGithubUserInfo(code)
+			user, err = processGithubUserInfo(oauthCode)
 		case constants.AuthRecipeMethodFacebook:
-			user, err = processFacebookUserInfo(code)
+			user, err = processFacebookUserInfo(oauthCode)
 		case constants.AuthRecipeMethodLinkedIn:
-			user, err = processLinkedInUserInfo(code)
+			user, err = processLinkedInUserInfo(oauthCode)
 		case constants.AuthRecipeMethodApple:
-			user, err = processAppleUserInfo(code)
+			user, err = processAppleUserInfo(oauthCode)
+		case constants.AuthRecipeMethodTwitter:
+			user, err = processTwitterUserInfo(oauthCode, sessionState)
 		default:
 			log.Info("Invalid oauth provider")
 			err = fmt.Errorf(`invalid oauth provider`)
@@ -194,10 +197,41 @@ func OAuthCallbackHandler() gin.HandlerFunc {
 			}
 		}
 
-		authToken, err := token.CreateAuthToken(ctx, user, inputRoles, scopes, provider)
+		// TODO
+		// use stateValue to get code / nonce
+		// add code / nonce to id_token
+		code := ""
+		codeChallenge := ""
+		nonce := ""
+		if stateValue != "" {
+			// Get state from store
+			authorizeState, _ := memorystore.Provider.GetState(stateValue)
+			if authorizeState != "" {
+				authorizeStateSplit := strings.Split(authorizeState, "@@")
+				if len(authorizeStateSplit) > 1 {
+					code = authorizeStateSplit[0]
+					codeChallenge = authorizeStateSplit[1]
+				} else {
+					nonce = authorizeState
+				}
+				go memorystore.Provider.RemoveState(stateValue)
+			}
+		}
+		if nonce == "" {
+			nonce = uuid.New().String()
+		}
+		authToken, err := token.CreateAuthToken(ctx, user, inputRoles, scopes, provider, nonce, code)
 		if err != nil {
 			log.Debug("Failed to create auth token: ", err)
 			ctx.JSON(500, gin.H{"error": err.Error()})
+		}
+
+		// Code challenge could be optional if PKCE flow is not used
+		if code != "" {
+			if err := memorystore.Provider.SetState(code, codeChallenge+"@@"+authToken.FingerPrintHash); err != nil {
+				log.Debug("SetState failed: ", err)
+				ctx.JSON(500, gin.H{"error": err.Error()})
+			}
 		}
 
 		expiresIn := authToken.AccessToken.ExpiresAt - time.Now().Unix()
@@ -205,7 +239,11 @@ func OAuthCallbackHandler() gin.HandlerFunc {
 			expiresIn = 1
 		}
 
-		params := "access_token=" + authToken.AccessToken.Token + "&token_type=bearer&expires_in=" + strconv.FormatInt(expiresIn, 10) + "&state=" + stateValue + "&id_token=" + authToken.IDToken.Token
+		params := "access_token=" + authToken.AccessToken.Token + "&token_type=bearer&expires_in=" + strconv.FormatInt(expiresIn, 10) + "&state=" + stateValue + "&id_token=" + authToken.IDToken.Token + "&nonce=" + nonce
+
+		if code != "" {
+			params += "&code=" + code
+		}
 
 		sessionKey := provider + ":" + user.ID
 		cookie.SetSession(ctx, authToken.FingerPrintHash)
@@ -213,7 +251,7 @@ func OAuthCallbackHandler() gin.HandlerFunc {
 		memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeAccessToken+"_"+authToken.FingerPrint, authToken.AccessToken.Token)
 
 		if authToken.RefreshToken != nil {
-			params = params + `&refresh_token=` + authToken.RefreshToken.Token
+			params += `&refresh_token=` + authToken.RefreshToken.Token
 			memorystore.Provider.SetUserSession(sessionKey, constants.TokenTypeRefreshToken+"_"+authToken.FingerPrint, authToken.RefreshToken.Token)
 		}
 
@@ -274,7 +312,7 @@ func processGoogleUserInfo(code string) (models.User, error) {
 
 func processGithubUserInfo(code string) (models.User, error) {
 	user := models.User{}
-	oauth2Token, err := oauth.OAuthProviders.GithubConfig.Exchange(oauth2.NoContext, code)
+	oauth2Token, err := oauth.OAuthProviders.GithubConfig.Exchange(context.TODO(), code)
 	if err != nil {
 		log.Debug("Failed to exchange code for token: ", err)
 		return user, fmt.Errorf("invalid github exchange code: %s", err.Error())
@@ -285,9 +323,9 @@ func processGithubUserInfo(code string) (models.User, error) {
 		log.Debug("Failed to create github user info request: ", err)
 		return user, fmt.Errorf("error creating github user info request: %s", err.Error())
 	}
-	req.Header = http.Header{
-		"Authorization": []string{fmt.Sprintf("token %s", oauth2Token.AccessToken)},
-	}
+	req.Header.Set(
+		"Authorization", fmt.Sprintf("token %s", oauth2Token.AccessToken),
+	)
 
 	response, err := client.Do(req)
 	if err != nil {
@@ -296,7 +334,7 @@ func processGithubUserInfo(code string) (models.User, error) {
 	}
 
 	defer response.Body.Close()
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		log.Debug("Failed to read github user info response body: ", err)
 		return user, fmt.Errorf("failed to read github response body: %s", err.Error())
@@ -329,14 +367,14 @@ func processGithubUserInfo(code string) (models.User, error) {
 		}
 
 		// fetch using /users/email endpoint
-		req, err := http.NewRequest("GET", constants.GithubUserEmails, nil)
+		req, err := http.NewRequest(http.MethodGet, constants.GithubUserEmails, nil)
 		if err != nil {
 			log.Debug("Failed to create github emails request: ", err)
 			return user, fmt.Errorf("error creating github user info request: %s", err.Error())
 		}
-		req.Header = http.Header{
-			"Authorization": []string{fmt.Sprintf("token %s", oauth2Token.AccessToken)},
-		}
+		req.Header.Set(
+			"Authorization", fmt.Sprintf("token %s", oauth2Token.AccessToken),
+		)
 
 		response, err := client.Do(req)
 		if err != nil {
@@ -345,7 +383,7 @@ func processGithubUserInfo(code string) (models.User, error) {
 		}
 
 		defer response.Body.Close()
-		body, err := ioutil.ReadAll(response.Body)
+		body, err := io.ReadAll(response.Body)
 		if err != nil {
 			log.Debug("Failed to read github user email response body: ", err)
 			return user, fmt.Errorf("failed to read github response body: %s", err.Error())
@@ -381,7 +419,7 @@ func processGithubUserInfo(code string) (models.User, error) {
 
 func processFacebookUserInfo(code string) (models.User, error) {
 	user := models.User{}
-	oauth2Token, err := oauth.OAuthProviders.FacebookConfig.Exchange(oauth2.NoContext, code)
+	oauth2Token, err := oauth.OAuthProviders.FacebookConfig.Exchange(context.TODO(), code)
 	if err != nil {
 		log.Debug("Invalid facebook exchange code: ", err)
 		return user, fmt.Errorf("invalid facebook exchange code: %s", err.Error())
@@ -400,7 +438,7 @@ func processFacebookUserInfo(code string) (models.User, error) {
 	}
 
 	defer response.Body.Close()
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		log.Debug("Failed to read facebook response: ", err)
 		return user, fmt.Errorf("failed to read facebook response body: %s", err.Error())
@@ -432,7 +470,7 @@ func processFacebookUserInfo(code string) (models.User, error) {
 
 func processLinkedInUserInfo(code string) (models.User, error) {
 	user := models.User{}
-	oauth2Token, err := oauth.OAuthProviders.LinkedInConfig.Exchange(oauth2.NoContext, code)
+	oauth2Token, err := oauth.OAuthProviders.LinkedInConfig.Exchange(context.TODO(), code)
 	if err != nil {
 		log.Debug("Failed to exchange code for token: ", err)
 		return user, fmt.Errorf("invalid linkedin exchange code: %s", err.Error())
@@ -455,7 +493,7 @@ func processLinkedInUserInfo(code string) (models.User, error) {
 	}
 
 	defer response.Body.Close()
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		log.Debug("Failed to read linkedin user info response body: ", err)
 		return user, fmt.Errorf("failed to read linkedin response body: %s", err.Error())
@@ -485,7 +523,7 @@ func processLinkedInUserInfo(code string) (models.User, error) {
 	}
 
 	defer response.Body.Close()
-	body, err = ioutil.ReadAll(response.Body)
+	body, err = io.ReadAll(response.Body)
 	if err != nil {
 		log.Debug("Failed to read linkedin email info response body: ", err)
 		return user, fmt.Errorf("failed to read linkedin email response body: %s", err.Error())
@@ -514,7 +552,7 @@ func processLinkedInUserInfo(code string) (models.User, error) {
 
 func processAppleUserInfo(code string) (models.User, error) {
 	user := models.User{}
-	oauth2Token, err := oauth.OAuthProviders.AppleConfig.Exchange(oauth2.NoContext, code)
+	oauth2Token, err := oauth.OAuthProviders.AppleConfig.Exchange(context.TODO(), code)
 	if err != nil {
 		log.Debug("Failed to exchange code for token: ", err)
 		return user, fmt.Errorf("invalid apple exchange code: %s", err.Error())
@@ -563,4 +601,71 @@ func processAppleUserInfo(code string) (models.User, error) {
 	}
 
 	return user, err
+}
+
+func processTwitterUserInfo(code, verifier string) (models.User, error) {
+	user := models.User{}
+	oauth2Token, err := oauth.OAuthProviders.TwitterConfig.Exchange(context.TODO(), code, oauth2.SetAuthURLParam("code_verifier", verifier))
+	if err != nil {
+		log.Debug("Failed to exchange code for token: ", err)
+		return user, fmt.Errorf("invalid twitter exchange code: %s", err.Error())
+	}
+
+	client := http.Client{}
+	req, err := http.NewRequest("GET", constants.TwitterUserInfoURL, nil)
+	if err != nil {
+		log.Debug("Failed to create Twitter user info request: ", err)
+		return user, fmt.Errorf("error creating Twitter user info request: %s", err.Error())
+	}
+	req.Header = http.Header{
+		"Authorization": []string{fmt.Sprintf("Bearer %s", oauth2Token.AccessToken)},
+	}
+
+	response, err := client.Do(req)
+	if err != nil {
+		log.Debug("Failed to request Twitter user info: ", err)
+		return user, err
+	}
+
+	defer response.Body.Close()
+	body, err := io.ReadAll(response.Body)
+	if err != nil {
+		log.Debug("Failed to read Twitter user info response body: ", err)
+		return user, fmt.Errorf("failed to read Twitter response body: %s", err.Error())
+	}
+
+	if response.StatusCode >= 400 {
+		log.Debug("Failed to request Twitter user info: ", string(body))
+		return user, fmt.Errorf("failed to request Twitter user info: %s", string(body))
+	}
+
+	responseRawData := make(map[string]interface{})
+	json.Unmarshal(body, &responseRawData)
+
+	userRawData := responseRawData["data"].(map[string]interface{})
+
+	// log.Info(userRawData)
+	// Twitter API does not return E-Mail adresses by default. For that case special privileges have
+	// to be granted on a per-App basis. See https://developer.twitter.com/en/docs/twitter-api/v1/accounts-and-users/manage-account-settings/api-reference/get-account-verify_credentials
+
+	// Currently Twitter API only provides the full name of a user. To fill givenName and familyName
+	// the full name will be split at the first whitespace. This approach will not be valid for all name combinations
+	nameArr := strings.SplitAfterN(userRawData["name"].(string), " ", 2)
+
+	firstName := nameArr[0]
+	lastName := ""
+	if len(nameArr) == 2 {
+		lastName = nameArr[1]
+	}
+	nickname := userRawData["username"].(string)
+	profilePicture := userRawData["profile_image_url"].(string)
+
+	user = models.User{
+		GivenName:  &firstName,
+		FamilyName: &lastName,
+		Picture:    &profilePicture,
+		Nickname:   &nickname,
+	}
+
+	return user, nil
 }

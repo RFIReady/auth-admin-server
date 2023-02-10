@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 
@@ -13,8 +14,10 @@ import (
 	"github.com/authorizerdev/authorizer/server/cookie"
 	"github.com/authorizerdev/authorizer/server/db"
 	"github.com/authorizerdev/authorizer/server/db/models"
+	"github.com/authorizerdev/authorizer/server/email"
 	"github.com/authorizerdev/authorizer/server/graph/model"
 	"github.com/authorizerdev/authorizer/server/memorystore"
+	"github.com/authorizerdev/authorizer/server/refs"
 	"github.com/authorizerdev/authorizer/server/token"
 	"github.com/authorizerdev/authorizer/server/utils"
 	"github.com/authorizerdev/authorizer/server/validators"
@@ -48,7 +51,7 @@ func LoginResolver(ctx context.Context, params model.LoginInput) (*model.AuthRes
 	user, err := db.Provider.GetUserByEmail(ctx, params.Email)
 	if err != nil {
 		log.Debug("Failed to get user by email: ", err)
-		return res, fmt.Errorf(`user with this email not found`)
+		return res, fmt.Errorf(`bad user credentials`)
 	}
 
 	if user.RevokedTimestamp != nil {
@@ -70,7 +73,7 @@ func LoginResolver(ctx context.Context, params model.LoginInput) (*model.AuthRes
 
 	if err != nil {
 		log.Debug("Failed to compare password: ", err)
-		return res, fmt.Errorf(`invalid password`)
+		return res, fmt.Errorf(`bad user credentials`)
 	}
 
 	defaultRolesString, err := memorystore.Provider.GetStringStoreEnvVariable(constants.EnvKeyDefaultRoles)
@@ -97,10 +100,82 @@ func LoginResolver(ctx context.Context, params model.LoginInput) (*model.AuthRes
 		scope = params.Scope
 	}
 
-	authToken, err := token.CreateAuthToken(gc, user, roles, scope, constants.AuthRecipeMethodBasicAuth)
+	isEmailServiceEnabled, err := memorystore.Provider.GetBoolStoreEnvVariable(constants.EnvKeyIsEmailServiceEnabled)
+	if err != nil || !isEmailServiceEnabled {
+		log.Debug("Email service not enabled: ", err)
+	}
+
+	isMFADisabled, err := memorystore.Provider.GetBoolStoreEnvVariable(constants.EnvKeyDisableMultiFactorAuthentication)
+	if err != nil || !isEmailServiceEnabled {
+		log.Debug("MFA service not enabled: ", err)
+	}
+
+	// If email service is not enabled continue the process in any way
+	if refs.BoolValue(user.IsMultiFactorAuthEnabled) && isEmailServiceEnabled && !isMFADisabled {
+		otp := utils.GenerateOTP()
+		otpData, err := db.Provider.UpsertOTP(ctx, &models.OTP{
+			Email:     user.Email,
+			Otp:       otp,
+			ExpiresAt: time.Now().Add(1 * time.Minute).Unix(),
+		})
+		if err != nil {
+			log.Debug("Failed to add otp: ", err)
+			return nil, err
+		}
+
+		go func() {
+			// exec it as go routine so that we can reduce the api latency
+			go email.SendEmail([]string{params.Email}, constants.VerificationTypeOTP, map[string]interface{}{
+				"user":         user.ToMap(),
+				"organization": utils.GetOrganization(),
+				"otp":          otpData.Otp,
+			})
+			if err != nil {
+				log.Debug("Failed to send otp email: ", err)
+			}
+		}()
+
+		return &model.AuthResponse{
+			Message:             "Please check the OTP in your inbox",
+			ShouldShowOtpScreen: refs.NewBoolRef(true),
+		}, nil
+	}
+
+	code := ""
+	codeChallenge := ""
+	nonce := ""
+	if params.State != nil {
+		// Get state from store
+		authorizeState, _ := memorystore.Provider.GetState(refs.StringValue(params.State))
+		if authorizeState != "" {
+			authorizeStateSplit := strings.Split(authorizeState, "@@")
+			if len(authorizeStateSplit) > 1 {
+				code = authorizeStateSplit[0]
+				codeChallenge = authorizeStateSplit[1]
+			} else {
+				nonce = authorizeState
+			}
+			go memorystore.Provider.RemoveState(refs.StringValue(params.State))
+		}
+	}
+
+	if nonce == "" {
+		nonce = uuid.New().String()
+	}
+
+	authToken, err := token.CreateAuthToken(gc, user, roles, scope, constants.AuthRecipeMethodBasicAuth, nonce, code)
 	if err != nil {
 		log.Debug("Failed to create auth token", err)
 		return res, err
+	}
+
+	// TODO add to other login options as well
+	// Code challenge could be optional if PKCE flow is not used
+	if code != "" {
+		if err := memorystore.Provider.SetState(code, codeChallenge+"@@"+authToken.FingerPrintHash); err != nil {
+			log.Debug("SetState failed: ", err)
+			return res, err
+		}
 	}
 
 	expiresIn := authToken.AccessToken.ExpiresAt - time.Now().Unix()

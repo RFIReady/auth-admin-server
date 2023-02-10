@@ -57,6 +57,11 @@ func cleanData(email string) {
 		err = db.Provider.DeleteVerificationRequest(ctx, verificationRequest)
 	}
 
+	otp, err := db.Provider.GetOTPByEmail(ctx, email)
+	if err == nil {
+		err = db.Provider.DeleteOTP(ctx, otp)
+	}
+
 	dbUser, err := db.Provider.GetUserByEmail(ctx, email)
 	if err == nil {
 		db.Provider.DeleteUser(ctx, dbUser)
@@ -79,7 +84,7 @@ func testSetup() TestSetup {
 	testData := TestData{
 		Email:                       fmt.Sprintf("%d_authorizer_tester@yopmail.com", time.Now().Unix()),
 		Password:                    "Test@123",
-		WebhookEndpoint:             "https://62cbc6738042b16aa7c22df2.mockapi.io/api/v1/webhook",
+		WebhookEndpoint:             "https://62f93101e05644803533cf36.mockapi.io/authorizer/webhook",
 		TestWebhookEventTypes:       []string{constants.UserAccessEnabledWebhookEvent, constants.UserAccessRevokedWebhookEvent, constants.UserCreatedWebhookEvent, constants.UserDeletedWebhookEvent, constants.UserLoginWebhookEvent, constants.UserSignUpWebhookEvent},
 		TestEmailTemplateEventTypes: []string{constants.VerificationTypeBasicAuthSignup, constants.VerificationTypeForgotPassword, constants.VerificationTypeMagicLinkLogin, constants.VerificationTypeUpdateEmail},
 	}

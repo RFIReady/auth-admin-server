@@ -8,7 +8,6 @@ import {
 	IconButton,
 	Menu,
 	MenuButton,
-	MenuItem,
 	MenuList,
 	NumberDecrementStepper,
 	NumberIncrementStepper,
@@ -40,7 +39,7 @@ import UpdateWebhookModal from '../components/UpdateWebhookModal';
 import {
 	pageLimits,
 	WebhookInputDataFields,
-	UpdateWebhookModalViews,
+	UpdateModalViews,
 } from '../constants';
 import { WebhooksDataQuery } from '../graphql/queries';
 import DeleteWebhookModal from '../components/DeleteWebhookModal';
@@ -125,7 +124,7 @@ const Webhooks = () => {
 					Webhooks
 				</Text>
 				<UpdateWebhookModal
-					view={UpdateWebhookModalViews.ADD}
+					view={UpdateModalViews.ADD}
 					fetchWebookData={fetchWebookData}
 				/>
 			</Flex>
@@ -171,12 +170,12 @@ const Webhooks = () => {
 											label={JSON.stringify(
 												webhook[WebhookInputDataFields.HEADERS],
 												null,
-												' '
+												' ',
 											)}
 										>
 											<Tag size="sm" variant="outline" colorScheme="gray">
 												{Object.keys(
-													webhook[WebhookInputDataFields.HEADERS] || {}
+													webhook[WebhookInputDataFields.HEADERS] || {},
 												)?.length.toString()}
 											</Tag>
 										</Tooltip>
@@ -196,7 +195,7 @@ const Webhooks = () => {
 											</MenuButton>
 											<MenuList>
 												<UpdateWebhookModal
-													view={UpdateWebhookModalViews.Edit}
+													view={UpdateModalViews.Edit}
 													selectedWebhook={webhook}
 													fetchWebookData={fetchWebookData}
 												/>

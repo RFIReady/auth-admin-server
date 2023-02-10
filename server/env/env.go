@@ -55,6 +55,7 @@ func InitAllEnv() error {
 	osSmtpPort := os.Getenv(constants.EnvKeySmtpPort)
 	osSmtpUsername := os.Getenv(constants.EnvKeySmtpUsername)
 	osSmtpPassword := os.Getenv(constants.EnvKeySmtpPassword)
+	osSmtpLocalName := os.Getenv(constants.EnvKeySmtpLocalName)
 	osSenderEmail := os.Getenv(constants.EnvKeySenderEmail)
 	osJwtType := os.Getenv(constants.EnvKeyJwtType)
 	osJwtSecret := os.Getenv(constants.EnvKeyJwtSecret)
@@ -72,18 +73,31 @@ func InitAllEnv() error {
 	osLinkedInClientSecret := os.Getenv(constants.EnvKeyLinkedInClientSecret)
 	osAppleClientID := os.Getenv(constants.EnvKeyAppleClientID)
 	osAppleClientSecret := os.Getenv(constants.EnvKeyAppleClientSecret)
+	osTwitterClientID := os.Getenv(constants.EnvKeyTwitterClientID)
+	osTwitterClientSecret := os.Getenv(constants.EnvKeyTwitterClientSecret)
 	osResetPasswordURL := os.Getenv(constants.EnvKeyResetPasswordURL)
 	osOrganizationName := os.Getenv(constants.EnvKeyOrganizationName)
 	osOrganizationLogo := os.Getenv(constants.EnvKeyOrganizationLogo)
+	osAwsRegion := os.Getenv(constants.EnvAwsRegion)
+	osAwsAccessKey := os.Getenv(constants.EnvAwsAccessKeyID)
+	osAwsSecretKey := os.Getenv(constants.EnvAwsSecretAccessKey)
+	osCouchbaseBucket := os.Getenv(constants.EnvCouchbaseBucket)
+	osCouchbaseScope := os.Getenv(constants.EnvCouchbaseScope)
+	osCouchbaseBucketRAMQuotaMB := os.Getenv(constants.EnvCouchbaseBucketRAMQuotaMB)
 
 	// os bool vars
+	osAppCookieSecure := os.Getenv(constants.EnvKeyAppCookieSecure)
+	osAdminCookieSecure := os.Getenv(constants.EnvKeyAdminCookieSecure)
 	osDisableBasicAuthentication := os.Getenv(constants.EnvKeyDisableBasicAuthentication)
+	osDisableMobileBasicAuthentication := os.Getenv(constants.AuthRecipeMethodMobileBasicAuth)
 	osDisableEmailVerification := os.Getenv(constants.EnvKeyDisableEmailVerification)
 	osDisableMagicLinkLogin := os.Getenv(constants.EnvKeyDisableMagicLinkLogin)
 	osDisableLoginPage := os.Getenv(constants.EnvKeyDisableLoginPage)
 	osDisableSignUp := os.Getenv(constants.EnvKeyDisableSignUp)
 	osDisableRedisForEnv := os.Getenv(constants.EnvKeyDisableRedisForEnv)
 	osDisableStrongPassword := os.Getenv(constants.EnvKeyDisableStrongPassword)
+	osEnforceMultiFactorAuthentication := os.Getenv(constants.EnvKeyEnforceMultiFactorAuthentication)
+	osDisableMultiFactorAuthentication := os.Getenv(constants.EnvKeyDisableMultiFactorAuthentication)
 
 	// os slice vars
 	osAllowedOrigins := os.Getenv(constants.EnvKeyAllowedOrigins)
@@ -111,6 +125,48 @@ func InitAllEnv() error {
 		} else {
 			envData[constants.EnvKeyIsProd] = false
 		}
+	}
+
+	if val, ok := envData[constants.EnvAwsRegion]; !ok || val == "" {
+		envData[constants.EnvAwsRegion] = osAwsRegion
+	}
+	if osAwsRegion != "" && envData[constants.EnvAwsRegion] != osAwsRegion {
+		envData[constants.EnvAwsRegion] = osAwsRegion
+	}
+
+	if val, ok := envData[constants.EnvAwsAccessKeyID]; !ok || val == "" {
+		envData[constants.EnvAwsAccessKeyID] = osAwsAccessKey
+	}
+	if osAwsAccessKey != "" && envData[constants.EnvAwsAccessKeyID] != osAwsAccessKey {
+		envData[constants.EnvAwsAccessKeyID] = osAwsAccessKey
+	}
+
+	if val, ok := envData[constants.EnvAwsSecretAccessKey]; !ok || val == "" {
+		envData[constants.EnvAwsSecretAccessKey] = osAwsSecretKey
+	}
+	if osAwsSecretKey != "" && envData[constants.EnvAwsSecretAccessKey] != osAwsSecretKey {
+		envData[constants.EnvAwsSecretAccessKey] = osAwsSecretKey
+	}
+
+	if val, ok := envData[constants.EnvCouchbaseBucket]; !ok || val == "" {
+		envData[constants.EnvCouchbaseBucket] = osCouchbaseBucket
+	}
+	if osCouchbaseBucket != "" && envData[constants.EnvCouchbaseBucket] != osCouchbaseBucket {
+		envData[constants.EnvCouchbaseBucket] = osCouchbaseBucket
+	}
+
+	if val, ok := envData[constants.EnvCouchbaseBucketRAMQuotaMB]; !ok || val == "" {
+		envData[constants.EnvCouchbaseBucketRAMQuotaMB] = osCouchbaseBucketRAMQuotaMB
+	}
+	if osCouchbaseBucketRAMQuotaMB != "" && envData[constants.EnvCouchbaseBucketRAMQuotaMB] != osCouchbaseBucketRAMQuotaMB {
+		envData[constants.EnvCouchbaseBucketRAMQuotaMB] = osCouchbaseBucketRAMQuotaMB
+	}
+
+	if val, ok := envData[constants.EnvCouchbaseScope]; !ok || val == "" {
+		envData[constants.EnvCouchbaseScope] = osCouchbaseScope
+	}
+	if osCouchbaseScope != "" && envData[constants.EnvCouchbaseScope] != osCouchbaseScope {
+		envData[constants.EnvCouchbaseScope] = osCouchbaseScope
 	}
 
 	if val, ok := envData[constants.EnvKeyAppURL]; !ok || val == "" {
@@ -173,6 +229,13 @@ func InitAllEnv() error {
 	}
 	if osSmtpUsername != "" && envData[constants.EnvKeySmtpUsername] != osSmtpUsername {
 		envData[constants.EnvKeySmtpUsername] = osSmtpUsername
+	}
+
+	if val, ok := envData[constants.EnvKeySmtpLocalName]; !ok || val == "" {
+		envData[constants.EnvKeySmtpLocalName] = osSmtpLocalName
+	}
+	if osSmtpLocalName != "" && envData[constants.EnvKeySmtpLocalName] != osSmtpLocalName {
+		envData[constants.EnvKeySmtpLocalName] = osSmtpLocalName
 	}
 
 	if val, ok := envData[constants.EnvKeySmtpPassword]; !ok || val == "" {
@@ -294,7 +357,7 @@ func InitAllEnv() error {
 		envData[constants.EnvKeyJwtRoleClaim] = osJwtRoleClaim
 
 		if envData[constants.EnvKeyJwtRoleClaim] == "" {
-			envData[constants.EnvKeyJwtRoleClaim] = "role"
+			envData[constants.EnvKeyJwtRoleClaim] = "roles"
 		}
 	}
 	if osJwtRoleClaim != "" && envData[constants.EnvKeyJwtRoleClaim] != osJwtRoleClaim {
@@ -353,29 +416,43 @@ func InitAllEnv() error {
 	if val, ok := envData[constants.EnvKeyLinkedInClientID]; !ok || val == "" {
 		envData[constants.EnvKeyLinkedInClientID] = osLinkedInClientID
 	}
-	if osFacebookClientID != "" && envData[constants.EnvKeyLinkedInClientID] != osFacebookClientID {
+	if osLinkedInClientID != "" && envData[constants.EnvKeyLinkedInClientID] != osLinkedInClientID {
 		envData[constants.EnvKeyLinkedInClientID] = osLinkedInClientID
 	}
 
 	if val, ok := envData[constants.EnvKeyLinkedInClientSecret]; !ok || val == "" {
 		envData[constants.EnvKeyLinkedInClientSecret] = osLinkedInClientSecret
 	}
-	if osFacebookClientSecret != "" && envData[constants.EnvKeyLinkedInClientSecret] != osFacebookClientSecret {
+	if osLinkedInClientSecret != "" && envData[constants.EnvKeyLinkedInClientSecret] != osLinkedInClientSecret {
 		envData[constants.EnvKeyLinkedInClientSecret] = osLinkedInClientSecret
 	}
 
 	if val, ok := envData[constants.EnvKeyAppleClientID]; !ok || val == "" {
 		envData[constants.EnvKeyAppleClientID] = osAppleClientID
 	}
-	if osFacebookClientID != "" && envData[constants.EnvKeyAppleClientID] != osFacebookClientID {
+	if osAppleClientID != "" && envData[constants.EnvKeyAppleClientID] != osAppleClientID {
 		envData[constants.EnvKeyAppleClientID] = osAppleClientID
 	}
 
 	if val, ok := envData[constants.EnvKeyAppleClientSecret]; !ok || val == "" {
 		envData[constants.EnvKeyAppleClientSecret] = osAppleClientSecret
 	}
-	if osFacebookClientSecret != "" && envData[constants.EnvKeyAppleClientSecret] != osFacebookClientSecret {
+	if osAppleClientSecret != "" && envData[constants.EnvKeyAppleClientSecret] != osAppleClientSecret {
 		envData[constants.EnvKeyAppleClientSecret] = osAppleClientSecret
+	}
+
+	if val, ok := envData[constants.EnvKeyTwitterClientID]; !ok || val == "" {
+		envData[constants.EnvKeyTwitterClientID] = osTwitterClientID
+	}
+	if osTwitterClientID != "" && envData[constants.EnvKeyTwitterClientID] != osTwitterClientID {
+		envData[constants.EnvKeyTwitterClientID] = osTwitterClientID
+	}
+
+	if val, ok := envData[constants.EnvKeyTwitterClientSecret]; !ok || val == "" {
+		envData[constants.EnvKeyTwitterClientSecret] = osTwitterClientSecret
+	}
+	if osTwitterClientSecret != "" && envData[constants.EnvKeyTwitterClientSecret] != osTwitterClientSecret {
+		envData[constants.EnvKeyTwitterClientSecret] = osTwitterClientSecret
 	}
 
 	if val, ok := envData[constants.EnvKeyResetPasswordURL]; !ok || val == "" {
@@ -399,6 +476,40 @@ func InitAllEnv() error {
 		envData[constants.EnvKeyOrganizationLogo] = osOrganizationLogo
 	}
 
+	if _, ok := envData[constants.EnvKeyAppCookieSecure]; !ok {
+		if osAppCookieSecure == "" {
+			envData[constants.EnvKeyAppCookieSecure] = true
+		} else {
+			envData[constants.EnvKeyAppCookieSecure] = osAppCookieSecure == "true"
+		}
+	}
+	if osAppCookieSecure != "" {
+		boolValue, err := strconv.ParseBool(osAppCookieSecure)
+		if err != nil {
+			return err
+		}
+		if boolValue != envData[constants.EnvKeyAppCookieSecure].(bool) {
+			envData[constants.EnvKeyAppCookieSecure] = boolValue
+		}
+	}
+
+	if _, ok := envData[constants.EnvKeyAdminCookieSecure]; !ok {
+		if osAdminCookieSecure == "" {
+			envData[constants.EnvKeyAdminCookieSecure] = true
+		} else {
+			envData[constants.EnvKeyAdminCookieSecure] = osAdminCookieSecure == "true"
+		}
+	}
+	if osAdminCookieSecure != "" {
+		boolValue, err := strconv.ParseBool(osAdminCookieSecure)
+		if err != nil {
+			return err
+		}
+		if boolValue != envData[constants.EnvKeyAdminCookieSecure].(bool) {
+			envData[constants.EnvKeyAdminCookieSecure] = boolValue
+		}
+	}
+
 	if _, ok := envData[constants.EnvKeyDisableBasicAuthentication]; !ok {
 		envData[constants.EnvKeyDisableBasicAuthentication] = osDisableBasicAuthentication == "true"
 	}
@@ -409,6 +520,19 @@ func InitAllEnv() error {
 		}
 		if boolValue != envData[constants.EnvKeyDisableBasicAuthentication].(bool) {
 			envData[constants.EnvKeyDisableBasicAuthentication] = boolValue
+		}
+	}
+
+	if _, ok := envData[constants.EnvKeyDisableMobileBasicAuthentication]; !ok {
+		envData[constants.EnvKeyDisableMobileBasicAuthentication] = osDisableBasicAuthentication == "true"
+	}
+	if osDisableMobileBasicAuthentication != "" {
+		boolValue, err := strconv.ParseBool(osDisableMobileBasicAuthentication)
+		if err != nil {
+			return err
+		}
+		if boolValue != envData[constants.EnvKeyDisableMobileBasicAuthentication].(bool) {
+			envData[constants.EnvKeyDisableMobileBasicAuthentication] = boolValue
 		}
 	}
 
@@ -490,10 +614,49 @@ func InitAllEnv() error {
 		}
 	}
 
+	if _, ok := envData[constants.EnvKeyEnforceMultiFactorAuthentication]; !ok {
+		envData[constants.EnvKeyEnforceMultiFactorAuthentication] = osEnforceMultiFactorAuthentication == "true"
+	}
+	if osEnforceMultiFactorAuthentication != "" {
+		boolValue, err := strconv.ParseBool(osEnforceMultiFactorAuthentication)
+		if err != nil {
+			return err
+		}
+		if boolValue != envData[constants.EnvKeyEnforceMultiFactorAuthentication].(bool) {
+			envData[constants.EnvKeyEnforceMultiFactorAuthentication] = boolValue
+		}
+	}
+
+	if _, ok := envData[constants.EnvKeyDisableMultiFactorAuthentication]; !ok {
+		envData[constants.EnvKeyDisableMultiFactorAuthentication] = osDisableMultiFactorAuthentication == "true"
+	}
+	if osDisableMultiFactorAuthentication != "" {
+		boolValue, err := strconv.ParseBool(osDisableMultiFactorAuthentication)
+		if err != nil {
+			return err
+		}
+		if boolValue != envData[constants.EnvKeyDisableMultiFactorAuthentication].(bool) {
+			envData[constants.EnvKeyDisableMultiFactorAuthentication] = boolValue
+		}
+	}
+
 	// no need to add nil check as its already done above
 	if envData[constants.EnvKeySmtpHost] == "" || envData[constants.EnvKeySmtpUsername] == "" || envData[constants.EnvKeySmtpPassword] == "" || envData[constants.EnvKeySenderEmail] == "" && envData[constants.EnvKeySmtpPort] == "" {
 		envData[constants.EnvKeyDisableEmailVerification] = true
 		envData[constants.EnvKeyDisableMagicLinkLogin] = true
+		envData[constants.EnvKeyIsEmailServiceEnabled] = false
+	}
+
+	if envData[constants.EnvKeySmtpHost] != "" || envData[constants.EnvKeySmtpUsername] != "" || envData[constants.EnvKeySmtpPassword] != "" || envData[constants.EnvKeySenderEmail] != "" && envData[constants.EnvKeySmtpPort] != "" {
+		envData[constants.EnvKeyIsEmailServiceEnabled] = true
+	}
+
+	if envData[constants.EnvKeyEnforceMultiFactorAuthentication].(bool) && !envData[constants.EnvKeyIsEmailServiceEnabled].(bool) {
+		return errors.New("to enable multi factor authentication, please enable email service")
+	}
+
+	if !envData[constants.EnvKeyIsEmailServiceEnabled].(bool) {
+		envData[constants.EnvKeyDisableMultiFactorAuthentication] = true
 	}
 
 	if envData[constants.EnvKeyDisableEmailVerification].(bool) {

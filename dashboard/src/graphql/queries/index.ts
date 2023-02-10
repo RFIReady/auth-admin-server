@@ -18,48 +18,55 @@ export const AdminSessionQuery = `
 export const EnvVariablesQuery = `
   query {
     _env{
-      CLIENT_ID,
-      CLIENT_SECRET,
-	    GOOGLE_CLIENT_ID,
-      GOOGLE_CLIENT_SECRET,
-      GITHUB_CLIENT_ID,
-      GITHUB_CLIENT_SECRET,
-      FACEBOOK_CLIENT_ID,
-      FACEBOOK_CLIENT_SECRET,
-      LINKEDIN_CLIENT_ID,
-      LINKEDIN_CLIENT_SECRET,
-      APPLE_CLIENT_ID,
-      APPLE_CLIENT_SECRET,
-      DEFAULT_ROLES,
-      PROTECTED_ROLES,
-      ROLES,
-      JWT_TYPE,
-      JWT_SECRET,
-      JWT_ROLE_CLAIM,
-      JWT_PRIVATE_KEY,
-      JWT_PUBLIC_KEY,
-      REDIS_URL,
-      SMTP_HOST,
-      SMTP_PORT,
-      SMTP_USERNAME,
-      SMTP_PASSWORD,
-      SENDER_EMAIL,
-      ALLOWED_ORIGINS,
-      ORGANIZATION_NAME,
-      ORGANIZATION_LOGO,
-      ADMIN_SECRET,
-      DISABLE_LOGIN_PAGE,
-      DISABLE_MAGIC_LINK_LOGIN,
-      DISABLE_EMAIL_VERIFICATION,
-      DISABLE_BASIC_AUTHENTICATION,
-      DISABLE_SIGN_UP,
-      DISABLE_STRONG_PASSWORD,
-      DISABLE_REDIS_FOR_ENV,
-      CUSTOM_ACCESS_TOKEN_SCRIPT,
-      DATABASE_NAME,
-      DATABASE_TYPE,
-      DATABASE_URL,
-      ACCESS_TOKEN_EXPIRY_TIME,
+      CLIENT_ID
+      CLIENT_SECRET
+      GOOGLE_CLIENT_ID
+      GOOGLE_CLIENT_SECRET
+      GITHUB_CLIENT_ID
+      GITHUB_CLIENT_SECRET
+      FACEBOOK_CLIENT_ID
+      FACEBOOK_CLIENT_SECRET
+      LINKEDIN_CLIENT_ID
+      LINKEDIN_CLIENT_SECRET
+      APPLE_CLIENT_ID
+      APPLE_CLIENT_SECRET
+      TWITTER_CLIENT_ID
+      TWITTER_CLIENT_SECRET
+      DEFAULT_ROLES
+      PROTECTED_ROLES
+      ROLES
+      JWT_TYPE
+      JWT_SECRET
+      JWT_ROLE_CLAIM
+      JWT_PRIVATE_KEY
+      JWT_PUBLIC_KEY
+      REDIS_URL
+      SMTP_HOST
+      SMTP_PORT
+      SMTP_USERNAME
+      SMTP_PASSWORD
+      SMTP_LOCAL_NAME
+      SENDER_EMAIL
+      ALLOWED_ORIGINS
+      ORGANIZATION_NAME
+      ORGANIZATION_LOGO
+      ADMIN_SECRET
+      APP_COOKIE_SECURE
+      ADMIN_COOKIE_SECURE
+      DISABLE_LOGIN_PAGE
+      DISABLE_MAGIC_LINK_LOGIN
+      DISABLE_EMAIL_VERIFICATION
+      DISABLE_BASIC_AUTHENTICATION
+      DISABLE_SIGN_UP
+      DISABLE_STRONG_PASSWORD
+      DISABLE_REDIS_FOR_ENV
+      CUSTOM_ACCESS_TOKEN_SCRIPT
+      DATABASE_NAME
+      DATABASE_TYPE
+      DATABASE_URL
+      ACCESS_TOKEN_EXPIRY_TIME
+      DISABLE_MULTI_FACTOR_AUTHENTICATION
+      ENFORCE_MULTI_FACTOR_AUTHENTICATION
     }
   }
 `;
@@ -89,6 +96,7 @@ export const UserDetailsQuery = `
         roles
         created_at
         revoked_timestamp
+        is_multi_factor_auth_enabled
       }
     }
   }
@@ -122,6 +130,27 @@ export const WebhooksDataQuery = `
   }
 `;
 
+export const EmailTemplatesQuery = `
+  query getEmailTemplates($params: PaginatedInput!) {
+    _email_templates(params: $params) {
+      email_templates {
+        id
+        event_name
+        subject
+        created_at
+        template
+        design
+      }
+      pagination {
+        limit
+        page
+        offset
+        total
+      }
+    }
+  }
+`;
+
 export const WebhookLogsQuery = `
   query getWebhookLogs($params: ListWebhookLogRequest!) {
     _webhook_logs(params: $params) {
@@ -138,6 +167,15 @@ export const WebhookLogsQuery = `
         offset
         total
       }
+    }
+  }
+`;
+
+export const GetAvailableRolesQuery = `
+  query {
+    _env {
+      ROLES
+      PROTECTED_ROLES
     }
   }
 `;

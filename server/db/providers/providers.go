@@ -18,8 +18,13 @@ type Provider interface {
 	ListUsers(ctx context.Context, pagination model.Pagination) (*model.Users, error)
 	// GetUserByEmail to get user information from database using email address
 	GetUserByEmail(ctx context.Context, email string) (models.User, error)
+	// GetUserByPhoneNumber to get user information from database using phone number
+	GetUserByPhoneNumber(ctx context.Context, phoneNumber string) (*models.User, error)
 	// GetUserByID to get user information from database using user ID
 	GetUserByID(ctx context.Context, id string) (models.User, error)
+	// UpdateUsers to update multiple users, with parameters of user IDs slice
+	// If ids set to nil / empty all the users will be updated
+	UpdateUsers(ctx context.Context, data map[string]interface{}, ids []string) error
 
 	// AddVerification to save verification request in database
 	AddVerificationRequest(ctx context.Context, verificationRequest models.VerificationRequest) (models.VerificationRequest, error)
@@ -72,4 +77,11 @@ type Provider interface {
 	GetEmailTemplateByEventName(ctx context.Context, eventName string) (*model.EmailTemplate, error)
 	// DeleteEmailTemplate to delete EmailTemplate
 	DeleteEmailTemplate(ctx context.Context, emailTemplate *model.EmailTemplate) error
+
+	// UpsertOTP to add or update otp
+	UpsertOTP(ctx context.Context, otp *models.OTP) (*models.OTP, error)
+	// GetOTPByEmail to get otp for a given email address
+	GetOTPByEmail(ctx context.Context, emailAddress string) (*models.OTP, error)
+	// DeleteOTP to delete otp
+	DeleteOTP(ctx context.Context, otp *models.OTP) error
 }

@@ -13,6 +13,7 @@ import (
 	"github.com/authorizerdev/authorizer/server/memorystore"
 	"github.com/gocql/gocql"
 	cansandraDriver "github.com/gocql/gocql"
+	log "github.com/sirupsen/logrus"
 )
 
 type provider struct {
@@ -99,6 +100,7 @@ func NewProvider() (*provider, error) {
 	cassandraClient.Consistency = gocql.LocalQuorum
 	cassandraClient.ConnectTimeout = 10 * time.Second
 	cassandraClient.ProtoVersion = 4
+	cassandraClient.Timeout = 30 * time.Minute // for large data
 
 	session, err := cassandraClient.CreateSession()
 	if err != nil {
@@ -160,6 +162,19 @@ func NewProvider() (*provider, error) {
 		return nil, err
 	}
 
+	userPhoneNumberIndexQuery := fmt.Sprintf("CREATE INDEX IF NOT EXISTS authorizer_user_phone_number ON %s.%s (phone_number)", KeySpace, models.Collections.User)
+	err = session.Query(userPhoneNumberIndexQuery).Exec()
+	if err != nil {
+		return nil, err
+	}
+	// add is_multi_factor_auth_enabled on users table
+	userTableAlterQuery := fmt.Sprintf(`ALTER TABLE %s.%s ADD is_multi_factor_auth_enabled boolean`, KeySpace, models.Collections.User)
+	err = session.Query(userTableAlterQuery).Exec()
+	if err != nil {
+		log.Debug("Failed to alter table as column exists: ", err)
+		// return nil, err
+	}
+
 	// token is reserved keyword in cassandra, hence we need to use jwt_token
 	verificationRequestCollectionQuery := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s.%s (id text, jwt_token text, identifier text, expires_at bigint, email text, nonce text, redirect_uri text, created_at bigint, updated_at bigint, PRIMARY KEY (id))", KeySpace, models.Collections.VerificationRequest)
 	err = session.Query(verificationRequestCollectionQuery).Exec()
@@ -211,6 +226,24 @@ func NewProvider() (*provider, error) {
 	}
 	emailTemplateIndexQuery := fmt.Sprintf("CREATE INDEX IF NOT EXISTS authorizer_email_template_event_name ON %s.%s (event_name)", KeySpace, models.Collections.EmailTemplate)
 	err = session.Query(emailTemplateIndexQuery).Exec()
+	if err != nil {
+		return nil, err
+	}
+	// add subject on email_templates table
+	emailTemplateAlterQuery := fmt.Sprintf(`ALTER TABLE %s.%s ADD (subject text, design text);`, KeySpace, models.Collections.EmailTemplate)
+	err = session.Query(emailTemplateAlterQuery).Exec()
+	if err != nil {
+		log.Debug("Failed to alter table as column exists: ", err)
+		// continue
+	}
+
+	otpCollection := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s.%s (id text, email text, otp text, expires_at bigint, updated_at bigint, created_at bigint, PRIMARY KEY (id))", KeySpace, models.Collections.OTP)
+	err = session.Query(otpCollection).Exec()
+	if err != nil {
+		return nil, err
+	}
+	otpIndexQuery := fmt.Sprintf("CREATE INDEX IF NOT EXISTS authorizer_otp_email ON %s.%s (email)", KeySpace, models.Collections.OTP)
+	err = session.Query(otpIndexQuery).Exec()
 	if err != nil {
 		return nil, err
 	}

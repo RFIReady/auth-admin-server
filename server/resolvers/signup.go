@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/authorizerdev/authorizer/server/constants"
@@ -17,6 +18,7 @@ import (
 	"github.com/authorizerdev/authorizer/server/graph/model"
 	"github.com/authorizerdev/authorizer/server/memorystore"
 	"github.com/authorizerdev/authorizer/server/parsers"
+	"github.com/authorizerdev/authorizer/server/refs"
 	"github.com/authorizerdev/authorizer/server/token"
 	"github.com/authorizerdev/authorizer/server/utils"
 	"github.com/authorizerdev/authorizer/server/validators"
@@ -157,6 +159,20 @@ func SignupResolver(ctx context.Context, params model.SignUpInput) (*model.AuthR
 		user.Picture = params.Picture
 	}
 
+	if params.IsMultiFactorAuthEnabled != nil {
+		user.IsMultiFactorAuthEnabled = params.IsMultiFactorAuthEnabled
+	}
+
+	isMFAEnforced, err := memorystore.Provider.GetBoolStoreEnvVariable(constants.EnvKeyEnforceMultiFactorAuthentication)
+	if err != nil {
+		log.Debug("MFA service not enabled: ", err)
+		isMFAEnforced = false
+	}
+
+	if isMFAEnforced {
+		user.IsMultiFactorAuthEnabled = refs.NewBoolRef(true)
+	}
+
 	user.SignupMethods = constants.AuthRecipeMethodBasicAuth
 	isEmailVerificationDisabled, err := memorystore.Provider.GetBoolStoreEnvVariable(constants.EnvKeyDisableEmailVerification)
 	if err != nil {
@@ -206,9 +222,14 @@ func SignupResolver(ctx context.Context, params model.SignUpInput) (*model.AuthR
 			return res, err
 		}
 
-		// exec it as go routin so that we can reduce the api latency
+		// exec it as go routine so that we can reduce the api latency
 		go func() {
-			email.SendVerificationMail(params.Email, verificationToken, hostname)
+			// exec it as go routine so that we can reduce the api latency
+			email.SendEmail([]string{params.Email}, constants.VerificationTypeBasicAuthSignup, map[string]interface{}{
+				"user":             user.ToMap(),
+				"organization":     utils.GetOrganization(),
+				"verification_url": utils.GetEmailVerificationURL(verificationToken, hostname),
+			})
 			utils.RegisterEvent(ctx, constants.UserCreatedWebhookEvent, constants.AuthRecipeMethodBasicAuth, user)
 		}()
 
@@ -222,10 +243,40 @@ func SignupResolver(ctx context.Context, params model.SignUpInput) (*model.AuthR
 			scope = params.Scope
 		}
 
-		authToken, err := token.CreateAuthToken(gc, user, roles, scope, constants.AuthRecipeMethodBasicAuth)
+		code := ""
+		codeChallenge := ""
+		nonce := ""
+		if params.State != nil {
+			// Get state from store
+			authorizeState, _ := memorystore.Provider.GetState(refs.StringValue(params.State))
+			if authorizeState != "" {
+				authorizeStateSplit := strings.Split(authorizeState, "@@")
+				if len(authorizeStateSplit) > 1 {
+					code = authorizeStateSplit[0]
+					codeChallenge = authorizeStateSplit[1]
+				} else {
+					nonce = authorizeState
+				}
+				go memorystore.Provider.RemoveState(refs.StringValue(params.State))
+			}
+		}
+
+		if nonce == "" {
+			nonce = uuid.New().String()
+		}
+
+		authToken, err := token.CreateAuthToken(gc, user, roles, scope, constants.AuthRecipeMethodBasicAuth, nonce, code)
 		if err != nil {
 			log.Debug("Failed to create auth token: ", err)
 			return res, err
+		}
+
+		// Code challenge could be optional if PKCE flow is not used
+		if code != "" {
+			if err := memorystore.Provider.SetState(code, codeChallenge+"@@"+authToken.FingerPrintHash); err != nil {
+				log.Debug("SetState failed: ", err)
+				return res, err
+			}
 		}
 
 		expiresIn := authToken.AccessToken.ExpiresAt - time.Now().Unix()
